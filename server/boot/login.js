@@ -57,7 +57,9 @@ module.exports = function(app) {
         console.log('The access token has been refreshed!');
         spotifyApi.setAccessToken(data.body['access_token']);
         res.cookie('access_token', data.body['access_token']);
+        /* eslint-disable */
         res.send({access_token: data.body['access_token']});
+        /* eslint-enable */
       },
       function(err) {
         console.log('Could not refresh access token', err);
