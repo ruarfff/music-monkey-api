@@ -3,7 +3,7 @@ services:
   web:
     image: keymetrics/pm2:latest-alpine
     ports:
-      - "3000:8080"
+      - "8080:8080"
     volumes:
       - .:/host
     working_dir: /host
