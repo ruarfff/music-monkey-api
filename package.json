@@ -1,5 +1,5 @@
 {
-  "name": "mm-api",
+  "name": "music-monkey-api",
   "version": "1.0.0",
   "private": true,
   "main": "server/server.js",
@@ -37,5 +37,5 @@
     "url": ""
   },
   "license": "UNLICENSED",
-  "description": "mm-api"
+  "description": "music-monkey-api"
 }
