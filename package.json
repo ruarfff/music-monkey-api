@@ -1,14 +1,17 @@
 {
   "name": "mm-api",
   "version": "1.0.0",
+  "private": true,
   "main": "server/server.js",
   "engines": {
-    "node": ">=4"
+    "node": ">=6.11.5"
   },
   "scripts": {
     "lint": "eslint .",
-    "start": "node .",
-    "posttest": "npm run lint && nsp check"
+    "start": "node ./node_modules/.bin/pm2 start pm2.json",
+    "posttest": "npm run lint && nsp check",
+    "test": "mocha --recursive --reporter spec \"**/*.spec.js\"",
+    "test:watch": "npm test -- --watch"
   },
   "dependencies": {
     "compression": "^1.0.3",
@@ -17,6 +20,7 @@
     "loopback": "^3.0.0",
     "loopback-boot": "^2.6.5",
     "loopback-component-explorer": "^5.0.0",
+    "pm2": "^2.10.2",
     "serve-favicon": "^2.0.1",
     "spotify-web-api-node": "^3.0.0",
     "strong-error-handler": "^2.0.0"
@@ -24,7 +28,9 @@
   "devDependencies": {
     "eslint": "^3.17.1",
     "eslint-config-loopback": "^8.0.0",
-    "nsp": "^2.1.0"
+    "nsp": "^2.1.0",
+    "chai": "^4.1.2",
+    "mocha": "^5.1.0"
   },
   "repository": {
     "type": "",
