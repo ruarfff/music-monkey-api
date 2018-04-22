@@ -46,11 +46,17 @@ module.exports = function(app) {
 
   router.get('/refresh', function(req, res) {
     const spotifyApi = new SpotifyWebApi({
-      redirectUri: 'http://' + req.hostname + callbackEndpoint,
+      redirectUri: 'http://' + req.hostname,
       clientId: clientId,
       clientSecret: clientSecret,
     });
     spotifyApi.setRefreshToken(req.get('refresh_token'));
+    console.log('Refresh Token:', req.get('refresh_token'));
+    console.log('Auth Config: ', {
+      redirectUri: 'http://' + req.hostname,
+      clientId: clientId,
+      clientSecret: clientSecret,
+    });
     spotifyApi.refreshAccessToken().then(
       function(data) {
         res.header('Access-Control-Allow-Origin', '*');
