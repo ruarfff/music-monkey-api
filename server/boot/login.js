@@ -55,7 +55,7 @@ module.exports = function(app) {
       function(data) {
         res.header('Access-Control-Allow-Origin', '*');
         res.header('Access-Control-Allow-Headers',
-            'Origin, X-Requested-With, Content-Type, Accept');
+          'Origin, X-Requested-With, Content-Type, Accept');
 
         console.log('The access token has been refreshed!');
         spotifyApi.setAccessToken(data.body['access_token']);
@@ -65,7 +65,9 @@ module.exports = function(app) {
         /* eslint-enable */
       },
       function(err) {
-        res.status(500).send({error: 'Could not refresh access token: ' + JSON.stringify(err)});
+        res.status(500).send({
+          error: 'Could not refresh access token: ' + JSON.stringify(err),
+        });
       }
     );
   });
