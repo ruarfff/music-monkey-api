@@ -66,7 +66,7 @@ module.exports = function(app) {
         /* eslint-enable */
       },
       function(err) {
-        console.log('Could not refresh access token', err);
+        res.status(500).send({error: 'Could not refresh access token: ' + JSON.stringify(err)});
       }
     );
   });
