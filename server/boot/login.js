@@ -9,7 +9,7 @@ module.exports = function(app) {
   var router = app.loopback.Router();
   router.get('/login', function(req, res) {
     const spotifyApi = new SpotifyWebApi({
-      redirectUri: req.hostname + callbackEndpoint,
+      redirectUri: 'http://' + req.hostname + callbackEndpoint,
       clientId: clientId,
     });
     var authorizeURL = spotifyApi.createAuthorizeURL(scopes);
@@ -20,7 +20,7 @@ module.exports = function(app) {
     var credentials = {
       clientId: clientId,
       clientSecret: clientSecret,
-      redirectUri: req.hostname + callbackEndpoint,
+      redirectUri: 'http://' + req.hostname + callbackEndpoint,
     };
 
     var spotifyApi = new SpotifyWebApi(credentials);
@@ -46,7 +46,7 @@ module.exports = function(app) {
 
   router.get('/refresh', function(req, res) {
     const spotifyApi = new SpotifyWebApi({
-      redirectUri: req.hostname + callbackEndpoint,
+      redirectUri: 'http://' + req.hostname + callbackEndpoint,
       clientId: clientId,
       clientSecret: clientSecret,
     });
