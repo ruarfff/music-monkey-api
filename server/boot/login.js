@@ -46,7 +46,8 @@ module.exports = function(app) {
 
   router.get('/refresh', function(req, res) {
     res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    res.header('Access-Control-Allow-Headers',
+      'Origin, X-Requested-With, Content-Type, Accept');
 
     const spotifyApi = new SpotifyWebApi({
       redirectUri: 'http://' + req.hostname + callbackEndpoint,
