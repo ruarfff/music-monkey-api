@@ -45,15 +45,15 @@ module.exports = function(app) {
     );
   });
 
-  router.get('/refresh', (req, res) => {
+  router.post('/refresh', (req, res) => {
     const redirectUrl = getRedirectUrl(req);
     const spotifyApi = new SpotifyWebApi({
       redirectUri: redirectUrl,
       clientId: clientId,
       clientSecret: clientSecret,
     });
-    spotifyApi.setRefreshToken(req.get('refresh_token'));
-    console.log('Refresh Token:', req.get('refresh_token'));
+    spotifyApi.setRefreshToken(req.body.refreshToken);
+    console.log('Refresh Token:', req.body.refreshToken);
     console.log('Auth Config: ', {
       redirectUri: redirectUrl,
       clientId: clientId,
