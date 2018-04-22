@@ -1,7 +1,7 @@
 'use strict';
 const SpotifyWebApi = require('spotify-web-api-node');
 const scopes = ['user-read-private', 'user-read-email'];
-const redirectUri = 'http://localhost:3000/callback';
+const callbackEndpoint = '/callback';
 const clientId = 'ee4aa78cde4c4be08978d79c180e11c9';
 const clientSecret = 'acfc43102e5c4e05902e66284dfdcb19';
 
@@ -9,7 +9,7 @@ module.exports = function(app) {
   var router = app.loopback.Router();
   router.get('/login', function(req, res) {
     const spotifyApi = new SpotifyWebApi({
-      redirectUri: redirectUri,
+      redirectUri: req.hostname + callbackEndpoint,
       clientId: clientId,
     });
     var authorizeURL = spotifyApi.createAuthorizeURL(scopes);
@@ -20,7 +20,7 @@ module.exports = function(app) {
     var credentials = {
       clientId: clientId,
       clientSecret: clientSecret,
-      redirectUri: redirectUri,
+      redirectUri: req.hostname + callbackEndpoint,
     };
 
     var spotifyApi = new SpotifyWebApi(credentials);
@@ -35,7 +35,7 @@ module.exports = function(app) {
         spotifyApi.setRefreshToken(data.body['refresh_token']);
         res.cookie('access_token', data.body['access_token']);
         res.cookie('refresh_token', data.body['refresh_token']);
-        res.redirect('http://localhost:3001/callback');
+        res.redirect('http://localhost:3000');
       },
       function(err) {
         console.log('Something went wrong!', err);
@@ -46,7 +46,7 @@ module.exports = function(app) {
 
   router.get('/refresh', function(req, res) {
     const spotifyApi = new SpotifyWebApi({
-      redirectUri: redirectUri,
+      redirectUri: req.hostname + callbackEndpoint,
       clientId: clientId,
       clientSecret: clientSecret,
     });
