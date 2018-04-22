@@ -7,58 +7,60 @@ const clientSecret = 'acfc43102e5c4e05902e66284dfdcb19';
 
 module.exports = function(app) {
   var router = app.loopback.Router();
-  router.get('/login', function(req, res) {
+
+  router.get('/login', (req, res) => {
+    const redirectURL = getRedirectUrl(req);
+    console.log('RedirectURL: ', redirectURL);
     const spotifyApi = new SpotifyWebApi({
-      redirectUri: 'http://' + req.hostname + callbackEndpoint,
+      redirectUri: redirectURL,
       clientId: clientId,
     });
     var authorizeURL = spotifyApi.createAuthorizeURL(scopes);
     res.redirect(authorizeURL);
   });
 
-  router.get('/callback', function(req, res) {
-    var credentials = {
+  router.get('/callback', (req, res) => {
+    const redirectURL = getRedirectUrl(req);
+    const code = req.query.code;
+    const redirectTo = req.query.redirectTo;
+    const credentials = {
       clientId: clientId,
       clientSecret: clientSecret,
-      redirectUri: 'http://' + req.hostname + callbackEndpoint,
+      redirectUri: redirectURL,
     };
 
-    var spotifyApi = new SpotifyWebApi(credentials);
+    console.log('Creds: ', JSON.stringify(credentials, null, 4));
+    console.log('Code: ', code);
 
-    // The code that's returned as a query parameter to the redirect URI
-    var code = req.query.code;
+    const spotifyApi = new SpotifyWebApi(credentials);
 
-    // Retrieve an access token and a refresh token
     spotifyApi.authorizationCodeGrant(code).then(
-      function(data) {
-        spotifyApi.setAccessToken(data.body['access_token']);
-        spotifyApi.setRefreshToken(data.body['refresh_token']);
-        res.cookie('access_token', data.body['access_token']);
-        res.cookie('refresh_token', data.body['refresh_token']);
-        res.redirect('http://localhost:3000');
+      (data) => {
+        res.redirect(redirectTo + '?rt=' + data.body['refresh_token']);
       },
-      function(err) {
+      (err) => {
         console.log('Something went wrong!', err);
-        res.send(err);
+        res.status(500).send(err);
       }
     );
   });
 
-  router.get('/refresh', function(req, res) {
+  router.get('/refresh', (req, res) => {
+    const redirectUrl = getRedirectUrl(req);
     const spotifyApi = new SpotifyWebApi({
-      redirectUri: 'http://' + req.hostname,
+      redirectUri: redirectUrl,
       clientId: clientId,
       clientSecret: clientSecret,
     });
     spotifyApi.setRefreshToken(req.get('refresh_token'));
     console.log('Refresh Token:', req.get('refresh_token'));
     console.log('Auth Config: ', {
-      redirectUri: 'http://' + req.hostname,
+      redirectUri: redirectUrl,
       clientId: clientId,
       clientSecret: clientSecret,
     });
     spotifyApi.refreshAccessToken().then(
-      function(data) {
+      (data) => {
         res.header('Access-Control-Allow-Origin', '*');
         res.header('Access-Control-Allow-Headers',
           'Origin, X-Requested-With, Content-Type, Accept');
@@ -70,12 +72,20 @@ module.exports = function(app) {
         res.send({access_token: data.body['access_token']});
         /* eslint-enable */
       },
-      function(err) {
+      (err) => {
         res.status(500).send({
           error: 'Could not refresh access token: ' + JSON.stringify(err),
         });
       }
     );
   });
+
   app.use(router);
 };
+
+function getRedirectUrl(req) {
+  return 'http://' + req.hostname +
+    ((req.hostname === 'localhost') ? ':8080' : '') +
+    callbackEndpoint +
+    ((req.query.redirectTo) ? '?redirectTo=' + req.query.redirectTo : '');
+}
