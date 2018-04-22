@@ -45,19 +45,18 @@ module.exports = function(app) {
   });
 
   router.get('/refresh', function(req, res) {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers',
-      'Origin, X-Requested-With, Content-Type, Accept');
-
     const spotifyApi = new SpotifyWebApi({
       redirectUri: 'http://' + req.hostname + callbackEndpoint,
       clientId: clientId,
       clientSecret: clientSecret,
     });
     spotifyApi.setRefreshToken(req.get('refresh_token'));
-    // clientId, clientSecret and refreshToken has been set on the api object previous to this call.
     spotifyApi.refreshAccessToken().then(
       function(data) {
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Headers',
+            'Origin, X-Requested-With, Content-Type, Accept');
+
         console.log('The access token has been refreshed!');
         spotifyApi.setAccessToken(data.body['access_token']);
         res.cookie('access_token', data.body['access_token']);
