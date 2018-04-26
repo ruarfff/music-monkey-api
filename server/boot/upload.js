@@ -1,6 +1,6 @@
 const multer = require('multer')
 const AWS = require('aws-sdk')
-const uuidv5 = require('uuid/v5')
+const uuidv1 = require('uuid/v1');
 
 const bucket = 'musicmonkey-uploads'
 
@@ -26,7 +26,7 @@ module.exports = function(app) {
   var router = app.loopback.Router()
   router.post('/upload', upload.single('event-image'), (req, res) => {
     const key = 'event-images/'
-    const fileName = uuidv5.URL + '-' + req.file.originalname
+    const fileName = uuidv1() + '-' + req.file.originalname
     s3.putObject(
       {
         Key: key + fileName,
@@ -35,7 +35,7 @@ module.exports = function(app) {
       },
       (err) => {
         if (err) {
-          return res.status(400).send(err)
+          return res.status(err.statusCode || 400).send(err)
         } else {
           res.send(`http://${bucket}.s3.amazonaws.com/${key}${fileName}`)
         }
