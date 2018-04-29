@@ -25,6 +25,7 @@ const upload = multer({
 module.exports = function(app) {
   var router = app.loopback.Router()
   router.post('/upload', upload.single('event-image'), (req, res) => {
+    console.log(req.file)
     const key = 'event-images/'
     const fileName = uuidv1() + '-' + req.file.originalname
     s3.putObject(
