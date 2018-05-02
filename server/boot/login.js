@@ -63,10 +63,10 @@ module.exports = function(app) {
           'Access-Control-Allow-Headers',
           'Origin, X-Requested-With, Content-Type, Accept'
         )
-        const token = data.body['access_token']
+        const accessToken = data.body['access_token']
         const expiresIn = data.body['expires_in']
-        spotifyApi.setAccessToken(token)
-        getOrCreateUser(spotifyApi, refreshToken, token, expiresIn)
+        spotifyApi.setAccessToken(accessToken)
+        getOrCreateUser(spotifyApi, refreshToken, accessToken, expiresIn)
           .then(response => {
             res.send(response)
           })
@@ -92,6 +92,12 @@ function getRedirectUrl(req) {
 }
 
 function getOrCreateUser(spotifyApi, refreshToken, accessToken, expiresIn) {
+  const auth = {
+    expiresIn: expiresIn,
+    refreshToken: refreshToken,
+    accessToken: accessToken
+  }
+
   return new Promise((resolve, reject) => {
     spotifyApi
       .getMe()
@@ -99,6 +105,7 @@ function getOrCreateUser(spotifyApi, refreshToken, accessToken, expiresIn) {
         userGateway
           .getUserByEmail(data.body)
           .then(savedUser => {
+            savedUser.auth = auth
             resolve(savedUser)
           })
           .catch(err => {
@@ -114,11 +121,7 @@ function getOrCreateUser(spotifyApi, refreshToken, accessToken, expiresIn) {
                 spotifyUser.images && spotifyUser.images.length > 0
                   ? spotifyUser.images[0].url
                   : '',
-              auth: {
-                expiresIn: expiresIn,
-                refreshToken: refreshToken,
-                accessToken: accessToken
-              }
+              auth: auth
             }
             userGateway
               .createUser(user)
