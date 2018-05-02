@@ -1,9 +1,9 @@
-const userGateway = require('../user/userGateway')
+const userGateway = require('../../src/user/userGateway')
 
 module.exports = function(server) {
-  var router = server.loopback.Router();
+  const router = server.loopback.Router();
   router.get('/user/:userid', (req, res) => {
-    res.send('test')
+    userGateway.getUserById(req.params.userId).then(res.send).catch(err => res.status(404).send(err))
   });
   server.use(router);
 };
