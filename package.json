@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "private": true,
   "main": "server/server.js",
-  "engines": {
-    "node": ">=6.11.5"
-  },
   "scripts": {
     "lint": "eslint .",
     "start": "node .",
@@ -18,7 +15,9 @@
     "babel-eslint": "8.2.3",
     "compression": "1.7.2",
     "cors": "2.8.4",
+    "dynamodb": "1.1.1",
     "helmet": "3.12.0",
+    "joi": "13.2.0",
     "loopback": "3.19.0",
     "loopback-boot": "2.27.1",
     "loopback-component-explorer": "6.0.0",

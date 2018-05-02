@@ -1,7 +1,9 @@
+const userGateway = require('../../src/user/userGateway')
 const SpotifyWebApi = require('spotify-web-api-node')
 const scopes = [
   'user-read-private',
   'user-read-email',
+  'user-read-birthdate',
   'playlist-modify-public',
   'playlist-modify-private'
 ]
@@ -50,33 +52,31 @@ module.exports = function(app) {
       clientId: clientId,
       clientSecret: clientSecret
     })
-    spotifyApi.setRefreshToken(req.body.refreshToken)
-    console.log('Refresh Token:', req.body.refreshToken)
-    console.log('Auth Config: ', {
-      redirectUri: redirectUrl,
-      clientId: clientId,
-      clientSecret: clientSecret
-    })
-    spotifyApi.refreshAccessToken().then(
-      data => {
+    const refreshToken = req.body.refreshToken
+    spotifyApi.setRefreshToken(refreshToken)
+
+    spotifyApi
+      .refreshAccessToken()
+      .then(data => {
         res.header('Access-Control-Allow-Origin', '*')
         res.header(
           'Access-Control-Allow-Headers',
           'Origin, X-Requested-With, Content-Type, Accept'
         )
-        console.log('The access token has been refreshed!')
-        spotifyApi.setAccessToken(data.body['access_token'])
-        res.cookie('access_token', data.body['access_token'])
-        /* eslint-disable */
-        res.send({ access_token: data.body['access_token'] })
-        /* eslint-enable */
-      },
-      err => {
+        const accessToken = data.body['access_token']
+        const expiresIn = data.body['expires_in']
+        spotifyApi.setAccessToken(accessToken)
+        getOrCreateUser(spotifyApi, refreshToken, accessToken, expiresIn)
+          .then(response => {
+            res.send(response)
+          })
+          .catch(err => res.status(401).send(err))
+      })
+      .catch(err =>
         res.status(500).send({
           error: 'Could not refresh access token: ' + JSON.stringify(err)
         })
-      }
-    )
+      )
   })
   app.use(router)
 }
@@ -89,4 +89,46 @@ function getRedirectUrl(req) {
     callbackEndpoint +
     (req.query.redirectTo ? '?redirectTo=' + req.query.redirectTo : '')
   )
+}
+
+function getOrCreateUser(spotifyApi, refreshToken, accessToken, expiresIn) {
+  const auth = {
+    expiresIn: expiresIn,
+    refreshToken: refreshToken,
+    accessToken: accessToken
+  }
+
+  return new Promise((resolve, reject) => {
+    spotifyApi
+      .getMe()
+      .then(data => {
+        userGateway
+          .getUserByEmail(data.body)
+          .then(savedUser => {
+            savedUser.auth = auth
+            resolve(savedUser)
+          })
+          .catch(err => {
+            console.log('Could not find user ' + data.body.email, err)
+            // Try create the user
+            const spotifyUser = data.body
+            const user = {
+              displayName: spotifyUser.display_name,
+              email: spotifyUser.email,
+              country: spotifyUser.country,
+              birthdate: spotifyUser.birthdate,
+              image:
+                spotifyUser.images && spotifyUser.images.length > 0
+                  ? spotifyUser.images[0].url
+                  : '',
+              auth: auth
+            }
+            userGateway
+              .createUser(user)
+              .then(resolve)
+              .catch(reject)
+          })
+      })
+      .catch(reject)
+  })
 }
