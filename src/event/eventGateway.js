@@ -45,15 +45,16 @@ exports.getEventById = eventId => {
   })
 }
 
-exports.getEventByUserId = userId => {
+exports.getEventsByUserId = userId => {
   return new Promise((resolve, reject) => {
     Event.query(userId)
       .usingIndex('UserIdIndex')
       .exec((err, eventModel) => {
         if (err || eventModel.Items.length < 1) {
-          return reject(err)
+          reject(err)
         }
-        return resolve(eventModel.Items.map(item => item.attrs))
+        const eventList = eventModel.Items.map(item => item.attrs)
+        resolve(eventList)
       })
   })
 }
