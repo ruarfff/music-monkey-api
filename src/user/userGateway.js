@@ -1,49 +1,4 @@
-const dynamo = require('dynamodb')
-const Joi = require('joi')
-
-dynamo.AWS.config.update({
-  accessKeyId: 'AKIAIPMZTEODQOZYSNQA',
-  secretAccessKey: '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',
-  region: 'eu-west-1'
-})
-
-const User = dynamo.define('MM-Dev-User', {
-  hashKey: 'userId',
-  rangeKey: 'email',
-
-  timestamps: true,
-
-  schema: {
-    userId: dynamo.types.uuid(),
-    displayName: Joi.string(),
-    email: Joi.string().email(),
-    country: Joi.string(),
-    birthdate: Joi.string(),
-    image: Joi.string(),
-    auth: {
-      refreshToken: Joi.string(),
-      accessToken: Joi.string(),
-      expiresIn: Joi.number()
-    }
-  },
-
-  indexes: [
-    {
-      hashKey: 'email',
-      rangeKey: 'displayName',
-      name: 'EmailIndex',
-      type: 'global'
-    }
-  ]
-})
-
-dynamo.createTables(err => {
-  if (err) {
-    console.log('Error creating tables: ', err)
-  } else {
-    console.log('Tables has been created')
-  }
-})
+const User = require('../model').User
 
 exports.createUser = user => {
   return new Promise((resolve, reject) => {
@@ -63,14 +18,14 @@ exports.updateUser = user => {
       if (err) {
         return reject(err)
       }
-      return resolve(userModel.get('email'))
+      return resolve(userModel)
     })
   })
 }
 
-exports.deleteUser = user => {
+exports.deleteUser = userId => {
   return new Promise((resolve, reject) => {
-    User.destroy(user.email, err => {
+    User.destroy(userId, err => {
       if (err) {
         return reject(err)
       }
@@ -85,7 +40,7 @@ exports.getUserById = userId => {
       if (err) {
         return reject(err)
       }
-      return resolve(userModel.get('userId'))
+      return resolve(userModel)
     })
   })
 }
