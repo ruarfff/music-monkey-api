@@ -5,7 +5,8 @@
   "main": "server/server.js",
   "scripts": {
     "lint": "eslint .",
-    "start": "node .",
+    "start": "node ./node_modules/.bin/pm2 start pm2.json",
+    "poststart": "node ./node_modules/pm2/bin/pm2 logs",
     "posttest": "npm run lint",
     "test": "mocha --recursive --reporter spec \"**/*.spec.js\"",
     "test:watch": "npm test -- --watch"
