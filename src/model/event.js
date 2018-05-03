@@ -10,8 +10,9 @@ const Event = dynamo.define('MM-Dev-Event', {
   schema: {
     eventId: dynamo.types.uuid(),
     userId: Joi.string(),
+    name: Joi.string(),
     organizer: Joi.string(),
-    image: Joi.string()
+    imageUrl: Joi.string()
       .allow('')
       .optional(),
     description: Joi.string()
@@ -21,9 +22,7 @@ const Event = dynamo.define('MM-Dev-Event', {
       .allow('')
       .optional(),
     location: {
-      address: Joi.string()
-        .allow('')
-        .optional(),
+      address: Joi.string().default('Nowhere'),
       latLng: {
         lat: Joi.number().optional(),
         lng: Joi.number().optional()
@@ -33,7 +32,8 @@ const Event = dynamo.define('MM-Dev-Event', {
     endDateTime: Joi.string(),
     eventCode: Joi.string()
       .allow('')
-      .optional()
+      .optional(),
+    playlist: Joi.string()
   },
 
   indexes: [
