@@ -1,6 +1,6 @@
 FROM keymetrics/pm2:8-alpine
 
-COPY server server/
+COPY build/server build/server/
 COPY package.json .
 COPY package-lock.json .
 COPY pm2.json .
