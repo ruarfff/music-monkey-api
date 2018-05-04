@@ -1,25 +1,27 @@
-const eventGateway = require('../../src/event/eventGateway')
+import { Request, Response } from 'express'
+import EventGateway from '../event/eventGateway'
 
-module.exports = function(server) {
+export default function(server: any) {
   const router = server.loopback.Router()
+  const eventGateway = new EventGateway()
 
-  router.get('/events', (req, res) => {
+  router.get('/events', (req: Request, res: Response) => {
     eventGateway
       .getEventsByUserId(req.query.userId)
-      .then((events) => {
+      .then(events => {
         res.send(events)
       })
       .catch(err => res.status(500).send(err))
   })
 
-  router.get('/events/:eventId', (req, res) => {
+  router.get('/events/:eventId', (req: Request, res: Response) => {
     eventGateway
       .getEventById(req.params.eventId)
       .then(res.send)
       .catch(err => res.status(404).send(err))
   })
 
-  router.post('/events', (req, res) => {
+  router.post('/events', (req: Request, res: Response) => {
     const event = req.body
     eventGateway
       .createEvent(event)
@@ -30,6 +32,8 @@ module.exports = function(server) {
         res.status(400).send(err)
       })
   })
+
+  // router.put('/events/:eventId', (req: Request, res: Response) => {})
 
   server.use(router)
 }
