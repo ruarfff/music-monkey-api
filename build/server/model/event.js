@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-// @ts-ignore
-var dynamo = require("dynamodb");
+// tslint:disable-next-line:no-var-requires
+var dynamo = require('dynamodb');
 var Joi = require("joi");
 exports.Event = dynamo.define('MM-Dev-Event', {
     hashKey: 'eventId',

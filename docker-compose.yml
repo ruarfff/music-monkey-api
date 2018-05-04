@@ -7,4 +7,4 @@ services:
     volumes:
       - .:/host
     working_dir: /host
-    command: ["pm2-runtime", "start", "pm2.json"]
+    command: ["npm", "start"]

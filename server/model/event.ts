@@ -1,5 +1,5 @@
-// @ts-ignore
-import * as dynamo from 'dynamodb'
+// tslint:disable-next-line:no-var-requires
+const dynamo = require('dynamodb')
 
 import * as Joi from 'joi'
 
