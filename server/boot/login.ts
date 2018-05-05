@@ -89,7 +89,7 @@ export default function(server: any) {
 
 function getRedirectUrl(req: Request) {
   return (
-    'http://' +
+    (req.hostname === 'localhost' ? 'http://' : 'https://') +
     req.hostname +
     (req.hostname === 'localhost' ? ':8080' : '') +
     callbackEndpoint +
