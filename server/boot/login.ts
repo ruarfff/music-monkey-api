@@ -1,8 +1,9 @@
 import { Request, Response } from 'express'
-// @ts-ignore
-import * as SpotifyWebApi from 'spotify-web-api-node'
 import { IUser } from '../model'
 import UserGateway from '../user/userGateway'
+
+const SpotifyWebApi = require('spotify-web-api-node')
+
 const scopes = [
   'user-read-private',
   'user-read-email',
@@ -20,7 +21,6 @@ export default function(server: any) {
 
   router.get('/login', (req: Request, res: Response) => {
     const redirectURL = getRedirectUrl(req)
-    console.log('RedirectURL: ', redirectURL)
     const spotifyApi = new SpotifyWebApi({
       clientId,
       redirectUri: redirectURL
@@ -37,8 +37,6 @@ export default function(server: any) {
       clientSecret,
       redirectUri: redirectURL
     }
-    console.log('Creds: ', JSON.stringify(credentials, null, 4))
-    console.log('Code: ', code)
     const spotifyApi = new SpotifyWebApi(credentials)
     spotifyApi.authorizationCodeGrant(code).then(
       (data: any) => {
@@ -132,7 +130,8 @@ function getOrCreateUser(
               image:
                 spotifyUser.images && spotifyUser.images.length > 0
                   ? spotifyUser.images[0].url
-                  : ''
+                  : '',
+              spotifyId: spotifyUser.id
             } as IUser
 
             userGateway

@@ -4,19 +4,20 @@ const dynamo = require('dynamodb')
 import * as Joi from 'joi'
 
 export interface IUserAuth {
-  refreshToken: string
   accessToken: string
   expiresIn: number
+  refreshToken: string
 }
 
 export interface IUser {
-  userId: string
-  email: string
-  displayName: string
-  country: string
-  birthdate: string
-  image: string
   auth: IUserAuth
+  birthdate: string
+  country: string
+  displayName: string
+  email: string
+  image: string
+  spotifyId: string
+  userId: string
 }
 
 export const User = dynamo.define('MM-Dev-User', {
@@ -40,6 +41,9 @@ export const User = dynamo.define('MM-Dev-User', {
     displayName: Joi.string(),
     email: Joi.string().email(),
     image: Joi.string()
+      .allow('')
+      .optional(),
+    spotifyId: Joi.string()
       .allow('')
       .optional(),
     userId: dynamo.types.uuid()
