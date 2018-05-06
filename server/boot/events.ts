@@ -17,7 +17,9 @@ export default function(server: any) {
   router.get('/events/:eventId', (req: Request, res: Response) => {
     eventGateway
       .getEventById(req.params.eventId)
-      .then(res.send)
+      .then(event => {
+        res.send(event)
+      })
       .catch(err => res.status(404).send(err))
   })
 

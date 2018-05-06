@@ -37,11 +37,11 @@ export default class EventGateway {
 
   public getEventById(eventId: string) {
     return new Promise((resolve, reject) => {
-      Event.get(eventId, (err: Error, eventModel: any) => {
+      Event.query(eventId).exec((err: Error, eventModel: any) => {
         if (err) {
-          return reject(err)
+          reject(err)
         }
-        return resolve(eventModel)
+        resolve(eventModel.Items[0].attrs)
       })
     })
   }
