@@ -28,7 +28,6 @@ export default function(server: any) {
     eventGateway
       .deleteEvent(req.params.eventId, userId)
       .then(event => {
-        console.log(event)
         res.send(event)
       })
       .catch(err => res.status(404).send(err))
