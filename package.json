@@ -46,7 +46,7 @@
     "nsp": "3.2.1",
     "rimraf": "2.6.2",
     "tslint": "5.10.0",
-    "typescript": "2.8.3"
+    "typescript": "2.9.0-dev.20180506"
   },
   "repository": {
     "type": "",

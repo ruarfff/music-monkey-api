@@ -23,6 +23,17 @@ export default function(server: any) {
       .catch(err => res.status(404).send(err))
   })
 
+  router.delete('/events/:eventId', (req: Request, res: Response) => {
+    const userId = req.query.userId
+    eventGateway
+      .deleteEvent(req.params.eventId, userId)
+      .then(event => {
+        console.log(event)
+        res.send(event)
+      })
+      .catch(err => res.status(404).send(err))
+  })
+
   router.post('/events', (req: Request, res: Response) => {
     const event = req.body
     eventGateway

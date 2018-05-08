@@ -24,9 +24,9 @@ export default class EventGateway {
     })
   }
 
-  public deleteEvent(eventId: string) {
+  public deleteEvent(eventId: string, userId: string) {
     return new Promise((resolve, reject) => {
-      Event.destroy(eventId, (err: Error) => {
+      Event.destroy(eventId, userId, (err: Error) => {
         if (err) {
           return reject(err)
         }
