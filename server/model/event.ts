@@ -55,7 +55,7 @@ export const Event = dynamo.define('MM-Dev-Event', {
     },
     name: Joi.string(),
     organizer: Joi.string(),
-    playlist: Joi.string(),
+    playlistUrl: Joi.string(),
     startDateTime: Joi.string(),
     userId: Joi.string(),
     venue: Joi.string()
