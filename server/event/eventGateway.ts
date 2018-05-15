@@ -1,13 +1,30 @@
-import { Event, IEvent } from '../model'
+import { Event, IEvent, IInvite } from '../model'
+import InviteGateway from './inviteGateway'
+
+const inviteGateway: InviteGateway = new InviteGateway()
 
 export default class EventGateway {
   public createEvent(event: IEvent) {
+    console.log('Am here', event)
     return new Promise((resolve, reject) => {
       Event.create(event, (err: Error, eventModel: any) => {
         if (err) {
           reject(err)
         } else {
-          resolve(eventModel)
+          inviteGateway
+            .createInvite({
+              eventId: eventModel.get('eventId')
+            } as IInvite)
+            .then((inviteModel: any) => {
+              resolve({
+                ...eventModel.attrs,
+                invites: [inviteModel.attrs.inviteId]
+              })
+            })
+            .catch(inviteCreateErr => {
+              console.error(inviteCreateErr)
+              resolve(eventModel.attrs)
+            })
         }
       })
     })
@@ -40,8 +57,21 @@ export default class EventGateway {
       Event.query(eventId).exec((err: Error, eventModel: any) => {
         if (err) {
           reject(err)
+        } else {
+          const event = eventModel.Items[0].attrs
+          inviteGateway
+            .getInvitesByEventId(event.eventId)
+            .then((invites: any) => {
+              resolve({
+                ...event,
+                invites: invites.map((invite: any) => invite.inviteId)
+              })
+            })
+            .catch(inviteErr => {
+              console.error(inviteErr)
+              resolve(event)
+            })
         }
-        resolve(eventModel.Items[0].attrs)
       })
     })
   }

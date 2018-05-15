@@ -26,6 +26,7 @@ export interface IEvent {
   endDateTime: string
   eventCode: string
   playlist: string
+  invites: string[]
 }
 
 export const Event = dynamo.define('MM-Dev-Event', {
