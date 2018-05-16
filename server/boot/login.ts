@@ -122,10 +122,13 @@ function getOrCreateUser(
     refreshToken
   }
 
+  console.log('AUTH:', auth)
+
   return new Promise((resolve, reject) => {
     spotifyApi
       .getMe()
       .then((data: any) => {
+        console.log('DATA:', data)
         userGateway
           .getUserByEmail(data.body)
           .then((savedUser: any) => {
@@ -136,6 +139,7 @@ function getOrCreateUser(
             console.log('Could not find user ' + data.body.email, err)
             // Try create the user
             const spotifyUser = data.body
+            console.log('SP USER', spotifyUser)
             const user = {
               auth,
               birthdate: spotifyUser.birthdate,
@@ -149,12 +153,20 @@ function getOrCreateUser(
               spotifyId: spotifyUser.id
             } as IUser
 
+            console.log('All USER', user)
+
             userGateway
               .createUser(user)
               .then(resolve)
-              .catch(reject)
+              .catch((errt: Error) => {
+                console.log(errt)
+                reject()
+              })
           })
       })
-      .catch(reject)
+      .catch((err: Error) => {
+        console.log(err)
+        reject(err)
+      })
   })
 }

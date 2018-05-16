@@ -3,11 +3,13 @@ import { IUser, User } from '../model'
 
 export default class UserGateway {
   public createUser(user: IUser) {
+    console.log('User: ', user)
     return new Promise((resolve, reject) => {
       User.create(user, (err: Error, userModel: any) => {
         if (err) {
           reject(err)
         } else {
+          console.log('Usermodel: ', userModel)
           resolve(userModel)
         }
       })
