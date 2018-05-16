@@ -57,7 +57,7 @@ export const User = dynamo.define('MM-Dev-User', {
     {
       hashKey: 'email',
       name: 'EmailIndex',
-      rangeKey: 'displayName',
+      rangeKey: 'spotifyId',
       type: 'global'
     }
   ]
