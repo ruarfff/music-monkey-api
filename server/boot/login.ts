@@ -54,11 +54,9 @@ export default function(server: any) {
         if (state) {
           redirectUrl += '&' + state
         }
-        console.log('redir', redirectUrl)
         res.redirect(redirectUrl)
       },
       (err: Error) => {
-        console.log('Something went wrong!', err)
         res.status(500).send(err)
       }
     )
@@ -122,24 +120,19 @@ function getOrCreateUser(
     refreshToken
   }
 
-  console.log('AUTH:', auth)
-
   return new Promise((resolve, reject) => {
     spotifyApi
       .getMe()
       .then((data: any) => {
-        console.log('DATA:', data)
         userGateway
           .getUserByEmail(data.body)
           .then((savedUser: any) => {
             savedUser.auth = auth
             resolve(savedUser)
           })
-          .catch((err: Error) => {
-            console.log('Could not find user ' + data.body.email, err)
+          .catch(() => {
             // Try create the user
             const spotifyUser = data.body
-            console.log('SP USER', spotifyUser)
             const user = {
               auth,
               birthdate: spotifyUser.birthdate,
@@ -153,19 +146,15 @@ function getOrCreateUser(
               spotifyId: spotifyUser.id
             } as IUser
 
-            console.log('All USER', user)
-
             userGateway
               .createUser(user)
               .then(resolve)
               .catch((errt: Error) => {
-                console.log(errt)
                 reject(errt)
               })
           })
       })
       .catch((err: Error) => {
-        console.log(err)
         reject(err)
       })
   })

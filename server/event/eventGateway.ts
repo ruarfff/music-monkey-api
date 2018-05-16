@@ -77,10 +77,12 @@ export default class EventGateway {
   }
 
   public getEventByInviteId(inviteId: string) {
+    console.log('InviteID:', inviteId)
     return new Promise((resolve, reject) => {
       inviteGateway
         .getInviteById(inviteId)
         .then((invite: IInvite) => {
+          console.log('Invite:', invite)
           this.getEventById(invite.eventId)
             .then(resolve)
             .catch(reject)
