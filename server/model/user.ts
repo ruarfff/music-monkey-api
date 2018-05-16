@@ -45,6 +45,7 @@ export const User = dynamo.define('MM-Dev-User', {
     email: Joi.string().email(),
     image: Joi.string()
       .allow('')
+      .allow(null)
       .optional(),
     spotifyId: Joi.string()
       .allow('')
