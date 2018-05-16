@@ -76,6 +76,19 @@ export default class EventGateway {
     })
   }
 
+  public getEventByInviteId(inviteId: string) {
+    return new Promise((resolve, reject) => {
+      inviteGateway
+        .getInviteById(inviteId)
+        .then((invite: IInvite) => {
+          this.getEventById(invite.eventId)
+            .then(resolve)
+            .catch(reject)
+        })
+        .catch(reject)
+    })
+  }
+
   public getEventsByUserId(userId: string) {
     return new Promise((resolve: any, reject: any) => {
       Event.query(userId)

@@ -30,7 +30,11 @@ export default class InviteGateway {
         if (err) {
           reject(err)
         }
-        resolve(inviteModel.Items[0].attrs)
+        if (inviteModel.Count < 1) {
+          reject(new Error('Not found'))
+        } else {
+          resolve(inviteModel.Items[0].attrs)
+        }
       })
     })
   }

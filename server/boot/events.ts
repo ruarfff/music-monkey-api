@@ -6,12 +6,21 @@ export default function(server: any) {
   const eventGateway = new EventGateway()
 
   router.get('/events', (req: Request, res: Response) => {
-    eventGateway
-      .getEventsByUserId(req.query.userId)
-      .then(events => {
-        res.send(events)
-      })
-      .catch(err => res.status(500).send(err))
+    let action = null
+    if (req.query.userId) {
+      action = eventGateway.getEventsByUserId(req.query.userId)
+    } else if (req.query.inviteId) {
+      action = eventGateway.getEventByInviteId(req.query.inviteId)
+    }
+    if (action) {
+      action
+        .then(events => {
+          res.send(events)
+        })
+        .catch(err => res.status(500).send(err))
+    } else {
+      res.send([])
+    }
   })
 
   router.get('/events/:eventId', (req: Request, res: Response) => {
