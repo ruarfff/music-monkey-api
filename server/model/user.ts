@@ -38,7 +38,9 @@ export const User = dynamo.define('MM-Dev-User', {
     country: Joi.string()
       .allow('')
       .optional(),
-    displayName: Joi.string(),
+    displayName: Joi.string()
+      .allow('')
+      .optional(),
     email: Joi.string().email(),
     image: Joi.string()
       .allow('')

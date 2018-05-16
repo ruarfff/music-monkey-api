@@ -160,7 +160,7 @@ function getOrCreateUser(
               .then(resolve)
               .catch((errt: Error) => {
                 console.log(errt)
-                reject()
+                reject(errt)
               })
           })
       })
