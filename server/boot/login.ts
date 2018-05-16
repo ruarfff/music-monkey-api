@@ -20,18 +20,28 @@ export default function(server: any) {
   const router = server.loopback.Router()
 
   router.get('/login', (req: Request, res: Response) => {
-    const redirectURL = getRedirectUrl(req)
+    let redirectTo = req.query.redirectTo
+    let inviteParam = ''
+    if (redirectTo && redirectTo.split('?').length > 1) {
+      const inviteId = redirectTo.split('=')[1]
+      inviteParam = 'invite=' + inviteId
+      redirectTo = redirectTo.split('?')[0]
+    }
+
+    const redirectURL = getRedirectUrl(req.hostname, redirectTo)
+
     const spotifyApi = new SpotifyWebApi({
       clientId,
       redirectUri: redirectURL
     })
-    const authorizeURL = spotifyApi.createAuthorizeURL(scopes)
+    const authorizeURL = spotifyApi.createAuthorizeURL(scopes, inviteParam)
     res.redirect(authorizeURL)
   })
   router.get('/callback', (req: Request, res: Response) => {
-    const redirectURL = getRedirectUrl(req)
+    const redirectURL = getRedirectUrl(req.hostname, req.query.redirectTo)
     const code = req.query.code
     const redirectTo = req.query.redirectTo
+    const state = req.query.state
     const credentials = {
       clientId,
       clientSecret,
@@ -40,7 +50,12 @@ export default function(server: any) {
     const spotifyApi = new SpotifyWebApi(credentials)
     spotifyApi.authorizationCodeGrant(code).then(
       (data: any) => {
-        res.redirect(redirectTo + '?rt=' + data.body.refresh_token)
+        let redirectUrl = redirectTo + '?rt=' + data.body.refresh_token
+        if (state) {
+          redirectUrl += '&' + state
+        }
+        console.log('redir', redirectUrl)
+        res.redirect(redirectUrl)
       },
       (err: Error) => {
         console.log('Something went wrong!', err)
@@ -49,7 +64,7 @@ export default function(server: any) {
     )
   })
   router.post('/refresh', (req: Request, res: Response) => {
-    const redirectUrl = getRedirectUrl(req)
+    const redirectUrl = getRedirectUrl(req.hostname, req.query.redirectTo)
     const spotifyApi = new SpotifyWebApi({
       clientId,
       clientSecret,
@@ -85,13 +100,13 @@ export default function(server: any) {
   server.use(router)
 }
 
-function getRedirectUrl(req: Request) {
+function getRedirectUrl(hostname: string, redirectTo: string) {
   return (
-    (req.hostname === 'localhost' ? 'http://' : 'https://') +
-    req.hostname +
-    (req.hostname === 'localhost' ? ':8080' : '') +
+    (hostname === 'localhost' ? 'http://' : 'https://') +
+    hostname +
+    (hostname === 'localhost' ? ':8080' : '') +
     callbackEndpoint +
-    (req.query.redirectTo ? '?redirectTo=' + req.query.redirectTo : '')
+    (redirectTo ? '?redirectTo=' + redirectTo : '')
   )
 }
 
