@@ -38,12 +38,18 @@ export default class UserGateway {
 
   public getUserById(userId: string) {
     return new Promise((resolve, reject) => {
-      User.get(userId, (err: Error, userModel: any) => {
-        if (err) {
-          return reject(err)
-        }
-        return resolve(userModel)
-      })
+      console.log(userId)
+      User.query(userId)
+        .limit(1)
+        .exec((err: Error, userModel: any) => {
+          if (err) {
+            console.log(err)
+            reject(err)
+          } else {
+            const user = userModel.Items[0].attrs
+            resolve(user)
+          }
+        })
     })
   }
 

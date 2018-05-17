@@ -8,7 +8,9 @@ export default function(server: any) {
   router.get('/users/:userId', (req: Request, res: Response) => {
     userGateway
       .getUserById(req.params.userId)
-      .then(res.send)
+      .then(user => {
+        res.send(user)
+      })
       .catch(err => res.status(404).send(err))
   })
 
