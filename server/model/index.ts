@@ -10,6 +10,7 @@ dynamo.AWS.config.update({
 export * from './event'
 export * from './user'
 export * from './invite'
+export * from './suggestion'
 
 export const createTables = () => {
   dynamo.createTables((err: Error) => {
