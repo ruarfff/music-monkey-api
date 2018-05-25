@@ -9,7 +9,8 @@ const scopes = [
   'user-read-email',
   'user-read-birthdate',
   'playlist-modify-public',
-  'playlist-modify-private'
+  'playlist-modify-private',
+  'user-top-read'
 ]
 const callbackEndpoint = '/callback'
 const clientId = 'ee4aa78cde4c4be08978d79c180e11c9'
