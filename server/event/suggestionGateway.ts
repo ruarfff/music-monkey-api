@@ -1,4 +1,5 @@
 import { ISuggestion, Suggestion } from '../model'
+import {onSuggectionSaved} from './suggestionNotifier'
 
 export default class SuggestionGateway {
   public createSuggestion(suggestion: ISuggestion) {
@@ -7,7 +8,9 @@ export default class SuggestionGateway {
         if (err) {
           reject(err)
         } else {
-          resolve(suggestionModel)
+          console.log(suggestionModel.attrs)
+          onSuggectionSaved(suggestionModel.attrs)
+          resolve(suggestionModel.attrs)
         }
       })
     })
