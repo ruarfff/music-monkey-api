@@ -14,6 +14,7 @@ export interface ISuggestion {
   userId: string
   type: string
   item: ISuggestionItem
+  accepted: boolean
 }
 
 export const Suggestion = dynamo.define('MM-Dev-Suggestion', {
@@ -33,7 +34,8 @@ export const Suggestion = dynamo.define('MM-Dev-Suggestion', {
         .optional()
         .allow('')
         .allow(null)
-    }
+    },
+    accepted: Joi.boolean().default(false)
   },
 
   indexes: [
