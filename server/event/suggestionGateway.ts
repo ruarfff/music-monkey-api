@@ -8,7 +8,6 @@ export default class SuggestionGateway {
         if (err) {
           reject(err)
         } else {
-          console.log(suggestionModel.attrs)
           onSuggectionSaved(suggestionModel.attrs)
           resolve(suggestionModel.attrs)
         }
@@ -35,7 +34,6 @@ export default class SuggestionGateway {
             console.log('Suggestion Error', err)
             reject(err)
           }
-          console.log(suggestionModel)
           if (suggestionModel.Count < 1) {
             console.log('Not found')
             reject(new Error('Not found'))

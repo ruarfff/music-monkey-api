@@ -57,6 +57,8 @@ export default class EventGateway {
       Event.query(eventId).exec((err: Error, eventModel: any) => {
         if (err) {
           reject(err)
+        } else if (eventModel.Count < 1) {
+          reject(new Error('Event not found'))
         } else {
           const event = eventModel.Items[0].attrs
           inviteGateway
