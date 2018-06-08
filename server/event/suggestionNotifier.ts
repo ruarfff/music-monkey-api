@@ -9,6 +9,6 @@ const pusher = new Pusher({
   encrypted: true
 })
 
-export const onSuggectionSaved = (suggestion: ISuggestion) => {
+export const onSuggestionSaved = (suggestion: ISuggestion) => {
   pusher.trigger('mm-suggestions-' + suggestion.eventId, 'suggestion-saved', suggestion)
 }

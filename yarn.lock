@@ -48,6 +48,10 @@
   version "13.0.8"
   resolved "https://registry.yarnpkg.com/@types/joi/-/joi-13.0.8.tgz#224d5da224036f0c15b35e6980ba9de63b8ea374"
 
+"@types/lodash@4.14.109":
+  version "4.14.109"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.109.tgz#b1c4442239730bf35cabaf493c772b18c045886d"
+
 "@types/loopback-boot@2.23.4":
   version "2.23.4"
   resolved "https://registry.yarnpkg.com/@types/loopback-boot/-/loopback-boot-2.23.4.tgz#1905d903714336ed72d84b043b7a7470f770d4cf"
@@ -2363,7 +2367,7 @@ lodash.reduce@4.6.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/lodash.reduce/-/lodash.reduce-4.6.0.tgz#f1ab6b839299ad48f784abbf476596f03b914d3b"
 
-lodash@4.x.x, lodash@^4.0.0, lodash@^4.14.0, lodash@^4.15.0, lodash@^4.16.2, lodash@^4.17.2, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.3.0:
+lodash@4.17.10, lodash@4.x.x, lodash@^4.0.0, lodash@^4.14.0, lodash@^4.15.0, lodash@^4.16.2, lodash@^4.17.2, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.3.0:
   version "4.17.10"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.10.tgz#1b7793cf7259ea38fb3661d4d38b3260af8ae4e7"
 

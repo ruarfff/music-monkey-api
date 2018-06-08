@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import * as _ from 'lodash'
 import SuggestionGateway from '../event/suggestionGateway'
 
 export default function(server: any) {
@@ -47,9 +48,17 @@ export default function(server: any) {
   })
 
   router.post('/suggestions', (req: Request, res: Response) => {
-    const suggestion = req.body
-    suggestionGateway
-      .createSuggestion(suggestion)
+    let creationPromise
+    if (_.isArray(req.body)) {
+      const suggestions = req.body
+      creationPromise = Promise.all(
+        suggestions.map(suggestionGateway.createSuggestion)
+      )
+    } else {
+      const suggestion = req.body
+      creationPromise = suggestionGateway.createSuggestion(suggestion)
+    }
+    creationPromise
       .then(savedSuggestion => {
         res.send(savedSuggestion)
       })
