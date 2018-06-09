@@ -42,7 +42,7 @@ export default class UserGateway {
       User.query(userId)
         .limit(1)
         .exec((err: Error, userModel: any) => {
-          if (err) {
+          if (err || userModel.Count < 1) {
             console.log(err)
             reject(err)
           } else {
