@@ -54,6 +54,7 @@ export default function(server: any) {
       })
   })
 
+  // TODO: Allow updates
   // router.put('/events/:eventId', (req: Request, res: Response) => {})
 
   server.use(router)

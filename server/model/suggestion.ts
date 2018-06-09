@@ -3,17 +3,13 @@ const dynamo = require('dynamodb')
 
 import * as Joi from 'joi'
 
-interface ISuggestionItem {
-  id: string
-  refId?: string
-}
-
 export interface ISuggestion {
   suggestionId: string
   eventId: string
   userId: string
   type: string
-  item: ISuggestionItem
+  trackUri: string
+  playlistUri: string
   accepted: boolean
 }
 
@@ -28,13 +24,8 @@ export const Suggestion = dynamo.define('MM-Dev-Suggestion', {
     eventId: Joi.string(),
     userId: Joi.string(),
     type: Joi.string().valid(['track', 'playlist']),
-    item: {
-      id: Joi.string(),
-      refId: Joi.string()
-        .optional()
-        .allow('')
-        .allow(null)
-    },
+    playlistUri: Joi.string().optional().allow(''),
+    trackUri: Joi.string(),
     accepted: Joi.boolean().default(false)
   },
 
