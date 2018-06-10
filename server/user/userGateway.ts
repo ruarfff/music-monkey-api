@@ -38,12 +38,11 @@ export default class UserGateway {
 
   public getUserById(userId: string) {
     return new Promise((resolve, reject) => {
-      console.log(userId)
       User.query(userId)
         .limit(1)
         .exec((err: Error, userModel: any) => {
           if (err || userModel.Count < 1) {
-            console.log(err)
+            console.error(err)
             reject(err)
           } else {
             const user = userModel.Items[0].attrs

@@ -17,7 +17,7 @@ export default class SuggestionGateway {
 
   public createSuggestion(suggestion: ISuggestion) {
     return new Promise((resolve, reject) => {
-      Suggestion.up(suggestion, (err: Error, suggestionModel: any) => {
+      Suggestion.create(suggestion, (err: Error, suggestionModel: any) => {
         if (err) {
           reject(err)
         } else {
@@ -55,11 +55,10 @@ export default class SuggestionGateway {
       Suggestion.query(suggestionId).exec(
         (err: Error, suggestionModel: any) => {
           if (err) {
-            console.log('Suggestion Error', err)
+            console.error('Suggestion Error', err)
             reject(err)
           }
           if (suggestionModel.Count < 1) {
-            console.log('Not found')
             reject(new Error('Not found'))
           } else {
             resolve(suggestionModel.Items[0].attrs)

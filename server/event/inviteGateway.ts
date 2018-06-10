@@ -28,12 +28,10 @@ export default class InviteGateway {
     return new Promise((resolve, reject) => {
       Invite.query(inviteId).exec((err: Error, inviteModel: any) => {
         if (err) {
-          console.log('Invite Error', err)
+          console.error('Invite Error', err)
           reject(err)
         }
-        console.log(inviteModel)
         if (inviteModel.Count < 1) {
-          console.log('Not found')
           reject(new Error('Not found'))
         } else {
           resolve(inviteModel.Items[0].attrs)

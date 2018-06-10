@@ -5,7 +5,6 @@ const inviteGateway: InviteGateway = new InviteGateway()
 
 export default class EventGateway {
   public createEvent(event: IEvent) {
-    console.log('Am here', event)
     return new Promise((resolve, reject) => {
       Event.create(event, (err: Error, eventModel: any) => {
         if (err) {
@@ -79,12 +78,10 @@ export default class EventGateway {
   }
 
   public getEventByInviteId(inviteId: string) {
-    console.log('InviteID:', inviteId)
     return new Promise((resolve, reject) => {
       inviteGateway
         .getInviteById(inviteId)
         .then((invite: IInvite) => {
-          console.log('Invite:', invite)
           this.getEventById(invite.eventId)
             .then(resolve)
             .catch(reject)
