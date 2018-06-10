@@ -1,10 +1,23 @@
 import { ISuggestion, Suggestion } from '../model'
-import {onSuggestionSaved} from './suggestionNotifier'
+import { onSuggestionsAccepted, onSuggestionSaved } from './suggestionNotifier'
 
 export default class SuggestionGateway {
+  public bulkCreateSuggestion(suggestions: ISuggestion[]) {
+    return new Promise((resolve, reject) => {
+      Suggestion.create(suggestions, (err: Error, suggestionModel: any) => {
+        if (err) {
+          reject(err)
+        } else {
+          onSuggestionSaved(suggestionModel)
+          resolve(suggestionModel)
+        }
+      })
+    })
+  }
+
   public createSuggestion(suggestion: ISuggestion) {
     return new Promise((resolve, reject) => {
-      Suggestion.create(suggestion, (err: Error, suggestionModel: any) => {
+      Suggestion.up(suggestion, (err: Error, suggestionModel: any) => {
         if (err) {
           reject(err)
         } else {
@@ -12,6 +25,17 @@ export default class SuggestionGateway {
           resolve(suggestionModel.attrs)
         }
       })
+    })
+  }
+
+  public acceptSuggestions(eventId: string, suggestions: ISuggestion[]) {
+    const updatePromises: any = []
+    suggestions.map(suggestion => {
+      updatePromises.push(Suggestion.update({ ...suggestion, accepted: true }))
+    })
+    return Promise.all(updatePromises).then(values => {
+      onSuggestionsAccepted(eventId)
+      return values
     })
   }
 

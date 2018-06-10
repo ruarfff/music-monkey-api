@@ -51,14 +51,29 @@ export default function(server: any) {
     let creationPromise
     if (_.isArray(req.body)) {
       const suggestions = req.body
-      creationPromise = Promise.all(
-        suggestions.map(suggestionGateway.createSuggestion)
-      )
+      creationPromise = suggestionGateway.bulkCreateSuggestion(suggestions)
     } else {
       const suggestion = req.body
       creationPromise = suggestionGateway.createSuggestion(suggestion)
     }
     creationPromise
+      .then(savedSuggestion => {
+        res.send(savedSuggestion)
+      })
+      .catch(err => {
+        res.status(400).send(err)
+      })
+  })
+
+  router.post('/suggestions/:eventId/accept', (req: Request, res: Response) => {
+    const eventId = req.params.eventId
+    let acceptPromise
+    let suggestions = req.body
+    if (!_.isArray(suggestions)) {
+      suggestions = [req.body]
+    }
+    acceptPromise = suggestionGateway.acceptSuggestions(eventId, suggestions)
+    acceptPromise
       .then(savedSuggestion => {
         res.send(savedSuggestion)
       })

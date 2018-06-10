@@ -10,5 +10,13 @@ const pusher = new Pusher({
 })
 
 export const onSuggestionSaved = (suggestion: ISuggestion) => {
-  pusher.trigger('mm-suggestions-' + suggestion.eventId, 'suggestion-saved', suggestion)
+  pusher.trigger(
+    'mm-suggestions-' + suggestion.eventId,
+    'suggestion-saved',
+    suggestion
+  )
+}
+
+export const onSuggestionsAccepted = (eventId: string) => {
+  pusher.trigger('mm-suggestions-' + eventId, 'suggestions-accepted')
 }
