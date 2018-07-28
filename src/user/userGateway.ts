@@ -52,9 +52,9 @@ export default class UserGateway {
     })
   }
 
-  public getUserByEmail(user: IUser) {
+  public getUserByEmail(email: string) {
     return new Promise((resolve, reject) => {
-      User.query(user.email)
+      User.query(email)
         .usingIndex('EmailIndex')
         .limit(1)
         .exec((err: any, userModel: any) => {

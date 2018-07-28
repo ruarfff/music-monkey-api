@@ -1,0 +1,17 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.12.0
+# ignores vulnerabilities until expiry date; change duration by modifying expiry date
+ignore:
+  'npm:cryptiles:20180710':
+    - pusher > request > hawk > cryptiles:
+        reason: None given
+        expires: '2018-08-27T09:46:27.206Z'
+  'npm:shelljs:20140723':
+    - pm2 > shelljs:
+        reason: None given
+        expires: '2018-08-27T09:46:27.206Z'
+  'npm:superagent:20170807':
+    - spotify-web-api-node > superagent:
+        reason: None given
+        expires: '2018-08-27T09:46:27.206Z'
+patch: {}
