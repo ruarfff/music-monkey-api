@@ -120,7 +120,6 @@ function getOrCreateUser(
     spotifyApi
       .getMe()
       .then((data: any) => {
-        console.log('Spotify User', data)
         userGateway
           .getUserByEmail(data.body.email)
           .then((savedUser: any) => {
@@ -143,14 +142,12 @@ function getOrCreateUser(
               spotifyId: spotifyUser.id
             } as IUser
 
-            console.log(user)
-            reject('Bad')
-            /** userGateway
+            userGateway
               .createUser(user)
               .then(resolve)
               .catch((errt: Error) => {
                 reject(errt)
-              }) */
+              })
           })
       })
       .catch((err: Error) => {

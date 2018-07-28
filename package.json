@@ -4,7 +4,7 @@
   "private": true,
   "main": "build/server.js",
   "scripts": {
-    "lint": "tslint --fix -c tslint.json src/**/*.ts'",
+    "lint": "tslint --fix -c tslint.json src/**/*.ts",
     "start": "node ./node_modules/.bin/pm2 start pm2.json",
     "stop": "node ./node_modules/.bin/pm2 stop pm2.json",
     "start:watch": "npm run start -- --watch",
