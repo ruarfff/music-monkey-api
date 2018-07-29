@@ -57,7 +57,7 @@ router.get(
 
 router.get(
   '/guest/callback',
-  passport.authenticate('spotify-guest-local', {
+  passport.authenticate('spotify-guest', {
     failureRedirect: 'https://guest.musicmonkeuy.io/login',
     session: false
   } as any),

@@ -38,7 +38,7 @@ passport.use(
     {
       clientID: clientId,
       clientSecret,
-      callbackURL: 'https://api.musicmonkey.io/auth/guest/callback'
+      callbackURL: 'https://api.musicmonkey.io/api/v1/auth/guest/callback'
     },
     handleSpotifyLogin
   )
@@ -50,7 +50,7 @@ passport.use(
     {
       clientID: clientId,
       clientSecret,
-      callbackURL: 'http://localhost:8080/auth/guest/callback/local'
+      callbackURL: 'http://localhost:8080/api/v1/auth/guest/callback/local'
     },
     handleSpotifyLogin
   )

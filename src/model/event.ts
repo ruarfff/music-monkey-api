@@ -2,6 +2,7 @@
 const dynamo = require('dynamodb')
 
 import * as Joi from 'joi'
+import IPlaylist from '../spotify/IPlaylist'
 
 export interface ILatLng {
   lat: string
@@ -25,7 +26,8 @@ export interface IEvent {
   startDateTime: string
   endDateTime: string
   eventCode: string
-  playlist: string
+  playlist: IPlaylist
+  playlistUrl: string
   invites: string[]
 }
 

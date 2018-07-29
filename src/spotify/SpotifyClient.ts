@@ -10,8 +10,16 @@ const spotifyApi = new SpotifyWebApi({
 })
 
 export default class SpotifyClient {
+  public getPlaylist(userName: string, playlistId: string, user: IUser) {
+    return this.checkToken(user).then((validUser: IUser) => {
+      spotifyApi.setAccessToken(validUser.spotifyAuth.accessToken)
+      return spotifyApi.getPlaylist(userName, playlistId)
+    })
+  }
+
   public getUserPlaylists(user: IUser) {
     return this.checkToken(user).then((validUser: IUser) => {
+      console.log('USER:', user)
       spotifyApi.setAccessToken(validUser.spotifyAuth.accessToken)
 
       return spotifyApi
@@ -48,6 +56,7 @@ export default class SpotifyClient {
     if (user.spotifyAuth.expiresAt < Date.now()) {
       return this.refreshToken(user.spotifyAuth.refreshToken).then(
         (spotifyAuth: any) => {
+          console.log('spotifyAuth', spotifyAuth)
           return userGateway.updateUser({ ...user, spotifyAuth })
         }
       )

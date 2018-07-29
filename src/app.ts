@@ -9,9 +9,10 @@ import passport from './passport'
 
 import indexRouter from './routes'
 import authRouter from './routes/auth'
-import eventRouter from './routes/events'
+import eventsRouter from './routes/events'
 import inviteRouter from './routes/invites'
 import legacyAuthRouter from './routes/legacyAuth'
+import legacyEventRouter from './routes/legacyEvents'
 import suggestionsRouter from './routes/suggestions'
 import userPlaylistRouter from './routes/userPlaylists'
 import userRouter from './routes/users'
@@ -60,12 +61,13 @@ app.use(passport.session())
 
 app.use('/', indexRouter)
 app.use('/', legacyAuthRouter)
-app.use('/auth', authRouter)
 app.use('/users', userRouter)
 app.use('/suggestions', suggestionsRouter)
 app.use('/invites', inviteRouter)
-app.use('/events', eventRouter)
-app.use('/users/:userId/playlists', userPlaylistRouter)
+app.use('/events', legacyEventRouter)
+app.use('/api/v1/auth', authRouter)
+app.use('/api/v1/users/:userId/playlists', userPlaylistRouter)
+app.use('/api/v1/events', eventsRouter)
 
 // error handler
 app.use((err: any, req: any, res: any, next: any) => {
