@@ -48,8 +48,7 @@ router.get(
   passport.authenticate('jwt', { session: false }),
   (req: Request, res: Response) => {
     const { user } = req
-
-    res.status(200).send({ user })
+    res.status(200).send(user.user)
   }
 )
 

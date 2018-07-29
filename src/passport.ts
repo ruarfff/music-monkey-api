@@ -54,7 +54,7 @@ passport.use(
         profile
       )
       userGateway
-        .getOrCreateUser(user)
+        .getOrCreateUser(user, 'spotify')
         .then(validUser => {
           done(null, validUser)
         })

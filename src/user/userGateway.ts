@@ -2,10 +2,34 @@ import { Promise } from 'es6-promise'
 import { IUser, User } from '../model'
 
 export default class UserGateway {
-  public getOrCreateUser(user: IUser) {
+  public getOrCreateUser(user: IUser, strategy: string) {
     return new Promise((resolve, reject) => {
       this.getUserByEmail(user.email)
-        .then(resolve)
+        .then((savedUser: IUser) => {
+          if (strategy === 'spotify') {
+            if (savedUser.spotifyId && savedUser.spotifyId !== user.spotifyId) {
+              console.error(
+                `Invalid Spotify account link: email: ${
+                  user.email
+                }, incoming spotifyId: ${user.spotifyId}, saved spotifyId: ${
+                  savedUser.spotifyId
+                }`
+              )
+              reject('This Spotify account has been linked to another account')
+            } else {
+              savedUser = {
+                ...savedUser,
+                spotifyId: user.spotifyId,
+                spotifyAuth: user.spotifyAuth
+              }
+              this.updateUser(savedUser)
+                .then(resolve)
+                .catch(reject)
+            }
+          } else {
+            resolve(savedUser)
+          }
+        })
         .catch(() => {
           this.createUser(user)
             .then(resolve)
