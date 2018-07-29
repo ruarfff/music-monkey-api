@@ -36,7 +36,7 @@ router.get(
     const cookieConfig =
       req.app.get('env') === 'development'
         ? {}
-        : { httpOnly: true, secure: true }
+        : { httpOnly: true, secure: true, domain: '.musicmonkey.io' }
     const token = jwt.sign({ user }, 'super-super-secret-mm')
     res.cookie('jwt', token, cookieConfig)
     res.redirect('http://localhost:3000/')
