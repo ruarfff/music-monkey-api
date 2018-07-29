@@ -40,29 +40,43 @@ passport.use(
       clientSecret,
       callbackURL: 'https://api.musicmonkey.io/auth/guest/callback'
     },
-    (
-      accessToken: string,
-      refreshToken: string,
-      expiresIn: any,
-      profile: any,
-      done: any
-    ) => {
-      const user: IUser = profileToUser.spotifyProfileToUser(
-        accessToken,
-        refreshToken,
-        expiresIn,
-        profile
-      )
-      userGateway
-        .getOrCreateUser(user, 'spotify')
-        .then(validUser => {
-          done(null, validUser)
-        })
-        .catch(err => {
-          return done(err, user)
-        })
-    }
+    handleSpotifyLogin
   )
 )
+
+passport.use(
+  'spotify-guest-local',
+  new SpotifyStrategy(
+    {
+      clientID: clientId,
+      clientSecret,
+      callbackURL: 'http://localhost:8080/auth/guest/callback/local'
+    },
+    handleSpotifyLogin
+  )
+)
+
+function handleSpotifyLogin(
+  accessToken: string,
+  refreshToken: string,
+  expiresIn: number,
+  profile: any,
+  done: any
+) {
+  const user: IUser = profileToUser.spotifyProfileToUser(
+    accessToken,
+    refreshToken,
+    expiresIn,
+    profile
+  )
+  userGateway
+    .getOrCreateUser(user, 'spotify')
+    .then(validUser => {
+      done(null, validUser)
+    })
+    .catch(err => {
+      return done(err, user)
+    })
+}
 
 export default passport

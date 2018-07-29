@@ -11,7 +11,7 @@ export interface IUserAuth {
 
 export interface ISpotifyAuth {
   accessToken: string
-  expiresIn: number
+  expiresAt: number
   refreshToken: string
 }
 

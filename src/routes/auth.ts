@@ -26,16 +26,50 @@ router.get(
 )
 
 router.get(
-  '/guest/callback',
-  passport.authenticate('spotify-guest', {
+  '/spotify-guest-local',
+  passport.authenticate('spotify-guest-local', {
+    scope: scopes,
+    showDialog: true
+  } as any),
+  () => {
+    // The request will be redirected to spotify for authentication, so this
+    // function will not be called.
+  }
+)
+
+router.get(
+  '/guest/callback/local',
+  passport.authenticate('spotify-guest-local', {
     failureRedirect: 'http://localhost:3000/login',
     session: false
   } as any),
   (req: Request, res: Response) => {
     const user = req.user
     const token = jwt.sign({ user }, 'super-super-secret-mm')
-    res.cookie('jwt', token, { httpOnly: true, secure: true })
+    if (req.get('env') === 'production') {
+      res.cookie('jwt', token, { httpOnly: true, secure: true })
+    } else {
+      res.cookie('jwt', token, {})
+    }
     res.redirect('http://localhost:3000/')
+  }
+)
+
+router.get(
+  '/guest/callback',
+  passport.authenticate('spotify-guest-local', {
+    failureRedirect: 'https://guest.musicmonkeuy.io/login',
+    session: false
+  } as any),
+  (req: Request, res: Response) => {
+    const user = req.user
+    const token = jwt.sign({ user }, 'super-super-secret-mm')
+    if (req.get('env') === 'production') {
+      res.cookie('jwt', token, { httpOnly: true, secure: true })
+    } else {
+      res.cookie('jwt', token, {})
+    }
+    res.redirect('https://guest.musicmonkeuy.io/')
   }
 )
 

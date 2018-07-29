@@ -9,13 +9,13 @@ export default class ProfileToUser {
   public spotifyProfileToUser(
     accessToken: string,
     refreshToken: string,
-    expiresIn: any,
+    expiresIn: number,
     spotifyProfile: ISpotifyPassportProfile
   ): IUser {
     return {
       spotifyAuth: {
         accessToken,
-        expiresIn,
+        expiresAt: Date.now() + expiresIn * 1000,
         refreshToken
       },
       birthdate: spotifyProfile._json.birthdate,

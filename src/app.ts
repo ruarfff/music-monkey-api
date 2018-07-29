@@ -13,6 +13,7 @@ import eventRouter from './routes/events'
 import inviteRouter from './routes/invites'
 import legacyAuthRouter from './routes/legacyAuth'
 import suggestionsRouter from './routes/suggestions'
+import userPlaylistRouter from './routes/userPlaylists'
 import userRouter from './routes/users'
 
 createTables()
@@ -64,6 +65,7 @@ app.use('/users', userRouter)
 app.use('/suggestions', suggestionsRouter)
 app.use('/invites', inviteRouter)
 app.use('/events', eventRouter)
+app.use('/users/:userId/playlists', userPlaylistRouter)
 
 // error handler
 app.use((err: any, req: any, res: any, next: any) => {
