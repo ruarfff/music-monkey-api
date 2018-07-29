@@ -38,7 +38,7 @@ passport.use(
     {
       clientID: clientId,
       clientSecret,
-      callbackURL: 'http://localhost:8080/auth/guest/callback'
+      callbackURL: 'https://api.musicmonkey.io/auth/guest/callback'
     },
     (
       accessToken: string,

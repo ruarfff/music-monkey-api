@@ -34,7 +34,7 @@ router.get(
   (req: Request, res: Response) => {
     const user = req.user
     const token = jwt.sign({ user }, 'super-super-secret-mm')
-    res.cookie('jwt', token, {})
+    res.cookie('jwt', token, { httpOnly: true, secure: true })
     res.redirect('http://localhost:3000/')
   }
 )
