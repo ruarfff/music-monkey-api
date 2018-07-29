@@ -92,12 +92,9 @@ export default class EventGateway {
 
   public getEventsByUserId(userId: string) {
     return new Promise((resolve: any, reject: any) => {
-      console.log(userId)
       Event.query(userId)
         .usingIndex('UserIdIndex')
         .exec((err: Error, eventModel: any) => {
-          console.error(err)
-          console.log(eventModel)
           if (err || eventModel.Items.length < 1) {
             reject(err)
           }

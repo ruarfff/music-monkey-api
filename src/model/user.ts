@@ -9,8 +9,15 @@ export interface IUserAuth {
   refreshToken: string
 }
 
+export interface ISpotifyAuth {
+  accessToken: string
+  expiresIn: number
+  refreshToken: string
+}
+
 export interface IUser {
   auth: IUserAuth
+  spotifyAuth: ISpotifyAuth
   birthdate: string
   country: string
   displayName: string

@@ -2,6 +2,21 @@ import { Promise } from 'es6-promise'
 import { IUser, User } from '../model'
 
 export default class UserGateway {
+  public getOrCreateUser(user: IUser) {
+    return new Promise((resolve, reject) => {
+      this.getUserByEmail(user.email)
+        .then(resolve)
+        .catch(() => {
+          this.createUser(user)
+            .then(resolve)
+            .catch((err: Error) => {
+              // TODO: for some reason if I just do  .catch(reject) it doesn't work. Should figure out why... someday
+              reject(err)
+            })
+        })
+    })
+  }
+
   public createUser(user: IUser) {
     return new Promise((resolve, reject) => {
       User.create(user, (err: Error, userModel: any) => {

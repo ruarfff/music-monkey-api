@@ -33,15 +33,13 @@ router.get(
   } as any),
   (req: Request, res: Response) => {
     const user = req.user
-    console.log('HUHUIHUI')
     const cookieConfig =
       req.app.get('env') === 'development'
         ? {}
         : { httpOnly: true, secure: true }
     const token = jwt.sign({ user }, 'super-super-secret-mm')
-    console.log(token)
     res.cookie('jwt', token, cookieConfig)
-    res.redirect('http://localhost:3000/callback')
+    res.redirect('http://localhost:3000/')
   }
 )
 
