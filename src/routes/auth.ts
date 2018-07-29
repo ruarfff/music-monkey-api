@@ -1,6 +1,7 @@
 import { Request, Response, Router } from 'express'
 import * as jwt from 'jsonwebtoken'
 import * as passport from 'passport'
+
 const router = Router()
 
 const scopes = [
@@ -26,14 +27,31 @@ router.get(
 
 router.get(
   '/guest/callback',
-  passport.authenticate('spotify-guest', { failureRedirect: '/login' } as any),
+  passport.authenticate('spotify-guest', {
+    failureRedirect: 'http://localhost:3000/login',
+    session: false
+  } as any),
   (req: Request, res: Response) => {
     const user = req.user
-
-    const expiryDate = new Date(Date.now() + 60 * 60 * 1000)
-    const token = jwt.sign({ user }, 'super-secret-music-monkey')
-    res.cookie('token', token, { expires: expiryDate })
+    console.log('HUHUIHUI')
+    const cookieConfig =
+      req.app.get('env') === 'development'
+        ? {}
+        : { httpOnly: true, secure: true }
+    const token = jwt.sign({ user }, 'super-super-secret-mm')
+    console.log(token)
+    res.cookie('jwt', token, cookieConfig)
     res.redirect('http://localhost:3000/callback')
+  }
+)
+
+router.get(
+  '/verify',
+  passport.authenticate('jwt', { session: false }),
+  (req: Request, res: Response) => {
+    const { user } = req
+
+    res.status(200).send({ user })
   }
 )
 

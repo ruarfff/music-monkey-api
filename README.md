@@ -22,6 +22,14 @@ To run the app locally use:
 
 This will launch the application on [localhost:8080](http://localhost:8080)
 
+To restart the app automatically on changes:
+
+`yarn start:watch`
+
+The easiest things is to use 2 consoles.
+
+In one run: `yarn compile:watch` and in the other run: `yarn start:watch`
+
 ## Deploying
 
 Deployments are automated. We use [CodeShip](https://codeship.com/) to automate deployments. All you need to do is push changes to the master branch to deploy. Other branches will not deploy.
@@ -29,3 +37,42 @@ Deployments are automated. We use [CodeShip](https://codeship.com/) to automate 
 See the build badge at the top of this Readme for more.
 
 Once deployed the app is available at [https://api.musicmonkey.io](api.musicmonkey.io)
+
+
+## Troubleshooting
+
+If you get an annoying Dtrace error running the app on a Mac, this helped:
+
+[node-gyp issue](https://github.com/nodejs/node-gyp/issues/569)
+
+In my case that was:
+```bash
+xcode-select --install # Install Command Line Tools if you haven't already.
+sudo xcode-select --switch /Library/Developer/CommandLineTools # Enable command line tools
+sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+```
+
+Followed by:
+
+```bash
+yarn global add node-gyp
+rm -rf node_modules yarn.lock
+yarn install
+```
+
+#### Debugging in VSCode
+
+in `.vscode/launch.json`
+```
+{
+  "version": "0.2.0",
+  "configurations": [
+      {
+          "type": "node",
+          "request": "launch",
+          "name": "Launch Program",
+          "program": "${workspaceFolder}/build/server/server.js"
+      }
+  ]
+}
+```

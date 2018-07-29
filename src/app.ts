@@ -30,6 +30,18 @@ if (app.get('env') === 'production') {
   sess.cookie.secure = true // serve secure cookies
 }
 
+// const whitelist = ['http://localhost:3000']
+/** const corsOptions = {
+  credentials: true,
+  origin: (origin: any, callback: any) => {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+} */
+
 app.use(session(sess))
 
 app.use(logger('dev'))
@@ -50,11 +62,13 @@ app.use('/invites', inviteRouter)
 app.use('/events', eventRouter)
 
 // error handler
-app.use((err: any, req: any, res: any, _next: any) => {
+app.use((err: any, req: any, res: any, next: any) => {
   // set locals, only providing error in development
   res.locals.message = err.message
   res.locals.error = req.app.get('env') === 'development' ? err : {}
   res.status(err.status || 500)
+  res.send(err.message)
+  next()
 })
 
 export default app
