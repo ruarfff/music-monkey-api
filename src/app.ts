@@ -30,7 +30,11 @@ if (app.get('env') === 'production') {
   sess.cookie.secure = true // serve secure cookies
 }
 
-const whitelist = ['http://localhost:3000']
+const whitelist = [
+  'http://localhost:3000',
+  'https://hosts.musicmonkey.io',
+  'https://guests.musicmonkey.io'
+]
 const corsOptions = {
   credentials: true,
   origin: (origin: any, callback: any) => {
