@@ -63,7 +63,7 @@ router.get(
   } as any),
   (req: Request, res: Response) => {
     const user = req.user
-    const token = jwt.sign({  id: user.userId }, 'super-super-secret-mm')
+    const token = jwt.sign({ id: user.userId }, 'super-super-secret-mm')
     if (req.get('env') === 'production') {
       res.cookie('jwt', token, { httpOnly: true, secure: true })
     } else {
@@ -79,6 +79,15 @@ router.get(
   (req: Request, res: Response) => {
     const { user } = req
     res.status(200).send(user)
+  }
+)
+
+router.get(
+  '/logout',
+  passport.authenticate('jwt', { session: false }),
+  (_req: Request, res: Response) => {
+    res.clearCookie('jwt')
+    res.status(200).send()
   }
 )
 

@@ -1,7 +1,6 @@
 import * as cookieParser from 'cookie-parser'
 import * as cors from 'cors'
 import * as express from 'express'
-import * as session from 'express-session'
 import * as helmet from 'helmet'
 import * as logger from 'morgan'
 import { createTables } from './model'
@@ -23,16 +22,8 @@ import userRouter from './routes/users'
 createTables()
 const app = express()
 
-const sess = {
-  secret: 'music-monkey-super-secret',
-  saveUninitialized: true,
-  cookie: {} as any,
-  resave: true
-}
-
 if (app.get('env') === 'production') {
   app.set('trust proxy', 1) // trust first proxy
-  sess.cookie.secure = true // serve secure cookies
 }
 
 const whitelist = [
@@ -51,8 +42,6 @@ const corsOptions = {
   }
 }
 
-app.use(session(sess))
-
 app.use(logger('dev'))
 app.use(helmet())
 app.use(cors(corsOptions))
@@ -60,7 +49,6 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(passport.initialize())
-app.use(passport.session())
 
 app.use('/', indexRouter)
 app.use('/', legacyAuthRouter)
