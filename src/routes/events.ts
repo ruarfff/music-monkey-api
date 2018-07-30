@@ -13,7 +13,6 @@ router.get(
   (req: Request, res: Response) => {
     const { user } = req
     let action = null
-    console.log('Got here', req.query.inviteId)
     if (req.query.inviteId) {
       action = eventGateway.getEventByInviteId(req.query.inviteId)
     }

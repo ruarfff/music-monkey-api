@@ -1,84 +1,92 @@
 import { Request, Response, Router } from 'express'
 import * as _ from 'lodash'
+import * as passport from 'passport'
 import SuggestionGateway from '../event/suggestionGateway'
+import { ISuggestion } from '../model'
+import SuggestionDecorator from '../suggestion/SuggestionDecorator'
 
 const router = Router()
 const suggestionGateway = new SuggestionGateway()
+const suggestionDecorator = new SuggestionDecorator()
 
-router.get('/', (req: Request, res: Response) => {
-  if (!req.query.eventId) {
-    res.send([])
+router.get(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  (req: Request, res: Response) => {
+    const { user } = req
+    if (!req.query.eventId) {
+      res.send([])
+    }
+    let query = null
+
+    if (user.user.userId && req.query.eventId) {
+      query = suggestionGateway.getSuggestionsByUserIdAndEventId(
+        user.user.userId,
+        req.query.eventId
+      )
+    } else {
+      query = suggestionGateway.getSuggestionsByEventId(req.query.eventId)
+    }
+
+    query
+      .then((suggestions: ISuggestion[]) => {
+        suggestionDecorator
+          .decorateSuggestions(suggestions, user.user)
+          .then(decoratedSuggestions => {
+            res.send(decoratedSuggestions)
+          })
+      })
+      .catch(err => res.status(404).send(err))
   }
-  let query = null
+)
 
-  if (req.query.userId && req.query.eventId) {
-    query = suggestionGateway.getSuggestionsByUserIdAndEventId(
-      req.query.userId,
-      req.query.eventId
-    )
-  } else {
-    query = suggestionGateway.getSuggestionsByEventId(req.query.eventId)
+router.get(
+  '/:suggestionId',
+  passport.authenticate('jwt', { session: false }),
+  (req: Request, res: Response) => {
+    suggestionGateway
+      .getSuggestionById(req.params.suggestionId)
+      .then(suggestion => {
+        res.send(suggestion)
+      })
+      .catch(err => res.status(404).send(err))
   }
+)
 
-  query
-    .then(suggestions => {
-      res.send(suggestions)
-    })
-    .catch(err => res.status(404).send(err))
-})
-
-router.get('/:suggestionId', (req: Request, res: Response) => {
-  suggestionGateway
-    .getSuggestionById(req.params.suggestionId)
-    .then(suggestion => {
-      res.send(suggestion)
-    })
-    .catch(err => res.status(404).send(err))
-})
-
-router.delete('/:suggestionId', (req: Request, res: Response) => {
-  const eventId = req.query.eventId
-  suggestionGateway
-    .deleteSuggestion(req.params.suggestionId, eventId)
-    .then(suggestion => {
-      res.send(suggestion)
-    })
-    .catch(err => res.status(404).send(err))
-})
-
-router.post('/', (req: Request, res: Response) => {
-  let creationPromise
-  if (_.isArray(req.body)) {
-    const suggestions = req.body
-    creationPromise = suggestionGateway.bulkCreateSuggestion(suggestions)
-  } else {
-    const suggestion = req.body
-    creationPromise = suggestionGateway.createSuggestion(suggestion)
+router.delete(
+  '/:suggestionId',
+  passport.authenticate('jwt', { session: false }),
+  (req: Request, res: Response) => {
+    const eventId = req.query.eventId
+    suggestionGateway
+      .deleteSuggestion(req.params.suggestionId, eventId)
+      .then(suggestion => {
+        res.send(suggestion)
+      })
+      .catch(err => res.status(404).send(err))
   }
-  creationPromise
-    .then(savedSuggestion => {
-      res.send(savedSuggestion)
-    })
-    .catch(err => {
-      res.status(400).send(err)
-    })
-})
+)
 
-router.post('/:eventId/accept', (req: Request, res: Response) => {
-  const eventId = req.params.eventId
-  let acceptPromise
-  let suggestions = req.body
-  if (!_.isArray(suggestions)) {
-    suggestions = [req.body]
+router.post(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  (req: Request, res: Response) => {
+    let creationPromise
+    if (_.isArray(req.body)) {
+      const suggestions = req.body
+      creationPromise = suggestionGateway.bulkCreateSuggestion(suggestions)
+    } else {
+      const suggestion = req.body
+      creationPromise = suggestionGateway.createSuggestion(suggestion)
+    }
+    creationPromise
+      .then(savedSuggestion => {
+        res.send(savedSuggestion)
+      })
+      .catch(err => {
+        res.status(400).send(err)
+      })
   }
-  acceptPromise = suggestionGateway.acceptSuggestions(eventId, suggestions)
-  acceptPromise
-    .then(savedSuggestion => {
-      res.send(savedSuggestion)
-    })
-    .catch(err => {
-      res.status(400).send(err)
-    })
-})
+)
 
 export default router

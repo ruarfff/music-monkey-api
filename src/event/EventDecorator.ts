@@ -27,7 +27,8 @@ export default class EventDecorator {
   public decorateEvent = (event: IEvent, user: IUser) => {
     return new Promise(resolve => {
       this.getEventPlaylist(event, user)
-        .then((playlist: any) => {
+        .then(({ body }: any) => {
+          const playlist: IPlaylist = body
           let imageUrl = event.imageUrl
           if (!imageUrl) {
             imageUrl =
@@ -38,7 +39,7 @@ export default class EventDecorator {
           const decoratedEvent: IEvent = {
             ...event,
             imageUrl,
-            playlist: playlist.body as IPlaylist
+            playlist
           }
 
           resolve(decoratedEvent)

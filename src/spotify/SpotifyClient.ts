@@ -10,6 +10,13 @@ const spotifyApi = new SpotifyWebApi({
 })
 
 export default class SpotifyClient {
+  public getTrack(trackId: string, user: IUser) {
+    return this.checkToken(user).then((validUser: IUser) => {
+      spotifyApi.setAccessToken(validUser.spotifyAuth.accessToken)
+      return spotifyApi.getTrack(trackId)
+    })
+  }
+
   public getPlaylist(userName: string, playlistId: string, user: IUser) {
     return this.checkToken(user).then((validUser: IUser) => {
       spotifyApi.setAccessToken(validUser.spotifyAuth.accessToken)
@@ -19,7 +26,6 @@ export default class SpotifyClient {
 
   public getUserPlaylists(user: IUser) {
     return this.checkToken(user).then((validUser: IUser) => {
-      console.log('USER:', user)
       spotifyApi.setAccessToken(validUser.spotifyAuth.accessToken)
 
       return spotifyApi
@@ -51,12 +57,9 @@ export default class SpotifyClient {
   }
 
   private checkToken(user: IUser) {
-    console.log(user.spotifyAuth.expiresAt)
-    console.log(Date.now())
     if (user.spotifyAuth.expiresAt < Date.now()) {
       return this.refreshToken(user.spotifyAuth.refreshToken).then(
         (spotifyAuth: any) => {
-          console.log('spotifyAuth', spotifyAuth)
           return userGateway.updateUser({ ...user, spotifyAuth })
         }
       )
