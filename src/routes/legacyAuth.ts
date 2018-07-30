@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express'
 import { IUser } from '../model'
-import UserGateway from '../user/userGateway'
+import UserGateway from '../user/UserGateway'
 const SpotifyWebApi = require('spotify-web-api-node')
 
 const router = Router()

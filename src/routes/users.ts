@@ -1,5 +1,6 @@
 import { Request, Response, Router } from 'express'
-import UserGateway from '../user/userGateway'
+import { IUser } from '../model'
+import UserGateway from '../user/UserGateway'
 
 const router = Router()
 const userGateway = new UserGateway()
@@ -7,7 +8,7 @@ const userGateway = new UserGateway()
 router.get('/:userId', (req: Request, res: Response) => {
   userGateway
     .getUserById(req.params.userId)
-    .then(user => {
+    .then((user: IUser) => {
       res.send(user)
     })
     .catch(err => res.status(404).send(err))
