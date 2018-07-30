@@ -14,6 +14,7 @@ import inviteRouter from './routes/invites'
 import legacyAuthRouter from './routes/legacyAuth'
 import legacyEventRouter from './routes/legacyEvents'
 import legacySuggestionsRouter from './routes/legacySuggestions'
+import recommendationsRouter from './routes/recommendations'
 import suggestionsRouter from './routes/suggestions'
 import userPlaylistRouter from './routes/userPlaylists'
 import userRouter from './routes/users'
@@ -66,10 +67,13 @@ app.use('/users', userRouter)
 app.use('/suggestions', legacySuggestionsRouter)
 app.use('/invites', inviteRouter)
 app.use('/events', legacyEventRouter)
-app.use('/api/v1/suggestions', suggestionsRouter)
-app.use('/api/v1/auth', authRouter)
-app.use('/api/v1/users/:userId/playlists', userPlaylistRouter)
-app.use('/api/v1/events', eventsRouter)
+
+const apiV1 = '/api/v1'
+app.use(apiV1 + '/suggestions', suggestionsRouter)
+app.use(apiV1 + '/auth', authRouter)
+app.use(apiV1 + '/users/:userId/playlists', userPlaylistRouter)
+app.use(apiV1 + '/events', eventsRouter)
+app.use(apiV1 + '/recommendations', recommendationsRouter)
 
 // error handler
 app.use((err: any, req: any, res: any, next: any) => {

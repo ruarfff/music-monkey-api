@@ -10,6 +10,13 @@ const spotifyApi = new SpotifyWebApi({
 })
 
 export default class SpotifyClient {
+  public getUserTopTracks(user: IUser) {
+    return this.checkToken(user).then((validUser: IUser) => {
+      spotifyApi.setAccessToken(validUser.spotifyAuth.accessToken)
+      return spotifyApi.getMyTopTracks()
+    })
+  }
+
   public getTrack(trackId: string, user: IUser) {
     return this.checkToken(user).then((validUser: IUser) => {
       spotifyApi.setAccessToken(validUser.spotifyAuth.accessToken)

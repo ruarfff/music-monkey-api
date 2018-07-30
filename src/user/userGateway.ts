@@ -59,7 +59,7 @@ export default class UserGateway {
         if (err) {
           return reject(err)
         }
-        return resolve(userModel)
+        return resolve(userModel.attrs)
       })
     })
   }
