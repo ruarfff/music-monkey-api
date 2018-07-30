@@ -58,7 +58,7 @@ router.get(
 router.get(
   '/guest/callback',
   passport.authenticate('spotify-guest', {
-    failureRedirect: 'https://guest.musicmonkeuy.io/login',
+    failureRedirect: 'https://guest.musicmonkey.io/login',
     session: false
   } as any),
   (req: Request, res: Response) => {
@@ -69,7 +69,7 @@ router.get(
     } else {
       res.cookie('jwt', token, {})
     }
-    res.redirect('https://guest.musicmonkeuy.io/')
+    res.redirect('https://guest.musicmonkey.io/')
   }
 )
 
