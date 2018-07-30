@@ -6,7 +6,32 @@ export default class UserGateway {
     return new Promise((resolve, reject) => {
       this.getUserByEmail(user.email)
         .then((savedUser: IUser) => {
-          if (strategy === 'spotify') {
+          if (strategy === 'facebook') {
+            if (
+              savedUser.facebookId &&
+              savedUser.facebookId !== user.facebookId
+            ) {
+              console.error(
+                `Invalid Facebook account link: email: ${
+                  user.email
+                }, incoming facebookId: ${user.facebookId}, saved facebookId: ${
+                  savedUser.facebookId
+                }`
+              )
+              reject('This Facebook account has been linked to another account')
+            } else {
+              savedUser = {
+                ...savedUser,
+                facebookId: user.facebookId,
+                facebookAuth: user.facebookAuth,
+                displayName: savedUser.displayName || user.displayName,
+                image: savedUser.image || user.image
+              }
+              this.updateUser(savedUser)
+                .then(resolve)
+                .catch(reject)
+            }
+          } else if (strategy === 'spotify') {
             if (savedUser.spotifyId && savedUser.spotifyId !== user.spotifyId) {
               console.error(
                 `Invalid Spotify account link: email: ${
@@ -20,7 +45,9 @@ export default class UserGateway {
               savedUser = {
                 ...savedUser,
                 spotifyId: user.spotifyId,
-                spotifyAuth: user.spotifyAuth
+                spotifyAuth: user.spotifyAuth,
+                displayName: savedUser.displayName || user.displayName,
+                image: savedUser.image || user.image
               }
               this.updateUser(savedUser)
                 .then(resolve)

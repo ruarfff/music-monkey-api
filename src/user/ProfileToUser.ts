@@ -1,11 +1,27 @@
 import { isEmpty } from 'lodash'
+import IFacebookPassportProfile from '../facebook/IFacebookPassportProfile'
 import { IUser } from '../model'
-import { ISpotifyPassportProfile } from '../spotify/SpotifyPassportProfile'
+import { ISpotifyPassportProfile } from '../spotify/ISpotifyPassportProfile'
 
 /**
  * This class is to support converting different types of profiles (Spotify, Facebook etc.) to our internal User model.
  */
 export default class ProfileToUser {
+  public facebookProfileToUser(
+    accessToken: string,
+    refreshToken: string,
+    profile: any
+  ): IUser {
+    const facebookProfile: IFacebookPassportProfile = profile._json
+    return {
+      facebookId: facebookProfile.id,
+      facebookAuth: { accessToken, refreshToken },
+      displayName: profile.displayName,
+      email: facebookProfile.email,
+      image: !isEmpty(profile.photos) ? profile.photos[0].value : undefined
+    } as IUser
+  }
+
   public spotifyProfileToUser(
     accessToken: string,
     refreshToken: string,

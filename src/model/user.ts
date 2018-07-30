@@ -15,14 +15,21 @@ export interface ISpotifyAuth {
   refreshToken: string
 }
 
+export interface IFacebookAuth {
+  accessToken: string
+  refreshToken: string
+}
+
 export interface IUser {
   auth: IUserAuth
-  spotifyAuth: ISpotifyAuth
   birthdate: string
   country: string
   displayName: string
   email: string
+  facebookAuth: IFacebookAuth
+  facebookId: string
   image: string
+  spotifyAuth: ISpotifyAuth
   spotifyId: string
   userId: string
 }

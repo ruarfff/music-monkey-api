@@ -6,8 +6,11 @@ import UserGateway from './user/UserGateway'
 import UserService from './user/UserService'
 
 const SpotifyStrategy = require('passport-spotify').Strategy
-const clientId = 'ee4aa78cde4c4be08978d79c180e11c9'
-const clientSecret = 'acfc43102e5c4e05902e66284dfdcb19'
+const FacebookStrategy = require('passport-facebook').Strategy
+const spotifyClientId = 'ee4aa78cde4c4be08978d79c180e11c9'
+const spotifyClientSecret = 'acfc43102e5c4e05902e66284dfdcb19'
+const facebookAppId = '226286181115039'
+const facebookAppSecret = 'ab450950666b33b434684bc8a2c24ca5'
 
 const JWTStrategy = passportJWT.Strategy
 const profileToUser = new ProfileToUser()
@@ -15,12 +18,10 @@ const userGateway: UserGateway = new UserGateway()
 const userService: UserService = new UserService()
 
 passport.serializeUser((user, done) => {
-  console.log('serializeUser', user)
   done(null, user)
 })
 
 passport.deserializeUser((obj, done) => {
-  console.log('deserializeUser', obj)
   done(null, obj)
 })
 
@@ -47,9 +48,10 @@ passport.use(
   'spotify-guest',
   new SpotifyStrategy(
     {
-      clientID: clientId,
-      clientSecret,
-      callbackURL: 'https://api.musicmonkey.io/api/v1/auth/guest/callback'
+      clientID: spotifyClientId,
+      spotifyClientSecret,
+      callbackURL:
+        'https://api.musicmonkey.io/api/v1/auth/guest/spotify/callback'
     },
     handleSpotifyLogin
   )
@@ -59,14 +61,63 @@ passport.use(
   'spotify-guest-local',
   new SpotifyStrategy(
     {
-      clientID: clientId,
-      clientSecret,
-      callbackURL: 'http://localhost:8080/api/v1/auth/guest/callback/local'
+      clientID: spotifyClientId,
+      spotifyClientSecret,
+      callbackURL:
+        'http://localhost:8080/api/v1/auth/guest/spotify/callback/local'
     },
     handleSpotifyLogin
   )
 )
 
+passport.use(
+  'facebook-guest',
+  new FacebookStrategy(
+    {
+      clientID: facebookAppId,
+      clientSecret: facebookAppSecret,
+      callbackURL:
+        'https://api.musicmonkey.io/api/v1/auth/guest/facebook/callback',
+        profileFields: ['id', 'displayName', 'photos', 'email']
+    },
+    handleFacebookLogin
+  )
+)
+
+passport.use(
+  'facebook-guest-local',
+  new FacebookStrategy(
+    {
+      clientID: facebookAppId,
+      clientSecret: facebookAppSecret,
+      callbackURL:
+        'http://localhost:8080/api/v1/auth/guest/facebook/callback/local',
+        profileFields: ['id', 'displayName', 'photos', 'email']
+    },
+    handleFacebookLogin
+  )
+)
+
+function handleFacebookLogin(
+  accessToken: string,
+  refreshToken: string,
+  profile: any,
+  done: any
+) {
+  const user: IUser = profileToUser.facebookProfileToUser(
+    accessToken,
+    refreshToken,
+    profile
+  )
+  userGateway
+    .getOrCreateUser(user, 'facebook')
+    .then(validUser => {
+      done(null, validUser)
+    })
+    .catch(err => {
+      return done(err, user)
+    })
+}
 function handleSpotifyLogin(
   accessToken: string,
   refreshToken: string,
