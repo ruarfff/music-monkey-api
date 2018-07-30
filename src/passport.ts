@@ -2,7 +2,7 @@ import * as passport from 'passport'
 import * as passportJWT from 'passport-jwt'
 import { IUser } from './model'
 import ProfileToUser from './user/ProfileToUser'
-import UserGateway from './user/userGateway'
+import UserGateway from './user/UserGateway'
 
 const SpotifyStrategy = require('passport-spotify').Strategy
 const clientId = 'ee4aa78cde4c4be08978d79c180e11c9'
