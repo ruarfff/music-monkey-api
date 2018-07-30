@@ -1,3 +1,5 @@
+import { expect } from 'chai'
+import 'mocha'
 import parsePlaylistUrl from './parsePlaylistUrl'
 
 describe('parsePlaylistUrl', () => {
@@ -5,7 +7,7 @@ describe('parsePlaylistUrl', () => {
     'https://open.spotify.com/user/1155695100/playlist/2Vb5zquQt3uuCO8or2grou'
 
   it('should return undefinied if url cannot be parsed', () => {
-    expect(parsePlaylistUrl('')).toBeUndefined()
+    expect().undefined(parsePlaylistUrl(''))
   })
 
   it('should parse playlist query details from a playlist url', () => {

@@ -19,9 +19,9 @@ router.get(
     }
     let query = null
 
-    if (user.user.userId && req.query.eventId) {
+    if (user.userId && req.query.eventId) {
       query = suggestionGateway.getSuggestionsByUserIdAndEventId(
-        user.user.userId,
+        user.userId,
         req.query.eventId
       )
     } else {
@@ -31,7 +31,7 @@ router.get(
     query
       .then((suggestions: ISuggestion[]) => {
         suggestionDecorator
-          .decorateSuggestions(suggestions, user.user)
+          .decorateSuggestions(suggestions, user)
           .then(decoratedSuggestions => {
             res.send(decoratedSuggestions)
           })

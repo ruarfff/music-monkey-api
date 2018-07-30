@@ -10,7 +10,7 @@ router.get(
   passport.authenticate('jwt', { session: false }),
   (req: Request, res: Response) => {
     const { user } = req
-    const userData: IUser = user.user
+    const userData: IUser = user
     if (userData.spotifyId) {
       spotifyClient
         .getUserTopTracks(userData)

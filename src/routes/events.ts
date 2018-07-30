@@ -20,7 +20,7 @@ router.get(
       action
         .then((event: IEvent) => {
           eventDecorator
-            .decorateSingleEvent(event, user.user)
+            .decorateSingleEvent(event, user)
             .then(decoratedEvent => {
               res.send(decoratedEvent)
             })
@@ -40,7 +40,7 @@ router.get(
       .getEventById(req.params.eventId)
       .then((event: IEvent) => {
         const { user } = req
-        eventDecorator.decorateSingleEvent(event, user.user).then(res.send)
+        eventDecorator.decorateSingleEvent(event, user).then(res.send)
       })
       .catch(err => res.status(404).send(err))
   }

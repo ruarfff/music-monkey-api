@@ -10,7 +10,7 @@ router.get(
   passport.authenticate('jwt', { session: false }),
   (req: Request, res: Response) => {
     const { user, query } = req
-    const userData: IUser = user.user
+    const userData: IUser = user
     const searchTerm = query.q
     if (!searchTerm) {
       res.send([])

@@ -6,15 +6,17 @@ const router = Router()
 const spotifyClient = new SpotifyClient()
 
 router.get(
-  '/',
+  '/:userId/playlists',
   passport.authenticate('jwt', { session: false }),
   (req: Request, res: Response) => {
     const { user } = req
-    const userData: IUser = user.user
-    if (req.params.userId !== user.userId) {
-      res.status(401).send()
-    }
-    if (userData.spotifyId) {
+    const userData: IUser = user
+
+    console.log('userData.userId', userData.userId)
+    console.log('req.params.userId', req.params)
+    if (req.params.userId !== userData.userId) {
+      res.status(401).send('Wrong User')
+    } else if (userData.spotifyId) {
       spotifyClient
         .getUserPlaylists(userData)
         .then((playlists: any) => {

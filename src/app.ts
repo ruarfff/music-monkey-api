@@ -72,7 +72,7 @@ app.use('/events', legacyEventRouter)
 const apiV1 = '/api/v1'
 app.use(apiV1 + '/suggestions', suggestionsRouter)
 app.use(apiV1 + '/auth', authRouter)
-app.use(apiV1 + '/users/:userId/playlists', userPlaylistRouter)
+app.use(apiV1 + '/users', userPlaylistRouter)
 app.use(apiV1 + '/events', eventsRouter)
 app.use(apiV1 + '/recommendations', recommendationsRouter)
 app.use(apiV1 + '/search', searchRouter)
