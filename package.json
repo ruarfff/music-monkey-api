@@ -60,6 +60,7 @@
     "@types/lodash": "4.14.109",
     "@types/mocha": "5.2.5",
     "@types/morgan": "1.7.35",
+    "@types/node-cache": "4.1.1",
     "@types/passport": "0.4.6",
     "@types/passport-jwt": "3.0.1",
     "@types/passport-local": "1.0.33",

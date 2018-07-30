@@ -1,9 +1,10 @@
 import { IUser } from '../model'
-import UserGateway from '../user/UserGateway'
+import UserService from '../user/UserService'
+
 const SpotifyWebApi = require('spotify-web-api-node')
 const clientId = 'ee4aa78cde4c4be08978d79c180e11c9'
 const clientSecret = 'acfc43102e5c4e05902e66284dfdcb19'
-const userGateway: UserGateway = new UserGateway()
+const userService: UserService = new UserService()
 const spotifyApi = new SpotifyWebApi({
   clientId,
   clientSecret
@@ -74,7 +75,7 @@ export default class SpotifyClient {
     if (user.spotifyAuth.expiresAt < Date.now()) {
       return this.refreshToken(user.spotifyAuth.refreshToken).then(
         (spotifyAuth: any) => {
-          return userGateway.updateUser({ ...user, spotifyAuth })
+          return userService.updateUser({ ...user, spotifyAuth })
         }
       )
     } else {
