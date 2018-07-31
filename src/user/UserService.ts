@@ -7,6 +7,10 @@ const userCache = new NodeCache({ stdTTL: 600, checkperiod: 300 })
 
 const userGateway: UserGateway = new UserGateway()
 export default class UserService {
+  public createGuest() {
+    return userGateway.createUser({} as IUser)
+  }
+
   public updateUser(user: IUser) {
     return userGateway.updateUser(user)
   }

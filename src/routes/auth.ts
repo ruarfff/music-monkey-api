@@ -1,9 +1,10 @@
 import { Request, Response, Router } from 'express'
 import * as jwt from 'jsonwebtoken'
 import * as passport from 'passport'
+import UserService from '../user/UserService'
 
 const router = Router()
-
+const userService = new UserService()
 const guestsUrl = 'https://guests.musicmonkey.io'
 const devUrl = 'http://localhost:3000/'
 
@@ -98,6 +99,19 @@ router.get(
     res.status(200).send(user)
   }
 )
+
+router.get('/guest-user', (req: Request, res: Response) => {
+  userService
+    .createGuest()
+    .then((stuff: any) => {
+      console.log('Stuff', stuff)
+      return handleCallback(devUrl)(req, res)
+    })
+    .catch((err: any) => {
+      const code = err.statusCode || 400
+      res.status(code).send(err.message)
+    })
+})
 
 router.get(
   '/logout',

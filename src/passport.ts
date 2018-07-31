@@ -49,7 +49,7 @@ passport.use(
   new SpotifyStrategy(
     {
       clientID: spotifyClientId,
-      spotifyClientSecret,
+      clientSecret: spotifyClientSecret,
       callbackURL:
         'https://api.musicmonkey.io/api/v1/auth/guest/spotify/callback'
     },
@@ -62,7 +62,7 @@ passport.use(
   new SpotifyStrategy(
     {
       clientID: spotifyClientId,
-      spotifyClientSecret,
+      clientSecret: spotifyClientSecret,
       callbackURL:
         'http://localhost:8080/api/v1/auth/guest/spotify/callback/local'
     },
