@@ -6,7 +6,7 @@ import UserService from '../user/UserService'
 const router = Router()
 const userService = new UserService()
 const guestsUrl = 'https://guests.musicmonkey.io'
-const devUrl = 'http://localhost:3000/'
+const devUrl = 'http://localhost:3000'
 
 const spotifyScopes = [
   'user-read-private',
@@ -115,7 +115,6 @@ router.get('/guest-user', (req: Request, res: Response) => {
 
 router.get(
   '/logout',
-  passport.authenticate('jwt', { session: false }),
   (_req: Request, res: Response) => {
     res.clearCookie('jwt')
     res.status(200).send()

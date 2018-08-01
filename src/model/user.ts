@@ -60,6 +60,7 @@ export const User = dynamo.define('MM-Dev-User', {
     image: Joi.string()
       .allow('')
       .allow(null)
+      .default('')
       .optional(),
     spotifyId: Joi.string()
       .allow('')

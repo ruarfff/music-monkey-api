@@ -18,7 +18,7 @@ export default class ProfileToUser {
       facebookAuth: { accessToken, refreshToken },
       displayName: profile.displayName,
       email: facebookProfile.email,
-      image: !isEmpty(profile.photos) ? profile.photos[0].value : undefined
+      image: !isEmpty(profile.photos) ? profile.photos[0].value : null
     } as IUser
   }
 
@@ -38,9 +38,7 @@ export default class ProfileToUser {
       country: spotifyProfile.country,
       displayName: spotifyProfile.displayName,
       email: spotifyProfile._json.email,
-      image: !isEmpty(spotifyProfile.photos)
-        ? spotifyProfile.photos[0]
-        : undefined,
+      image: !isEmpty(spotifyProfile.photos) ? spotifyProfile.photos[0] : '',
       spotifyId: spotifyProfile.id
     } as IUser
   }
