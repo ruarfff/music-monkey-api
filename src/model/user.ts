@@ -33,6 +33,8 @@ export interface IUser {
   spotifyAuth: ISpotifyAuth
   spotifyId: string
   userId: string
+  isGuest: boolean
+  isVerified: boolean
 }
 
 export const User = dynamo.define('MM-Dev-User', {
@@ -54,13 +56,14 @@ export const User = dynamo.define('MM-Dev-User', {
       .allow('')
       .optional(),
     displayName: Joi.string()
-      .allow(null)
-      .allow('')
+      .allow('', null)
       .optional(),
-    email: Joi.string().email(),
+    email: Joi.string()
+      .email()
+      .default('')
+      .optional(),
     image: Joi.string()
-      .allow('')
-      .allow(null)
+      .allow('', null)
       .default('')
       .optional(),
     passwordHash: Joi.string()
@@ -69,7 +72,9 @@ export const User = dynamo.define('MM-Dev-User', {
     spotifyId: Joi.string()
       .allow('')
       .optional(),
-    userId: dynamo.types.uuid()
+    userId: dynamo.types.uuid(),
+    isGuest: Joi.bool().default(false),
+    isVerified: Joi.bool().default(false)
   },
 
   indexes: [

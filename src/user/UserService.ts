@@ -30,7 +30,11 @@ export default class UserService {
     })
   }
   public createGuest() {
-    return userGateway.createUser({} as IUser)
+    const uuidv1 = require('uuid/v1')
+    return userGateway.createUser({
+      isGuest: true,
+      email: uuidv1() + '@temp.com'
+    } as IUser)
   }
 
   public updateUser(user: IUser) {

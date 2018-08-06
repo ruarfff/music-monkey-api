@@ -108,12 +108,12 @@ router.get(
   }
 )
 
-router.get('/guest-user', (req: Request, res: Response) => {
+router.post('/login-guest', (req: Request, res: Response) => {
   userService
     .createGuest()
-    .then((stuff: any) => {
-      console.log('Stuff', stuff)
-      return handleCallback(devUrl)(req, res)
+    .then((user: IUser) => {
+      setJwtCookie(res, user.userId, req.get('env'))
+      res.status(200).send()
     })
     .catch((err: any) => {
       const code = err.statusCode || 400

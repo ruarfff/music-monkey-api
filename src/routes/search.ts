@@ -19,8 +19,8 @@ router.get(
         res.send(body)
       })
       .catch((err: any) => {
-        const code = err.statusCode || 400
-        res.status(code).send(err.message)
+        const code = err && err.statusCode ? err.statusCode : 400
+        res.status(code).send(err ? err.message : 'unknown error')
       })
   }
 )
