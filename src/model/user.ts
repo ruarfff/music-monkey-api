@@ -29,6 +29,7 @@ export interface IUser {
   facebookAuth: IFacebookAuth
   facebookId: string
   image: string
+  passwordHash: string
   spotifyAuth: ISpotifyAuth
   spotifyId: string
   userId: string
@@ -61,6 +62,9 @@ export const User = dynamo.define('MM-Dev-User', {
       .allow('')
       .allow(null)
       .default('')
+      .optional(),
+    passwordHash: Joi.string()
+      .allow('')
       .optional(),
     spotifyId: Joi.string()
       .allow('')

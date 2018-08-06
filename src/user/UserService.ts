@@ -7,6 +7,25 @@ const userCache = new NodeCache({ stdTTL: 600, checkperiod: 300 })
 
 const userGateway: UserGateway = new UserGateway()
 export default class UserService {
+  // NOTE: Funny looking flow here but success if user not found basically.
+  public createNewUser(user: IUser): any {
+    return new Promise((resolve, reject) => {
+      userGateway
+        .getUserByEmail(user.email)
+        .then((foundUser: IUser) => {
+          reject(
+            'A user with the email ' + foundUser.email + ' already exists.'
+          )
+        })
+        .catch((err: any) => {
+          console.error(err)
+          userGateway
+            .createUser(user)
+            .then(resolve)
+            .catch(reject)
+        })
+    })
+  }
   public createGuest() {
     return userGateway.createUser({} as IUser)
   }

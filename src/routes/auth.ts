@@ -1,6 +1,9 @@
+import * as bcrypt from 'bcrypt'
 import { Request, Response, Router } from 'express'
 import * as jwt from 'jsonwebtoken'
+import { isEmpty } from 'lodash'
 import * as passport from 'passport'
+import { IUser } from '../model'
 import UserService from '../user/UserService'
 
 const router = Router()
@@ -113,13 +116,43 @@ router.get('/guest-user', (req: Request, res: Response) => {
     })
 })
 
-router.get(
-  '/logout',
-  (_req: Request, res: Response) => {
-    res.clearCookie('jwt')
-    res.status(200).send()
+router.get('/logout', (_req: Request, res: Response) => {
+  res.clearCookie('jwt')
+  res.status(200).send()
+})
+
+router.post('/signup', async (req: Request, res: Response) => {
+  try {
+    const { email, password } = req.body.data
+
+    // authentication will take approximately 13 seconds
+    // https://pthree.org/wp-content/uploads/2016/06/bcrypt.png
+    const hashCost = 10
+    if (isEmpty(password) || password.length > 256) {
+      throw new Error('Invalid Password.')
+    }
+    const passwordHash = await bcrypt.hash(password, hashCost)
+    userService
+      .createNewUser({ email, passwordHash } as IUser)
+      .then((user: IUser) => {
+        const token = jwt.sign({ id: user.userId }, 'super-super-secret-mm')
+        if (req.get('env') === 'production') {
+          res.cookie('jwt', token, { httpOnly: true, secure: true })
+        } else {
+          res.cookie('jwt', token, {})
+        }
+
+        res.status(200).send(user)
+      })
+      .catch((err: any) => {
+        res.status(400).send(err)
+      })
+  } catch (error) {
+    res.status(400).send({
+      error: 'req body should take the form { email, password }'
+    })
   }
-)
+})
 
 function handleCallback(redirectUrl: string) {
   return (req: Request, res: Response) => {
