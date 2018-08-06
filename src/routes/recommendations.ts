@@ -1,9 +1,8 @@
 import { Request, Response, Router } from 'express'
 import * as passport from 'passport'
 import { IUser } from '../model'
-import SpotifyClient from '../spotify/SpotifyClient'
+import { getRecommendations, getUserTopTracks } from '../spotify/SpotifyClient'
 const router = Router()
-const spotifyClient = new SpotifyClient()
 
 router.get(
   '/',
@@ -13,10 +12,9 @@ router.get(
     const userData: IUser = user
     let recommendationRequest
     if (userData.spotifyId) {
-      recommendationRequest = spotifyClient.getUserTopTracks(userData)
+      recommendationRequest = getUserTopTracks(userData)
     } else {
-      const country = userData.country || 'US'
-      recommendationRequest = spotifyClient.getRecommendations(userData)
+      recommendationRequest = getRecommendations(userData)
     }
 
     recommendationRequest

@@ -36,7 +36,9 @@ router.get(
             res.send(decoratedSuggestions)
           })
       })
-      .catch(err => res.status(404).send(err))
+      .catch(err => {
+        res.status(404).send(err)
+      })
   }
 )
 

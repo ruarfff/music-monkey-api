@@ -1,9 +1,8 @@
 import { Request, Response, Router } from 'express'
 import * as passport from 'passport'
 import { IUser } from '../model'
-import SpotifyClient from '../spotify/SpotifyClient'
+import { searchTracks } from '../spotify/SpotifyClient'
 const router = Router()
-const spotifyClient = new SpotifyClient()
 
 router.get(
   '/',
@@ -15,9 +14,7 @@ router.get(
     if (!searchTerm) {
       res.send([])
     }
-
-    spotifyClient
-      .searchTracks(searchTerm, userData)
+    searchTracks(searchTerm, userData)
       .then(({ body }: any) => {
         res.send(body)
       })

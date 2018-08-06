@@ -2,7 +2,7 @@ import { IEvent, IUser } from '../model'
 import IPlaylist from '../spotify/IPlaylist'
 import IPlaylistQuery from '../spotify/IPlaylistQuery'
 import parsePlaylistUrl from '../spotify/parsePlaylistUrl'
-import SpotifyClient from '../spotify/SpotifyClient'
+import { getPlaylist } from '../spotify/SpotifyClient'
 
 const defaultEventImage = '/img/partycover-sm.png'
 
@@ -11,14 +11,9 @@ export default class EventDecorator {
     const playlistQuery: IPlaylistQuery | undefined = parsePlaylistUrl(
       event.playlistUrl
     )
-    const spotifyClient = new SpotifyClient()
 
     if (playlistQuery) {
-      return spotifyClient.getPlaylist(
-        playlistQuery.userName,
-        playlistQuery.playlistId,
-        user
-      )
+      return getPlaylist(playlistQuery.userName, playlistQuery.playlistId, user)
     } else {
       return Promise.reject(new Error('Invalid Playlist Url'))
     }

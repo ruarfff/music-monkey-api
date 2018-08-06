@@ -1,9 +1,8 @@
 import { Request, Response, Router } from 'express'
 import * as passport from 'passport'
 import { IUser } from '../model'
-import SpotifyClient from '../spotify/SpotifyClient'
+import { getUserPlaylists } from '../spotify/SpotifyClient'
 const router = Router()
-const spotifyClient = new SpotifyClient()
 
 router.get(
   '/:userId/playlists',
@@ -15,8 +14,7 @@ router.get(
     if (req.params.userId !== userData.userId) {
       res.status(401).send('Wrong User')
     } else if (userData.spotifyId) {
-      spotifyClient
-        .getUserPlaylists(userData)
+      getUserPlaylists(userData)
         .then((playlists: any) => {
           res.send(playlists)
         })
