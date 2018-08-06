@@ -133,7 +133,7 @@ router.get('/logout', (req: Request, res: Response) => {
 router.post('/login', (req, res) => {
   passport.authenticate('local', { session: false }, (error, user) => {
     if (error || !user) {
-      res.status(400).json({ error })
+      res.status(401).send('Invalid email or password')
     }
 
     req.login(user, { session: false }, (loginErr: any) => {
@@ -141,7 +141,7 @@ router.post('/login', (req, res) => {
         res.status(400).send({ loginErr })
       }
       setJwtCookie(res, user.userId, req.get('env'))
-      res.status(200).send(user)
+      res.status(200).send()
     })
   })(req, res)
 })
@@ -161,7 +161,7 @@ router.post('/signup', async (req: Request, res: Response) => {
       .createNewUser({ email, passwordHash } as IUser)
       .then((user: IUser) => {
         setJwtCookie(res, user.userId, req.get('env'))
-        res.status(200).send(user)
+        res.status(200).send()
       })
       .catch((err: any) => {
         res.status(400).send(err)
