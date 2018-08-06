@@ -11,23 +11,26 @@ router.get(
   (req: Request, res: Response) => {
     const { user } = req
     const userData: IUser = user
+    let recommendationRequest
     if (userData.spotifyId) {
-      spotifyClient
-        .getUserTopTracks(userData)
-        .then(({ body }: any) => {
-          if (body) {
-            res.send(body.items)
-          } else {
-            res.send([])
-          }
-        })
-        .catch((err: any) => {
-          const code = err.statusCode || 400
-          res.status(code).send(err.message)
-        })
+      recommendationRequest = spotifyClient.getUserTopTracks(userData)
     } else {
-      res.send([])
+      const country = userData.country || 'US'
+      recommendationRequest = spotifyClient.getRecommendations(userData)
     }
+
+    recommendationRequest
+      .then((tracks: any) => {
+        if (tracks) {
+          res.send(tracks)
+        } else {
+          res.send([])
+        }
+      })
+      .catch((err: any) => {
+        const code = err.statusCode || 400
+        res.status(code).send(err.message)
+      })
   }
 )
 

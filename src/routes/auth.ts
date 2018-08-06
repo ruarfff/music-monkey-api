@@ -3,8 +3,13 @@ import { Request, Response, Router } from 'express'
 import * as jwt from 'jsonwebtoken'
 import { isEmpty } from 'lodash'
 import * as passport from 'passport'
+import { jwtCookieKey } from '../auth/authConstants'
 import { IUser } from '../model'
 import UserService from '../user/UserService'
+
+// const cookieExpirationDate = new Date('2030-01-01T12:00:00.000Z')
+const devCookieOpts = {}
+const prodCookieOpts = { httpOnly: true, secure: true }
 
 const router = Router()
 const userService = new UserService()
@@ -116,14 +121,34 @@ router.get('/guest-user', (req: Request, res: Response) => {
     })
 })
 
-router.get('/logout', (_req: Request, res: Response) => {
-  res.clearCookie('jwt')
+router.get('/logout', (req: Request, res: Response) => {
+  if (req.get('env') === 'production') {
+    res.clearCookie('jwt', prodCookieOpts)
+  } else {
+    res.clearCookie('jwt', devCookieOpts)
+  }
   res.status(200).send()
+})
+
+router.post('/login', (req, res) => {
+  passport.authenticate('local', { session: false }, (error, user) => {
+    if (error || !user) {
+      res.status(400).json({ error })
+    }
+
+    req.login(user, { session: false }, (loginErr: any) => {
+      if (loginErr) {
+        res.status(400).send({ loginErr })
+      }
+      setJwtCookie(res, user.userId, req.get('env'))
+      res.status(200).send(user)
+    })
+  })(req, res)
 })
 
 router.post('/signup', async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body.data
+    const { email, password } = req.body
 
     // authentication will take approximately 13 seconds
     // https://pthree.org/wp-content/uploads/2016/06/bcrypt.png
@@ -135,13 +160,7 @@ router.post('/signup', async (req: Request, res: Response) => {
     userService
       .createNewUser({ email, passwordHash } as IUser)
       .then((user: IUser) => {
-        const token = jwt.sign({ id: user.userId }, 'super-super-secret-mm')
-        if (req.get('env') === 'production') {
-          res.cookie('jwt', token, { httpOnly: true, secure: true })
-        } else {
-          res.cookie('jwt', token, {})
-        }
-
+        setJwtCookie(res, user.userId, req.get('env'))
         res.status(200).send(user)
       })
       .catch((err: any) => {
@@ -157,13 +176,17 @@ router.post('/signup', async (req: Request, res: Response) => {
 function handleCallback(redirectUrl: string) {
   return (req: Request, res: Response) => {
     const user = req.user
-    const token = jwt.sign({ id: user.userId }, 'super-super-secret-mm')
-    if (req.get('env') === 'production') {
-      res.cookie('jwt', token, { httpOnly: true, secure: true })
-    } else {
-      res.cookie('jwt', token, {})
-    }
+    setJwtCookie(res, user.userId, req.get('env'))
     res.redirect(redirectUrl)
+  }
+}
+
+function setJwtCookie(res: Response, userId: string, env: string) {
+  const token = jwt.sign({ id: userId }, jwtCookieKey)
+  if (env === 'production') {
+    res.cookie('jwt', token, prodCookieOpts)
+  } else {
+    res.cookie('jwt', token, devCookieOpts)
   }
 }
 

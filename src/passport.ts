@@ -1,10 +1,13 @@
+import * as bcrypt from 'bcrypt'
 import * as passport from 'passport'
 import * as passportJWT from 'passport-jwt'
+import { jwtCookieKey } from './auth/authConstants'
 import { IUser } from './model'
 import ProfileToUser from './user/ProfileToUser'
 import UserGateway from './user/UserGateway'
 import UserService from './user/UserService'
 
+const LocalStrategy = require('passport-local')
 const SpotifyStrategy = require('passport-spotify').Strategy
 const FacebookStrategy = require('passport-facebook').Strategy
 const spotifyClientId = 'ee4aa78cde4c4be08978d79c180e11c9'
@@ -29,7 +32,7 @@ passport.use(
   new JWTStrategy(
     {
       jwtFromRequest: req => req.cookies.jwt,
-      secretOrKey: 'super-super-secret-mm'
+      secretOrKey: jwtCookieKey
     },
     (jwtPayload, done) => {
       return userService
@@ -40,6 +43,37 @@ passport.use(
         .catch((err: Error) => {
           return done(err, jwtPayload)
         })
+    }
+  )
+)
+
+passport.use(
+  new LocalStrategy(
+    {
+      usernameField: 'email',
+      passwordField: 'password'
+    },
+    (email: string, password: string, done: any) => {
+      try {
+        userService
+          .getUserByEmail(email)
+          .then(async (user: IUser) => {
+            const passwordsMatch = await bcrypt.compare(
+              password,
+              user.passwordHash
+            )
+            if (passwordsMatch) {
+              return done(null, user)
+            } else {
+              return done('Incorrect Username / Password')
+            }
+          })
+          .catch((err: any) => {
+            done(err)
+          })
+      } catch (error) {
+        done(error)
+      }
     }
   )
 )
@@ -78,7 +112,7 @@ passport.use(
       clientSecret: facebookAppSecret,
       callbackURL:
         'https://api.musicmonkey.io/api/v1/auth/guest/facebook/callback',
-        profileFields: ['id', 'displayName', 'photos', 'email']
+      profileFields: ['id', 'displayName', 'photos', 'email']
     },
     handleFacebookLogin
   )
@@ -92,7 +126,7 @@ passport.use(
       clientSecret: facebookAppSecret,
       callbackURL:
         'http://localhost:8080/api/v1/auth/guest/facebook/callback/local',
-        profileFields: ['id', 'displayName', 'photos', 'email']
+      profileFields: ['id', 'displayName', 'photos', 'email']
     },
     handleFacebookLogin
   )

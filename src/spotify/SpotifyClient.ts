@@ -1,47 +1,88 @@
 import { IUser } from '../model'
 import UserService from '../user/UserService'
+import { getCreds, saveCreds } from './spotifyCredsCache'
 
 const SpotifyWebApi = require('spotify-web-api-node')
 const clientId = 'ee4aa78cde4c4be08978d79c180e11c9'
 const clientSecret = 'acfc43102e5c4e05902e66284dfdcb19'
 const userService: UserService = new UserService()
-const spotifyApi = new SpotifyWebApi({
-  clientId,
-  clientSecret
-})
+
+const getSpotifyApi = (token?: string) => {
+  const spotifyApi = new SpotifyWebApi({
+    clientId,
+    clientSecret
+  })
+  if (token) {
+    spotifyApi.setAccessToken(token)
+  }
+  return spotifyApi
+}
 
 export default class SpotifyClient {
+  public getNewReleases(country: string, user: IUser) {
+    return this.checkToken(user).then((validUser: IUser) => {
+      return getSpotifyApi(validUser.spotifyAuth.accessToken).getNewReleases({
+        limit: 10,
+        offset: 0,
+        country
+      })
+    })
+  }
+
+  public getRecommendations(user: IUser) {
+    const seeds = ['alt_rock', 'blues', 'dance', 'hard_rock', 'hip_hop']
+    return this.checkToken(user).then((validUser: IUser) => {
+      return getSpotifyApi(validUser.spotifyAuth.accessToken)
+        .getRecommendations({
+          min_energy: 0.5,
+          min_popularity: 50,
+          seed_genres: seeds
+        })
+        .then(({ body }: any) => {
+          return body.tracks
+        })
+        .catch((err: any) => {
+          console.log(err)
+        })
+    })
+  }
+
   public searchTracks(searchTerm: string, user: IUser) {
     return this.checkToken(user).then((validUser: IUser) => {
-      spotifyApi.setAccessToken(validUser.spotifyAuth.accessToken)
-      return spotifyApi.searchTracks(searchTerm)
+      return getSpotifyApi(validUser.spotifyAuth.accessToken).searchTracks(
+        searchTerm
+      )
     })
   }
 
   public getUserTopTracks(user: IUser) {
     return this.checkToken(user).then((validUser: IUser) => {
-      spotifyApi.setAccessToken(validUser.spotifyAuth.accessToken)
-      return spotifyApi.getMyTopTracks()
+      return getSpotifyApi(validUser.spotifyAuth.accessToken)
+        .getMyTopTracks()
+        .then(({ body }: any) => {
+          return body.items
+        })
     })
   }
 
   public getTrack(trackId: string, user: IUser) {
     return this.checkToken(user).then((validUser: IUser) => {
-      spotifyApi.setAccessToken(validUser.spotifyAuth.accessToken)
-      return spotifyApi.getTrack(trackId)
+      getSpotifyApi(validUser.spotifyAuth.accessToken).getTrack(trackId)
     })
   }
 
   public getPlaylist(userName: string, playlistId: string, user: IUser) {
     return this.checkToken(user).then((validUser: IUser) => {
-      spotifyApi.setAccessToken(validUser.spotifyAuth.accessToken)
-      return spotifyApi.getPlaylist(userName, playlistId)
+      return getSpotifyApi(validUser.spotifyAuth.accessToken).getPlaylist(
+        userName,
+        playlistId
+      )
     })
   }
 
   public getUserPlaylists(user: IUser) {
     return this.checkToken(user).then((validUser: IUser) => {
-      spotifyApi.setAccessToken(validUser.spotifyAuth.accessToken)
+      const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
 
       return spotifyApi
         .getUserPlaylists(validUser.spotifyId)
@@ -72,18 +113,45 @@ export default class SpotifyClient {
   }
 
   private checkToken(user: IUser) {
+    if (!user.spotifyAuth) {
+      return getCreds()
+        .then((token: string) => {
+          return {
+            ...user,
+            spotifyAuth: {
+              accessToken: token
+            }
+          }
+        })
+        .catch(() => {
+          return getSpotifyApi()
+            .clientCredentialsGrant()
+            .then((data: any) => {
+              const token = data.body.access_token
+              saveCreds(token)
+              return {
+                ...user,
+                spotifyAuth: {
+                  accessToken: token
+                }
+              }
+            })
+        })
+    }
     if (user.spotifyAuth.expiresAt < Date.now()) {
-      return this.refreshToken(user.spotifyAuth.refreshToken).then(
-        (spotifyAuth: any) => {
-          return userService.updateUser({ ...user, spotifyAuth })
-        }
-      )
+      return this.refreshToken(
+        user.spotifyAuth.accessToken,
+        user.spotifyAuth.refreshToken
+      ).then((spotifyAuth: any) => {
+        return userService.updateUser({ ...user, spotifyAuth })
+      })
     } else {
       return Promise.resolve(user)
     }
   }
 
-  private refreshToken(refreshToken: string) {
+  private refreshToken(oldAccessToken: string, refreshToken: string) {
+    const spotifyApi = getSpotifyApi(oldAccessToken)
     spotifyApi.setRefreshToken(refreshToken)
 
     return spotifyApi.refreshAccessToken().then((data: any) => {

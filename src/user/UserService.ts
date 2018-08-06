@@ -18,11 +18,14 @@ export default class UserService {
           )
         })
         .catch((err: any) => {
-          console.error(err)
-          userGateway
-            .createUser(user)
-            .then(resolve)
-            .catch(reject)
+          if (!err) {
+            userGateway
+              .createUser(user)
+              .then(resolve)
+              .catch(reject)
+          } else {
+            reject(err)
+          }
         })
     })
   }
@@ -34,6 +37,12 @@ export default class UserService {
     return userGateway.updateUser(user)
   }
 
+  public getUserByEmail(email: string) {
+    return userGateway.getUserByEmail(email)
+  }
+
+  // We use an in memory cache here since this lookup is done on most requests
+  // TODO: Move to caching service.
   public getUserById(userId: string) {
     return new Promise((resolve, reject) => {
       userCache.get(userId, (err: any, value: any) => {

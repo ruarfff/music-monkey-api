@@ -44,7 +44,8 @@ export default class EventDecorator {
 
           resolve(decoratedEvent)
         })
-        .catch(() => {
+        .catch((err: any) => {
+          console.log(err)
           resolve({
             ...event,
             imageUrl: event.imageUrl ? event.imageUrl : defaultEventImage

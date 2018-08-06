@@ -15,19 +15,16 @@ router.get(
     if (!searchTerm) {
       res.send([])
     }
-    if (userData.spotifyId) {
-      spotifyClient
-        .searchTracks(searchTerm, userData)
-        .then(({body}: any) => {
-          res.send(body)
-        })
-        .catch((err: any) => {
-          const code = err.statusCode || 400
-          res.status(code).send(err.message)
-        })
-    } else {
-      res.send([])
-    }
+
+    spotifyClient
+      .searchTracks(searchTerm, userData)
+      .then(({ body }: any) => {
+        res.send(body)
+      })
+      .catch((err: any) => {
+        const code = err.statusCode || 400
+        res.status(code).send(err.message)
+      })
   }
 )
 

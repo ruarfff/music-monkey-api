@@ -12,8 +12,6 @@ router.get(
     const { user } = req
     const userData: IUser = user
 
-    console.log('userData.userId', userData.userId)
-    console.log('req.params.userId', req.params)
     if (req.params.userId !== userData.userId) {
       res.status(401).send('Wrong User')
     } else if (userData.spotifyId) {
