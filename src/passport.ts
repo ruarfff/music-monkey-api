@@ -98,6 +98,19 @@ passport.use(
       clientID: spotifyClientId,
       clientSecret: spotifyClientSecret,
       callbackURL:
+        'https://api.musicmonkey.io/api/v1/auth/guest/spotify/callback/local'
+    },
+    handleSpotifyLogin
+  )
+)
+
+passport.use(
+  'spotify-guest-local-dev',
+  new SpotifyStrategy(
+    {
+      clientID: spotifyClientId,
+      clientSecret: spotifyClientSecret,
+      callbackURL:
         'http://localhost:8080/api/v1/auth/guest/spotify/callback/local'
     },
     handleSpotifyLogin
@@ -120,6 +133,20 @@ passport.use(
 
 passport.use(
   'facebook-guest-local',
+  new FacebookStrategy(
+    {
+      clientID: facebookAppId,
+      clientSecret: facebookAppSecret,
+      callbackURL:
+        'https://api.musicmonkey.io/api/v1/auth/guest/facebook/callback/local',
+      profileFields: ['id', 'displayName', 'photos', 'email']
+    },
+    handleFacebookLogin
+  )
+)
+
+passport.use(
+  'facebook-guest-local-dev',
   new FacebookStrategy(
     {
       clientID: facebookAppId,

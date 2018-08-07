@@ -48,6 +48,17 @@ router.get(
 )
 
 router.get(
+  '/spotify-guest-local-dev',
+  passport.authenticate('spotify-guest-local-dev', {
+    scope: spotifyScopes,
+    showDialog: true
+  } as any),
+  () => {
+    // The request will be redirected to spotify for authentication
+  }
+)
+
+router.get(
   '/guest/spotify/callback/local',
   passport.authenticate('spotify-guest-local', {
     failureRedirect: devUrl + '/login',
@@ -76,6 +87,16 @@ router.get(
 router.get(
   '/facebook-guest-local',
   passport.authenticate('facebook-guest-local', { scope: ['email'] } as any),
+  () => {
+    // The request will be redirected to facebook for authentication
+  }
+)
+
+router.get(
+  '/facebook-guest-local-dev',
+  passport.authenticate('facebook-guest-local-dev', {
+    scope: ['email']
+  } as any),
   () => {
     // The request will be redirected to facebook for authentication
   }
