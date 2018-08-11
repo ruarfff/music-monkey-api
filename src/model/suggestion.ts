@@ -11,6 +11,7 @@ export interface ISuggestion {
   trackUri: string
   playlistUri: string
   accepted: boolean
+  rejected: boolean
 }
 
 export const Suggestion = dynamo.define('MM-Dev-Suggestion', {
@@ -24,9 +25,12 @@ export const Suggestion = dynamo.define('MM-Dev-Suggestion', {
     eventId: Joi.string(),
     userId: Joi.string(),
     type: Joi.string().valid(['track', 'playlist']),
-    playlistUri: Joi.string().optional().allow(''),
+    playlistUri: Joi.string()
+      .optional()
+      .allow(''),
     trackUri: Joi.string(),
-    accepted: Joi.boolean().default(false)
+    accepted: Joi.boolean().default(false),
+    rejected: Joi.boolean().default(false)
   },
 
   indexes: [
