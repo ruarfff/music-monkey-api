@@ -5,7 +5,7 @@
   "main": "build/server.js",
   "scripts": {
     "lint": "tslint --fix -c tslint.json src/**/*.ts",
-    "start": "NODE_ENV=development node ./build/server/server.js",
+    "start": "node ./build/server/server.js",
     "stop": "node ./node_modules/.bin/pm2 stop pm2.json",
     "start:watch": "npm run start -- --watch",
     "flush-logs": "node ./node_modules/.bin/pm2 flush",
