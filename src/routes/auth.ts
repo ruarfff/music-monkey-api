@@ -122,6 +122,15 @@ router.get(
 )
 
 router.get(
+  '/guest/facebook/callback/local/dev',
+  passport.authenticate('facebook-guest-local-dev', {
+    failureRedirect: devUrl + '/login',
+    session: false
+  } as any),
+  handleCallback(devUrl)
+)
+
+router.get(
   '/guest/facebook/callback',
   passport.authenticate('facebook-guest', {
     failureRedirect: guestsUrl + '/login',

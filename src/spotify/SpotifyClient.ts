@@ -117,42 +117,51 @@ export const getUserPlaylists = (user: IUser) => {
   })
 }
 
-function checkToken(user: IUser) {
+async function checkToken(user: IUser) {
   if (!user.spotifyId && !user.spotifyAuth) {
-    return getCreds()
-      .then((token: string) => {
-        return {
-          ...user,
-          spotifyAuth: {
-            accessToken: token
-          }
-        }
-      })
-      .catch(() => {
-        return getSpotifyApi()
-          .clientCredentialsGrant()
-          .then((data: any) => {
-            const token = data.body.access_token
-            saveCreds(token)
-            return {
-              ...user,
-              spotifyAuth: {
-                accessToken: token
-              }
-            }
-          })
-      })
+    return giveUserSpotifyAppCredential(user)
   }
+
   if (user.spotifyAuth.expiresAt < Date.now()) {
-    return refreshToken(
+    const spotifyAuth = await refreshToken(
       user.spotifyAuth.accessToken,
       user.spotifyAuth.refreshToken
-    ).then((spotifyAuth: any) => {
-      return userService.updateUser({ ...user, spotifyAuth })
-    })
-  } else {
-    return Promise.resolve(user)
+    )
+    const updatedUser = await userService.updateUser({ ...user, spotifyAuth })
+    return updatedUser
   }
+
+  return user
+}
+
+async function giveUserSpotifyAppCredential(user: IUser) {
+  let token: string
+  let userWithAppCreds: IUser = user
+  try {
+    token = await getCreds()
+    if (token) {
+      userWithAppCreds = {
+        ...user,
+        spotifyAuth: {
+          accessToken: token
+        }
+      } as IUser
+    }
+  } catch (err) {
+    console.error(err)
+  }
+  if (!token) {
+    const { body } = await getSpotifyApi().clientCredentialsGrant()
+    const freshToken = body.access_token
+    saveCreds(freshToken)
+    userWithAppCreds = {
+      ...user,
+      spotifyAuth: {
+        accessToken: freshToken
+      }
+    } as IUser
+  }
+  return userWithAppCreds
 }
 
 function refreshToken(oldAccessToken: string, userRefreshToken: string) {

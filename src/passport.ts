@@ -152,7 +152,7 @@ passport.use(
       clientID: facebookAppId,
       clientSecret: facebookAppSecret,
       callbackURL:
-        'http://localhost:8080/api/v1/auth/guest/facebook/callback/local',
+        'http://localhost:8080/api/v1/auth/guest/facebook/callback/local/dev',
       profileFields: ['id', 'displayName', 'photos', 'email']
     },
     handleFacebookLogin
