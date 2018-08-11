@@ -1,4 +1,4 @@
-import { Promise } from 'es6-promise'
+// import { Promise } from 'es6-promise'
 import { IUser, User } from '../model'
 
 export default class UserGateway {
@@ -81,7 +81,7 @@ export default class UserGateway {
   }
 
   public updateUser(user: IUser) {
-    return new Promise((resolve, reject) => {
+    return new Promise<IUser>((resolve, reject) => {
       User.update(user, (err: any, userModel: any) => {
         if (err) {
           return reject(err)
@@ -102,20 +102,25 @@ export default class UserGateway {
     })
   }
 
-  public getUserById(userId: string) {
-    return new Promise((resolve, reject) => {
-      User.query(userId)
-        .limit(1)
-        .exec((err: Error, userModel: any) => {
-          if (err || userModel.Count < 1) {
-            console.error(err)
-            reject(err)
-          } else {
-            const user = userModel.Items[0].attrs
-            resolve(user)
-          }
-        })
-    })
+  public async getUserById(userId: string) {
+    let user: IUser
+    try {
+      user = await new Promise<IUser>((resolve, reject) => {
+        User.query(userId)
+          .limit(1)
+          .exec((err: Error, userModel: any) => {
+            if (err || userModel.Count < 1) {
+              console.error(err)
+              reject(err)
+            } else {
+              resolve(userModel.Items[0].attrs)
+            }
+          })
+      })
+    } catch (err) {
+      console.error(err)
+    }
+    return user
   }
 
   public getUserByEmail(email: string) {

@@ -111,7 +111,7 @@ passport.use(
       clientID: spotifyClientId,
       clientSecret: spotifyClientSecret,
       callbackURL:
-        'http://localhost:8080/api/v1/auth/guest/spotify/callback/local'
+        'http://localhost:8080/api/v1/auth/guest/spotify/callback/local/dev'
     },
     handleSpotifyLogin
   )

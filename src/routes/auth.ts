@@ -59,6 +59,16 @@ router.get(
 )
 
 router.get(
+  '/guest/spotify/callback/local/dev',
+  passport.authenticate('spotify-guest-local-dev', {
+    failureRedirect: devUrl + '/login',
+    session:
+     false
+  } as any),
+  handleCallback(devUrl)
+)
+
+router.get(
   '/guest/spotify/callback/local',
   passport.authenticate('spotify-guest-local', {
     failureRedirect: devUrl + '/login',

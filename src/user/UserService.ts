@@ -1,9 +1,6 @@
-import { Promise } from 'es6-promise'
-import * as NodeCache from 'node-cache'
+import * as cache from '../cache'
 import { IUser } from '../model'
 import UserGateway from './UserGateway'
-
-const userCache = new NodeCache({ stdTTL: 600, checkperiod: 300 })
 
 const userGateway: UserGateway = new UserGateway()
 export default class UserService {
@@ -37,8 +34,14 @@ export default class UserService {
     } as IUser)
   }
 
-  public updateUser(user: IUser) {
-    return userGateway.updateUser(user)
+  public async updateUser(user: IUser) {
+    let updatedUser: IUser
+    try {
+      updatedUser = await userGateway.updateUser(user)
+    } catch (err) {
+      console.error(err)
+    }
+    return updatedUser
   }
 
   public getUserByEmail(email: string) {
@@ -47,25 +50,17 @@ export default class UserService {
 
   // We use an in memory cache here since this lookup is done on most requests
   // TODO: Move to caching service.
-  public getUserById(userId: string) {
-    return new Promise((resolve, reject) => {
-      userCache.get(userId, (err: any, value: any) => {
-        if (value === undefined || err) {
-          userGateway
-            .getUserById(userId)
-            .then(user => {
-              userCache.set(userId, user, (cacheErr: any) => {
-                if (cacheErr) {
-                  console.error('Failed to cache user', err)
-                }
-              })
-              resolve(user)
-            })
-            .catch(reject)
-        } else {
-          resolve(value)
-        }
-      })
-    })
+  public async getUserById(userId: string) {
+    let user: IUser
+    try {
+      user = await cache.getObject(userId)
+      if (!user) {
+        user = await userGateway.getUserById(userId)
+        cache.setObject(user.userId, user)
+      }
+    } catch (err) {
+      console.error(err)
+    }
+    return user
   }
 }

@@ -7,6 +7,8 @@
 import * as debugFun from 'debug'
 import * as http from 'http'
 import app from './app'
+import { createTables } from './model'
+import * as redisGateway from './redis/redisGateway'
 
 const debug = debugFun('music-monkey-api:server')
 
@@ -85,4 +87,10 @@ function onListening() {
   const addr = server.address()
   const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port
   debug('Listening on ' + bind)
+
+  createTables()
+  redisGateway.connect()
+  if (process.env.NODE_ENV === 'development') {
+    redisGateway.enableMonitoring()
+  }
 }

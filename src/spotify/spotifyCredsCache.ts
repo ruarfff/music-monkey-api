@@ -1,24 +1,21 @@
-import * as NodeCache from 'node-cache'
+import * as cache from '../cache'
 
-const credCache = new NodeCache({ stdTTL: 3300, checkperiod: 300 })
 const cacheKey = 'cred-cache-key'
 
 export const saveCreds = (token: string) => {
-  credCache.set(cacheKey, token, (cacheErr: any) => {
-    if (cacheErr) {
-      console.error('Failed to cache credentials', cacheErr)
-    }
-  })
+  try {
+    cache.set(cacheKey, token, 3500)
+  } catch (err) {
+    console.error(err)
+  }
 }
 
-export const getCreds = () => {
-  return new Promise((resolve, reject) => {
-    credCache.get(cacheKey, (err: any, value: any) => {
-      if (value === undefined || err) {
-        reject()
-      } else {
-        resolve(value)
-      }
-    })
-  })
+export const getCreds = async () => {
+  let creds
+  try {
+    creds = await cache.get(cacheKey)
+  } catch (err) {
+    console.error(err)
+  }
+  return creds
 }

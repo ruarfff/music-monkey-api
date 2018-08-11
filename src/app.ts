@@ -3,7 +3,6 @@ import * as cors from 'cors'
 import * as express from 'express'
 import * as helmet from 'helmet'
 import * as logger from 'morgan'
-import { createTables } from './model'
 import passport from './passport'
 
 import indexRouter from './routes'
@@ -19,7 +18,6 @@ import suggestionsRouter from './routes/suggestions'
 import userPlaylistRouter from './routes/userPlaylists'
 import userRouter from './routes/users'
 
-createTables()
 const app = express()
 
 if (app.get('env') === 'production') {
