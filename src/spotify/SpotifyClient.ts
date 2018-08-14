@@ -1,4 +1,4 @@
-import { logDebug, logError } from '../logging'
+import { logError, logInfo } from '../logging'
 import { ISpotifyAuth, IUser } from '../model'
 import UserService from '../user/UserService'
 import { getCreds, saveCreds } from './spotifyCredsCache'
@@ -119,30 +119,30 @@ export const getUserPlaylists = (user: IUser) => {
 }
 
 async function checkToken(user: IUser) {
-  logDebug('Checking token')
+  logInfo('Checking token')
   if (!user.spotifyId && !user.spotifyAuth) {
-    logDebug('Giving user app auth')
+    logInfo('Giving user app auth')
     return giveUserSpotifyAppCredential(user)
   }
 
   try {
     if (user.spotifyAuth.expiresAt < Date.now()) {
-      logDebug('TOKEN Expired')
-      logDebug('spotifyAuth ' + JSON.stringify(user.spotifyAuth, null, 4))
+      logInfo('TOKEN Expired')
+      logInfo('spotifyAuth ' + JSON.stringify(user.spotifyAuth, null, 4))
       const spotifyAuth = await refreshToken(
         user.spotifyAuth.accessToken,
         user.spotifyAuth.refreshToken
       )
-      logDebug('Refreshed token ' + JSON.stringify(spotifyAuth))
+      logInfo('Refreshed token ' + JSON.stringify(spotifyAuth))
       const updatedUser = await userService.updateUser({ ...user, spotifyAuth })
-      logDebug('Updated user')
+      logInfo('Updated user')
       return updatedUser
     }
   } catch (err) {
     logError('Failed to refresh user token ', err)
     return giveUserSpotifyAppCredential(user)
   }
-  logDebug('Token probably OK')
+  logInfo('Token probably OK')
   return user
 }
 
@@ -177,8 +177,8 @@ async function giveUserSpotifyAppCredential(user: IUser) {
 }
 
 async function refreshToken(oldAccessToken: string, userRefreshToken: string) {
-  logDebug('Adding old access token: ' + oldAccessToken)
-  logDebug('Adding refresh token: ' + userRefreshToken)
+  logInfo('Adding old access token: ' + oldAccessToken)
+  logInfo('Adding refresh token: ' + userRefreshToken)
   const spotifyApi = getSpotifyApi(oldAccessToken)
   spotifyApi.setRefreshToken(userRefreshToken)
 
