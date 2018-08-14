@@ -81,4 +81,16 @@ router.post('/:eventId/accept', (req: Request, res: Response) => {
     })
 })
 
+router.post('/:suggestionId/reject', async (req: Request, res: Response) => {
+  try {
+    const suggestionId = req.params.suggestionId
+    const rejectedSuggestion = await suggestionGateway.rejectSuggestion(
+      suggestionId
+    )
+    res.send(rejectedSuggestion)
+  } catch (err) {
+    res.status(400).send(err)
+  }
+})
+
 export default router
