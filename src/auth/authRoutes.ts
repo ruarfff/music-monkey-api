@@ -3,9 +3,9 @@ import { Request, Response, Router } from 'express'
 import * as jwt from 'jsonwebtoken'
 import { isEmpty } from 'lodash'
 import * as passport from 'passport'
-import { jwtCookieKey } from '../auth/authConstants'
 import { IUser } from '../model'
 import UserService from '../user/UserService'
+import { jwtCookieKey } from './authConstants'
 
 // const cookieExpirationDate = new Date('2030-01-01T12:00:00.000Z')
 const devCookieOpts = {}

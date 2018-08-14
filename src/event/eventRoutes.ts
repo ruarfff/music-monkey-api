@@ -1,8 +1,8 @@
 import { Request, Response, Router } from 'express'
 import * as passport from 'passport'
-import EventDecorator from '../event/EventDecorator'
-import EventGateway from '../event/eventGateway'
 import { IEvent } from '../model'
+import EventDecorator from './EventDecorator'
+import EventGateway from './eventGateway'
 const router = Router()
 const eventGateway = new EventGateway()
 const eventDecorator = new EventDecorator()

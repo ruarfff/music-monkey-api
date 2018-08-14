@@ -5,18 +5,18 @@ import * as helmet from 'helmet'
 import * as logger from 'morgan'
 import passport from './passport'
 
-import indexRouter from './routes'
-import authRouter from './routes/auth'
-import eventsRouter from './routes/events'
-import inviteRouter from './routes/invites'
+import authRouter from './auth/authRoutes'
+import eventsRouter from './event/eventRoutes'
+import indexRouter from './indexRoutes'
+import inviteRouter from './invite/inviteRoutes'
 import legacyAuthRouter from './routes/legacyAuth'
 import legacyEventRouter from './routes/legacyEvents'
 import legacySuggestionsRouter from './routes/legacySuggestions'
 import recommendationsRouter from './routes/recommendations'
-import searchRouter from './routes/search'
 import suggestionsRouter from './routes/suggestions'
 import userPlaylistRouter from './routes/userPlaylists'
 import userRouter from './routes/users'
+import searchRouter from './search/searchRoutes'
 
 const app = express()
 
