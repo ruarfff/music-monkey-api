@@ -3,7 +3,7 @@ import * as _ from 'lodash'
 import * as passport from 'passport'
 import SuggestionGateway from '../event/suggestionGateway'
 import { ISuggestion } from '../model'
-import SuggestionDecorator from '../suggestion/SuggestionDecorator'
+import SuggestionDecorator from './SuggestionDecorator'
 
 const router = Router()
 const suggestionGateway = new SuggestionGateway()

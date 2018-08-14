@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express'
 import { IUser } from '../model'
-import UserGateway from '../user/UserGateway'
+import UserGateway from './UserGateway'
 
 const router = Router()
 const userGateway = new UserGateway()

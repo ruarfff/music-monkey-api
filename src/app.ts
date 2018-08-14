@@ -9,14 +9,14 @@ import authRouter from './auth/authRoutes'
 import eventsRouter from './event/eventRoutes'
 import indexRouter from './indexRoutes'
 import inviteRouter from './invite/inviteRoutes'
+import recommendationsRouter from './recommendation/recommendationRoutes'
 import legacyAuthRouter from './routes/legacyAuth'
 import legacyEventRouter from './routes/legacyEvents'
 import legacySuggestionsRouter from './routes/legacySuggestions'
-import recommendationsRouter from './routes/recommendations'
-import suggestionsRouter from './routes/suggestions'
-import userPlaylistRouter from './routes/userPlaylists'
-import userRouter from './routes/users'
 import searchRouter from './search/searchRoutes'
+import suggestionsRouter from './suggestion/suggestionRoutes'
+import userPlaylistRouter from './user/userPlaylistRoutes'
+import userRouter from './user/userRoutes'
 
 const app = express()
 
