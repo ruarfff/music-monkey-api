@@ -127,6 +127,7 @@ async function checkToken(user: IUser) {
   try {
     if (user.spotifyAuth.expiresAt < Date.now()) {
       console.log('TOKEN Expired')
+      console.log('spotifyAuth', user. spotifyAuth)
       const spotifyAuth = await refreshToken(
         user.spotifyAuth.accessToken,
         user.spotifyAuth.refreshToken
@@ -175,6 +176,8 @@ async function giveUserSpotifyAppCredential(user: IUser) {
 }
 
 function refreshToken(oldAccessToken: string, userRefreshToken: string) {
+  console.log('Adding old access token: ', oldAccessToken)
+  console.log('Adding refresh token: ', userRefreshToken)
   const spotifyApi = getSpotifyApi(oldAccessToken)
   spotifyApi.setRefreshToken(userRefreshToken)
 
