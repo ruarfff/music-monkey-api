@@ -38,6 +38,7 @@ export default class UserService {
     let updatedUser: IUser
     try {
       updatedUser = await userGateway.updateUser(user)
+      cache.setObject(user.userId, user)
     } catch (err) {
       console.error(err)
     }

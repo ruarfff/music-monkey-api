@@ -1,4 +1,4 @@
-import { IUser } from '../model'
+import { ISpotifyAuth, IUser } from '../model'
 import UserService from '../user/UserService'
 import { getCreds, saveCreds } from './spotifyCredsCache'
 
@@ -118,7 +118,7 @@ export const getUserPlaylists = (user: IUser) => {
 }
 
 async function checkToken(user: IUser) {
-  console.log('Checking token', JSON.stringify(user))
+  console.log('Checking token')
   if (!user.spotifyId && !user.spotifyAuth) {
     console.log('Giving user app auth')
     return giveUserSpotifyAppCredential(user)
@@ -127,7 +127,7 @@ async function checkToken(user: IUser) {
   try {
     if (user.spotifyAuth.expiresAt < Date.now()) {
       console.log('TOKEN Expired')
-      console.log('spotifyAuth', user. spotifyAuth)
+      console.log('spotifyAuth', user.spotifyAuth)
       const spotifyAuth = await refreshToken(
         user.spotifyAuth.accessToken,
         user.spotifyAuth.refreshToken
@@ -141,7 +141,7 @@ async function checkToken(user: IUser) {
     console.error('Failed to refresh user token ', err)
     return giveUserSpotifyAppCredential(user)
   }
-
+  console.log('Token probably OK')
   return user
 }
 
@@ -175,16 +175,19 @@ async function giveUserSpotifyAppCredential(user: IUser) {
   return userWithAppCreds
 }
 
-function refreshToken(oldAccessToken: string, userRefreshToken: string) {
+async function refreshToken(oldAccessToken: string, userRefreshToken: string) {
   console.log('Adding old access token: ', oldAccessToken)
   console.log('Adding refresh token: ', userRefreshToken)
   const spotifyApi = getSpotifyApi(oldAccessToken)
   spotifyApi.setRefreshToken(userRefreshToken)
 
-  return spotifyApi.refreshAccessToken().then((data: any) => {
-    const accessToken = data.body.access_token
-    const expiresAt = Date.now() + data.body.expires_in * 1000
+  const { body } = await spotifyApi.refreshAccessToken()
+  const accessToken = body.access_token
+  const expiresAt = Date.now() + body.expires_in * 1000
 
-    return { accessToken, expiresAt, userRefreshToken }
-  })
+  return {
+    accessToken,
+    expiresAt,
+    refreshToken: userRefreshToken
+  } as ISpotifyAuth
 }
