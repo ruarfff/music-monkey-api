@@ -104,6 +104,10 @@ export default class SuggestionGateway {
 
   public async rejectSuggestion(suggestionId: string) {
     const suggestion = await this.getSuggestionById(suggestionId)
-    return await Suggestion.update({ ...suggestion, rejected: true })
+    return await Suggestion.update({
+      ...suggestion,
+      accepted: false,
+      rejected: true
+    })
   }
 }
