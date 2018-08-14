@@ -1,5 +1,6 @@
 // tslint:disable-next-line:no-var-requires
 const dynamo = require('dynamodb')
+import { logError, logInfo } from '../logging'
 
 dynamo.AWS.config.update({
   accessKeyId: 'AKIAIPMZTEODQOZYSNQA',
@@ -15,9 +16,9 @@ export * from './suggestion'
 export const createTables = () => {
   dynamo.createTables((err: Error) => {
     if (err) {
-      console.log('Error creating tables: ', err)
+      logError('Error creating tables: ', err)
     } else {
-      console.log('Tables have been created')
+      logInfo('Tables have been created')
     }
   })
 }

@@ -1,3 +1,4 @@
+import { logDebug, logError } from '../logging'
 import { ISpotifyAuth, IUser } from '../model'
 import UserService from '../user/UserService'
 import { getCreds, saveCreds } from './spotifyCredsCache'
@@ -41,7 +42,7 @@ export const getRecommendations = (user: IUser) => {
         return body.tracks
       })
       .catch((err: any) => {
-        console.log(err)
+        logError('Error getting recommendations', err)
       })
   })
 }
@@ -118,30 +119,30 @@ export const getUserPlaylists = (user: IUser) => {
 }
 
 async function checkToken(user: IUser) {
-  console.log('Checking token')
+  logDebug('Checking token')
   if (!user.spotifyId && !user.spotifyAuth) {
-    console.log('Giving user app auth')
+    logDebug('Giving user app auth')
     return giveUserSpotifyAppCredential(user)
   }
 
   try {
     if (user.spotifyAuth.expiresAt < Date.now()) {
-      console.log('TOKEN Expired')
-      console.log('spotifyAuth', user.spotifyAuth)
+      logDebug('TOKEN Expired')
+      logDebug('spotifyAuth ' + JSON.stringify(user.spotifyAuth, null, 4))
       const spotifyAuth = await refreshToken(
         user.spotifyAuth.accessToken,
         user.spotifyAuth.refreshToken
       )
-      console.log('Refreshed token', spotifyAuth)
+      logDebug('Refreshed token ' + JSON.stringify(spotifyAuth))
       const updatedUser = await userService.updateUser({ ...user, spotifyAuth })
-      console.log('Updated user', updatedUser)
+      logDebug('Updated user')
       return updatedUser
     }
   } catch (err) {
-    console.error('Failed to refresh user token ', err)
+    logError('Failed to refresh user token ', err)
     return giveUserSpotifyAppCredential(user)
   }
-  console.log('Token probably OK')
+  logDebug('Token probably OK')
   return user
 }
 
@@ -159,7 +160,7 @@ async function giveUserSpotifyAppCredential(user: IUser) {
       } as IUser
     }
   } catch (err) {
-    console.error(err)
+    logError('Error giving user app creds for Spotify', err)
   }
   if (!token) {
     const { body } = await getSpotifyApi().clientCredentialsGrant()
@@ -176,8 +177,8 @@ async function giveUserSpotifyAppCredential(user: IUser) {
 }
 
 async function refreshToken(oldAccessToken: string, userRefreshToken: string) {
-  console.log('Adding old access token: ', oldAccessToken)
-  console.log('Adding refresh token: ', userRefreshToken)
+  logDebug('Adding old access token: ' + oldAccessToken)
+  logDebug('Adding refresh token: ' + userRefreshToken)
   const spotifyApi = getSpotifyApi(oldAccessToken)
   spotifyApi.setRefreshToken(userRefreshToken)
 

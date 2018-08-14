@@ -1,3 +1,4 @@
+import {logError} from '../logging'
 import { IEvent, IUser } from '../model'
 import IPlaylist from '../spotify/IPlaylist'
 import IPlaylistQuery from '../spotify/IPlaylistQuery'
@@ -40,7 +41,7 @@ export default class EventDecorator {
           resolve(decoratedEvent)
         })
         .catch((err: any) => {
-          console.log(err)
+          logError('Error decorating event', err)
           resolve({
             ...event,
             imageUrl: event.imageUrl ? event.imageUrl : defaultEventImage

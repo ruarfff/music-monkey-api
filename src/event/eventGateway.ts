@@ -1,3 +1,4 @@
+import { logError } from '../logging'
 import { Event, IEvent, IInvite } from '../model'
 import InviteGateway from './inviteGateway'
 
@@ -21,7 +22,7 @@ export default class EventGateway {
               })
             })
             .catch(inviteCreateErr => {
-              console.error(inviteCreateErr)
+              logError('Error creating invite', inviteCreateErr)
               resolve(eventModel.attrs)
             })
         }
@@ -69,7 +70,7 @@ export default class EventGateway {
               })
             })
             .catch(inviteErr => {
-              console.error(inviteErr)
+              logError('Error fetching invite', inviteErr)
               resolve(event)
             })
         }

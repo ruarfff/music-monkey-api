@@ -1,27 +1,28 @@
 const REDIS_ADDRESS = process.env.REDIS_ADDRESS || 'redis://127.0.0.1:6379'
 import * as Redis from 'ioredis'
+import { logError, logInfo } from '../logging'
 
 let redis = {} as any
 
 export const connect = () => {
   try {
-    console.log('Connecting to Redis')
+    logInfo('Connecting to Redis')
     redis = new Redis(REDIS_ADDRESS)
 
     redis.on('connect', () => {
-      console.log('Redis connected')
+      logInfo('Redis connected')
     })
     redis.on('error', (error: any) => {
-      console.error('Redis error', error)
+      logError('Redis error', error)
     })
     redis.on('close', () => {
-      console.log('Redis connection closed')
+      logInfo('Redis connection closed')
     })
     redis.on('reconnecting', () => {
-      console.log('Redis reconnecting')
+      logInfo('Redis reconnecting')
     })
   } catch (error) {
-    console.error(error)
+    logError('Something went wrong connecting to Redis', error)
   }
 }
 
@@ -31,7 +32,7 @@ export const getObject = async (key: string) => {
     const rawResult = await get(key)
     result = JSON.parse(rawResult)
   } catch (err) {
-    console.error(err)
+    logError('Error getting an object for redis with key ' + key, err)
   }
   return result
 }
@@ -41,7 +42,7 @@ export const get = async (key: string) => {
   try {
     result = await redis.get(key)
   } catch (err) {
-    console.error(err)
+    logError('Error getting item from redis with key ' + key, err)
   }
   return result
 }
@@ -61,14 +62,14 @@ export const set = (key: string, value: any, expiresIn: number = 0) => {
 }
 
 export const enableMonitoring = () => {
-  console.log('Enabling monitoring')
+  logInfo('Enabling monitoring')
   const redisMonitorConnection = new Redis(REDIS_ADDRESS)
   redisMonitorConnection.monitor((err, monitor) => {
     if (err) {
-      console.error(err)
+      logError('An error occurred enabling monitoring', err)
     }
     monitor.on('monitor', (time, args, source, database) => {
-      console.log(`${time} - DB: ${database}: SRC - ${source} - ARGS: ${args}`)
+      logInfo(`${time} - DB: ${database}: SRC - ${source} - ARGS: ${args}`)
     })
   })
 }

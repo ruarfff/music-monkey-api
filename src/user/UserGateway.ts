@@ -1,4 +1,5 @@
 // import { Promise } from 'es6-promise'
+import { logError } from '../logging'
 import { IUser, User } from '../model'
 
 export default class UserGateway {
@@ -11,7 +12,7 @@ export default class UserGateway {
               savedUser.facebookId &&
               savedUser.facebookId !== user.facebookId
             ) {
-              console.error(
+              logError(
                 `Invalid Facebook account link: email: ${
                   user.email
                 }, incoming facebookId: ${user.facebookId}, saved facebookId: ${
@@ -33,7 +34,7 @@ export default class UserGateway {
             }
           } else if (strategy === 'spotify') {
             if (savedUser.spotifyId && savedUser.spotifyId !== user.spotifyId) {
-              console.error(
+              logError(
                 `Invalid Spotify account link: email: ${
                   user.email
                 }, incoming spotifyId: ${user.spotifyId}, saved spotifyId: ${
@@ -110,7 +111,7 @@ export default class UserGateway {
           .limit(1)
           .exec((err: Error, userModel: any) => {
             if (err || userModel.Count < 1) {
-              console.error(err)
+              logError('Error fetching user by ID', err)
               reject(err)
             } else {
               resolve(userModel.Items[0].attrs)
@@ -118,7 +119,7 @@ export default class UserGateway {
           })
       })
     } catch (err) {
-      console.error(err)
+      logError('Error fetching user by ID', err)
     }
     return user
   }

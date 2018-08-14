@@ -1,3 +1,4 @@
+import { logError } from '../logging'
 import { IInvite, Invite } from '../model'
 
 export default class InviteGateway {
@@ -28,7 +29,7 @@ export default class InviteGateway {
     return new Promise((resolve, reject) => {
       Invite.query(inviteId).exec((err: Error, inviteModel: any) => {
         if (err) {
-          console.error('Invite Error', err)
+          logError('Invite Error', err)
           reject(err)
         }
         if (inviteModel.Count < 1) {

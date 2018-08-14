@@ -1,5 +1,6 @@
 import { find, flatten, forOwn, groupBy } from 'lodash'
 import * as spotifyUri from 'spotify-uri'
+import { logError } from '../logging'
 import { IUser } from '../model'
 import { ISuggestion } from '../model'
 import IPlaylist from '../spotify/IPlaylist'
@@ -21,7 +22,7 @@ export default class SuggestionDecorator {
       })
       .map(p =>
         p.catch((error: any) => {
-          console.error(error)
+          logError('Error decorating suggestion', error)
         })
       )
 
@@ -51,7 +52,10 @@ export default class SuggestionDecorator {
                 return decoratedSuggestions
               })
               .catch((err: any) => {
-                console.error(err)
+                logError(
+                  'Error getting playlist during suggestion decoration',
+                  err
+                )
               })
           )
         }

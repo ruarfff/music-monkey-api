@@ -45,9 +45,11 @@
     "serve-favicon": "2.5.0",
     "spotify-uri": "1.0.0",
     "spotify-web-api-node": "3.0.0",
-    "uuid": "3.2.1"
+    "uuid": "3.2.1",
+    "winston-loggly-bulk": "2.0.3"
   },
   "devDependencies": {
+    "@types/winston": "2.3.9",
     "@types/bcrypt": "2.0.0",
     "@types/chai": "4.1.4",
     "@types/cookie-parser": "1.4.1",

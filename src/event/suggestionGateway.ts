@@ -1,3 +1,4 @@
+import {logError} from '../logging'
 import { ISuggestion, Suggestion } from '../model'
 import { onSuggestionsAccepted, onSuggestionSaved } from './suggestionNotifier'
 
@@ -55,7 +56,7 @@ export default class SuggestionGateway {
       Suggestion.query(suggestionId).exec(
         (err: Error, suggestionModel: any) => {
           if (err) {
-            console.error('Suggestion Error', err)
+            logError('Suggestion Error', err)
             reject(err)
           }
           if (suggestionModel.Count < 1) {

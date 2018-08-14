@@ -1,4 +1,5 @@
 import * as cache from '../cache'
+import { logError } from '../logging'
 import { IUser } from '../model'
 import UserGateway from './UserGateway'
 
@@ -40,7 +41,7 @@ export default class UserService {
       updatedUser = await userGateway.updateUser(user)
       cache.setObject(user.userId, user)
     } catch (err) {
-      console.error(err)
+      logError('Error updating user', err)
     }
     return updatedUser
   }
@@ -60,7 +61,7 @@ export default class UserService {
         cache.setObject(user.userId, user)
       }
     } catch (err) {
-      console.error(err)
+      logError('Error getting user by IDs', err)
     }
     return user
   }

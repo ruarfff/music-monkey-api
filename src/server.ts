@@ -7,6 +7,7 @@
 import * as debugFun from 'debug'
 import * as http from 'http'
 import app from './app'
+import { logError } from './logging'
 import { createTables } from './model'
 import * as redisGateway from './redis/redisGateway'
 
@@ -67,11 +68,11 @@ function onError(error: any) {
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-      console.error(bind + ' requires elevated privileges')
+      logError(bind + ' requires elevated privileges', error)
       process.exit(1)
       break
     case 'EADDRINUSE':
-      console.error(bind + ' is already in use')
+      logError(bind + ' is already in use', error)
       process.exit(1)
       break
     default:
