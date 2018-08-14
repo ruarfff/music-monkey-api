@@ -118,17 +118,27 @@ export const getUserPlaylists = (user: IUser) => {
 }
 
 async function checkToken(user: IUser) {
+  console.log('Checking token', JSON.stringify(user))
   if (!user.spotifyId && !user.spotifyAuth) {
+    console.log('Giving user app auth')
     return giveUserSpotifyAppCredential(user)
   }
 
-  if (user.spotifyAuth.expiresAt < Date.now()) {
-    const spotifyAuth = await refreshToken(
-      user.spotifyAuth.accessToken,
-      user.spotifyAuth.refreshToken
-    )
-    const updatedUser = await userService.updateUser({ ...user, spotifyAuth })
-    return updatedUser
+  try {
+    if (user.spotifyAuth.expiresAt < Date.now()) {
+      console.log('TOKEN Expired')
+      const spotifyAuth = await refreshToken(
+        user.spotifyAuth.accessToken,
+        user.spotifyAuth.refreshToken
+      )
+      console.log('Refreshed token', spotifyAuth)
+      const updatedUser = await userService.updateUser({ ...user, spotifyAuth })
+      console.log('Updated user', updatedUser)
+      return updatedUser
+    }
+  } catch (err) {
+    console.error('Failed to refresh user token ', err)
+    return giveUserSpotifyAppCredential(user)
   }
 
   return user
