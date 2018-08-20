@@ -2,7 +2,7 @@ import * as cookieParser from 'cookie-parser'
 import * as cors from 'cors'
 import * as express from 'express'
 import * as helmet from 'helmet'
-import * as logger from 'morgan'
+import { expressLogger } from './logging'
 import passport from './passport'
 
 import authRouter from './auth/authRoutes'
@@ -40,7 +40,7 @@ const corsOptions = {
   }
 }
 
-app.use(logger('dev'))
+app.use(expressLogger)
 app.use(helmet())
 app.use(cors(corsOptions))
 app.use(express.json())
@@ -72,5 +72,7 @@ app.use((err: any, req: any, res: any, next: any) => {
   res.send(err.message)
   next()
 })
+
+// Ïapp.use(expressErrorLogger)
 
 export default app
