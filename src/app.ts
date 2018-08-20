@@ -13,6 +13,8 @@ import recommendationsRouter from './recommendation/recommendationRoutes'
 import legacyAuthRouter from './routes/legacyAuth'
 import legacyEventRouter from './routes/legacyEvents'
 import legacySuggestionsRouter from './routes/legacySuggestions'
+import rsvpRouter from './rsvp/rsvpRoutes'
+import userRsvpRouter from './rsvp/userRsvpRoutes'
 import searchRouter from './search/searchRoutes'
 import suggestionsRouter from './suggestion/suggestionRoutes'
 import userPlaylistRouter from './user/userPlaylistRoutes'
@@ -59,9 +61,11 @@ const apiV1 = '/api/v1'
 app.use(apiV1 + '/suggestions', suggestionsRouter)
 app.use(apiV1 + '/auth', authRouter)
 app.use(apiV1 + '/users', userPlaylistRouter)
+app.use(apiV1 + '/users', userRsvpRouter)
 app.use(apiV1 + '/events', eventsRouter)
 app.use(apiV1 + '/recommendations', recommendationsRouter)
 app.use(apiV1 + '/search', searchRouter)
+app.use(apiV1 + '/rsvp', rsvpRouter)
 
 // error handler
 app.use((err: any, req: any, res: any, next: any) => {
@@ -73,6 +77,6 @@ app.use((err: any, req: any, res: any, next: any) => {
   next()
 })
 
-// Ïapp.use(expressErrorLogger)
+// app.use(expressErrorLogger)
 
 export default app

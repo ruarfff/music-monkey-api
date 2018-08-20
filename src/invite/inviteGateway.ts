@@ -26,7 +26,7 @@ export default class InviteGateway {
   }
 
   public getInviteById(inviteId: string) {
-    return new Promise((resolve, reject) => {
+    return new Promise<IInvite>((resolve, reject) => {
       Invite.query(inviteId).exec((err: Error, inviteModel: any) => {
         if (err) {
           logError('Invite Error', err)

@@ -30,10 +30,10 @@ export const Rsvp = dynamo.define(rsvpTableName, {
 
   indexes: [
     {
-      hashKey: 'rsvpId',
+      hashKey: 'inviteId',
       rangeKey: 'userId',
-      type: 'local',
-      name: 'UserIdIndex'
+      type: 'global',
+      name: 'InviteIdUserIdIndex'
     }
   ]
 })
