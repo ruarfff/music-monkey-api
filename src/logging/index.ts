@@ -2,15 +2,7 @@ const expressWinston = require('express-winston')
 const winston = require('winston')
 const { Loggly } = require('winston-loggly-bulk')
 
-const logger = winston.createLogger({
-  transports: [
-    new winston.transports.Console({
-      format: winston.format.json({
-        space: 2
-      })
-    })
-  ]
-})
+const logger = winston.createLogger()
 
 const isProduction = process.env.NODE_ENV === 'production'
 
