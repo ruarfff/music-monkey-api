@@ -1,9 +1,9 @@
 import { Request, Response, Router } from 'express'
 import * as _ from 'lodash'
 import * as passport from 'passport'
-import SuggestionGateway from '../event/suggestionGateway'
 import { ISuggestion } from '../model'
 import SuggestionDecorator from './SuggestionDecorator'
+import SuggestionGateway from './suggestionGateway'
 
 const router = Router()
 const suggestionGateway = new SuggestionGateway()

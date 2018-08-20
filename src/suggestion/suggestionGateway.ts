@@ -1,4 +1,4 @@
-import {logError} from '../logging'
+import { logError } from '../logging'
 import { ISuggestion, Suggestion } from '../model'
 import { onSuggestionsAccepted, onSuggestionSaved } from './suggestionNotifier'
 
@@ -58,8 +58,7 @@ export default class SuggestionGateway {
           if (err) {
             logError('Suggestion Error', err)
             reject(err)
-          }
-          if (suggestionModel.Count < 1) {
+          } else if (suggestionModel.Count < 1) {
             reject(new Error('Not found'))
           } else {
             resolve(suggestionModel.Items[0].attrs)
@@ -76,11 +75,12 @@ export default class SuggestionGateway {
         .exec((err: Error, suggestionModel: any) => {
           if (err) {
             reject(err)
+          } else {
+            const suggestionList = suggestionModel.Items.map(
+              (item: any) => item.attrs
+            )
+            resolve(suggestionList)
           }
-          const suggestionList = suggestionModel.Items.map(
-            (item: any) => item.attrs
-          )
-          resolve(suggestionList)
         })
     })
   }
@@ -94,11 +94,12 @@ export default class SuggestionGateway {
         .exec((err: Error, suggestionModel: any) => {
           if (err) {
             reject(err)
+          } else {
+            const suggestionList = suggestionModel.Items.map(
+              (item: any) => item.attrs
+            )
+            resolve(suggestionList)
           }
-          const suggestionList = suggestionModel.Items.map(
-            (item: any) => item.attrs
-          )
-          resolve(suggestionList)
         })
     })
   }

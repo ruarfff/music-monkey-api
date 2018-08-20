@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express'
 import * as _ from 'lodash'
-import SuggestionGateway from '../event/suggestionGateway'
+import SuggestionGateway from '../suggestion/suggestionGateway'
 
 const router = Router()
 const suggestionGateway = new SuggestionGateway()
