@@ -96,11 +96,14 @@ export default class EventGateway {
       Event.query(userId)
         .usingIndex('UserIdIndex')
         .exec((err: Error, eventModel: any) => {
-          if (err || eventModel.Items.length < 1) {
+          if (err) {
             reject(err)
+          } else if (eventModel.Items.length < 1) {
+            resolve([])
+          } else {
+            const eventList = eventModel.Items.map((item: any) => item.attrs)
+            resolve(eventList)
           }
-          const eventList = eventModel.Items.map((item: any) => item.attrs)
-          resolve(eventList)
         })
     })
   }
