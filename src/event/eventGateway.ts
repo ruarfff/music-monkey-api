@@ -1,6 +1,6 @@
+import InviteGateway from '../invite/inviteGateway'
 import { logError } from '../logging'
 import { Event, IEvent, IInvite } from '../model'
-import InviteGateway from './inviteGateway'
 
 const inviteGateway: InviteGateway = new InviteGateway()
 

@@ -1,5 +1,5 @@
 import { Request, Response, Router } from 'express'
-import InviteGateway from '../event/inviteGateway'
+import InviteGateway from './inviteGateway'
 
 const router = Router()
 const inviteGateway = new InviteGateway()

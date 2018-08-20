@@ -31,8 +31,7 @@ export default class InviteGateway {
         if (err) {
           logError('Invite Error', err)
           reject(err)
-        }
-        if (inviteModel.Count < 1) {
+        } else if (inviteModel.Count < 1) {
           reject(new Error('Not found'))
         } else {
           resolve(inviteModel.Items[0].attrs)
@@ -48,9 +47,10 @@ export default class InviteGateway {
         .exec((err: Error, inviteModel: any) => {
           if (err || inviteModel.Items.length < 1) {
             reject(err)
+          } else {
+            const inviteList = inviteModel.Items.map((item: any) => item.attrs)
+            resolve(inviteList)
           }
-          const inviteList = inviteModel.Items.map((item: any) => item.attrs)
-          resolve(inviteList)
         })
     })
   }
