@@ -3,6 +3,7 @@ const dynamo = require('dynamodb')
 
 import * as Joi from 'joi'
 import IPlaylist from '../spotify/IPlaylist'
+import { eventTableName } from './modelConstants'
 
 export interface ILatLng {
   lat: string
@@ -31,7 +32,7 @@ export interface IEvent {
   invites: string[]
 }
 
-export const Event = dynamo.define('MM-Dev-Event', {
+export const Event = dynamo.define(eventTableName, {
   hashKey: 'eventId',
   rangeKey: 'userId',
 

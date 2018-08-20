@@ -2,6 +2,7 @@
 const dynamo = require('dynamodb')
 
 import * as Joi from 'joi'
+import { userTableName } from './modelConstants'
 
 export interface IUserAuth {
   accessToken: string
@@ -37,7 +38,7 @@ export interface IUser {
   isVerified: boolean
 }
 
-export const User = dynamo.define('MM-Dev-User', {
+export const User = dynamo.define(userTableName, {
   hashKey: 'userId',
   rangeKey: 'email',
 

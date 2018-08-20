@@ -1,0 +1,5 @@
+export const eventTableName = 'mm-dev-event'
+export const inviteTableName = 'mm-dev-invite'
+export const rsvpTableName = 'mm-dev-rsvp'
+export const suggestionTableName = 'mm-dev-suggestion'
+export const userTableName = 'mm-dev-user'

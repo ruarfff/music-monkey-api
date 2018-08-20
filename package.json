@@ -7,7 +7,7 @@
     "lint": "tslint --fix -c tslint.json src/**/*.ts",
     "start": "node ./build/server/server.js",
     "stop": "node ./node_modules/.bin/pm2 stop pm2.json",
-    "start:watch": "NODE_ENV=development npm run start -- --watch",
+    "start:watch": "npm run start -- --watch",
     "flush-logs": "node ./node_modules/.bin/pm2 flush",
     "update-pm2": "node ./node_modules/.bin/pm2 update",
     "compile": "tsc",

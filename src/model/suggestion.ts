@@ -2,6 +2,7 @@
 const dynamo = require('dynamodb')
 
 import * as Joi from 'joi'
+import { suggestionTableName } from './modelConstants'
 
 export interface ISuggestion {
   suggestionId: string
@@ -14,7 +15,7 @@ export interface ISuggestion {
   rejected: boolean
 }
 
-export const Suggestion = dynamo.define('MM-Dev-Suggestion', {
+export const Suggestion = dynamo.define(suggestionTableName, {
   hashKey: 'suggestionId',
   rangeKey: 'eventId',
 
