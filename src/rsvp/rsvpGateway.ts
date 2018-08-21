@@ -30,3 +30,17 @@ export const getRsvpByUserIdAndInviteId = (
       })
   })
 }
+
+export const getRsvpByEventId = (eventId: string) => {
+  return new Promise<IRsvp[]>((resolve: any, reject: any) => {
+    Rsvp.query(eventId)
+      .usingIndex('EventIdUserIdIndex')
+      .exec((err: Error, rsvpModel: any) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(rsvpModel.Items.map((item: any) => item.attrs))
+        }
+      })
+  })
+}

@@ -1,10 +1,27 @@
 import InviteGateway from '../invite/inviteGateway'
 import { logError } from '../logging'
-import { Event, IEvent, IInvite } from '../model'
+import { Event, IEvent, IInvite, IRsvp } from '../model'
+import { getRsvpByEventId } from '../rsvp/rsvpGateway'
+import UserGateway from '../user/UserGateway'
+import IEventGuest from './IEventGuest'
 
 const inviteGateway: InviteGateway = new InviteGateway()
+const userGateway: UserGateway = new UserGateway()
 
 export default class EventGateway {
+  public async getEventGuests(eventId: string): Promise<IEventGuest[]> {
+    try {
+      const rsvps: IRsvp[] = await getRsvpByEventId(eventId)
+      const eventGuests = rsvps.map(async (rsvp: IRsvp) => {
+        const user = await userGateway.getSafeUserById(rsvp.userId)
+        return { user, rsvp } as IEventGuest
+      })
+      return await Promise.all(eventGuests)
+    } catch (err) {
+      logError('Failed to get event guests', err)
+      return []
+    }
+  }
   public createEvent(event: IEvent) {
     return new Promise((resolve, reject) => {
       Event.create(event, (err: Error, eventModel: any) => {

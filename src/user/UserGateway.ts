@@ -1,6 +1,7 @@
 // import { Promise } from 'es6-promise'
 import { logError } from '../logging'
 import { IUser, User } from '../model'
+import ISafeUser from './ISafeUser'
 
 export default class UserGateway {
   public getOrCreateUser(user: IUser, strategy: string) {
@@ -103,6 +104,17 @@ export default class UserGateway {
     })
   }
 
+  public async getSafeUserById(userId: string) {
+    const user = await this.getUserById(userId)
+    return {
+      country: user.country,
+      displayName: user.displayName,
+      image: user.image,
+      userId: user.userId,
+      isGuest: user.isGuest
+    } as ISafeUser
+  }
+
   public async getUserById(userId: string) {
     let user: IUser
     try {
@@ -120,6 +132,7 @@ export default class UserGateway {
       })
     } catch (err) {
       logError('Error fetching user by ID', err)
+      throw err
     }
     return user
   }

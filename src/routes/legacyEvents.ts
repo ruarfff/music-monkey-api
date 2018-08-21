@@ -31,6 +31,15 @@ router.get('/:eventId', (req: Request, res: Response) => {
     .catch(err => res.status(404).send(err))
 })
 
+router.get('/:eventId/guests', (req: Request, res: Response) => {
+  eventGateway
+    .getEventGuests(req.params.eventId)
+    .then(guests => {
+      res.send(guests)
+    })
+    .catch(err => res.status(404).send(err))
+})
+
 router.delete('/:eventId', (req: Request, res: Response) => {
   const userId = req.query.userId
   eventGateway
