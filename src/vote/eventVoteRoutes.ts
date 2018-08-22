@@ -1,7 +1,6 @@
 import { Request, Response, Router } from 'express'
 import * as passport from 'passport'
 import { logError } from '../logging'
-import ITrackVoteStatus from './ITrackVoteStatus'
 import IVote from './IVote'
 import { getVotesByEventId } from './voteGateway'
 

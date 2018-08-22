@@ -1,10 +1,12 @@
 import { Vote } from '../model'
 import IVote from './IVote'
+import { onVoteCreated, onVoteDeleted } from './voteNotifier'
 
 export const createVote = async (vote: IVote) => {
   try {
     const voteId = `${vote.trackId}:${vote.eventId}:${vote.userId}`
     const savedVote = await Vote.create({ ...vote, voteId } as IVote)
+    onVoteCreated(vote)
     return savedVote
   } catch (err) {
     console.error('Failed to create vote', err)
@@ -14,7 +16,9 @@ export const createVote = async (vote: IVote) => {
 export const deleteVote = async (voteId: string) => {
   try {
     const idParts: string[] = voteId.split(':')
-    await Vote.destroy(voteId, idParts[idParts.length - 2])
+    const eventId = idParts[idParts.length - 2]
+    await Vote.destroy(voteId, eventId)
+    onVoteDeleted(eventId)
   } catch (err) {
     console.error('Failed to create vote', err)
     throw err
