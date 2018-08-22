@@ -6,7 +6,8 @@ import {
   inviteTableName,
   rsvpTableName,
   suggestionTableName,
-  userTableName
+  userTableName,
+  voteTableName
 } from './modelConstants'
 
 dynamo.AWS.config.update({
@@ -20,6 +21,7 @@ export * from './user'
 export * from './invite'
 export * from './suggestion'
 export * from './rsvp'
+export * from './vote'
 
 export const createTables = () => {
   dynamo.createTables(
@@ -28,7 +30,8 @@ export const createTables = () => {
       [inviteTableName]: { readCapacity: 5, writeCapacity: 2 },
       [rsvpTableName]: { readCapacity: 5, writeCapacity: 2 },
       [suggestionTableName]: { readCapacity: 5, writeCapacity: 5 },
-      [userTableName]: { readCapacity: 5, writeCapacity: 2 }
+      [userTableName]: { readCapacity: 5, writeCapacity: 2 },
+      [voteTableName]: { readCapacity: 5, writeCapacity: 5 }
     },
     (err: Error) => {
       if (err) {

@@ -19,6 +19,8 @@ import searchRouter from './search/searchRoutes'
 import suggestionsRouter from './suggestion/suggestionRoutes'
 import userPlaylistRouter from './user/userPlaylistRoutes'
 import userRouter from './user/userRoutes'
+import eventVoteRouter from './vote/eventVoteRoutes'
+import voteRouter from './vote/voteRoutes'
 
 const app = express()
 
@@ -63,9 +65,11 @@ app.use(apiV1 + '/auth', authRouter)
 app.use(apiV1 + '/users', userPlaylistRouter)
 app.use(apiV1 + '/users', userRsvpRouter)
 app.use(apiV1 + '/events', eventsRouter)
+app.use(apiV1 + '/events', eventVoteRouter)
 app.use(apiV1 + '/recommendations', recommendationsRouter)
 app.use(apiV1 + '/search', searchRouter)
 app.use(apiV1 + '/rsvp', rsvpRouter)
+app.use(apiV1 + '/votes', voteRouter)
 
 // error handler
 app.use((err: any, req: any, res: any, next: any) => {

@@ -1,4 +1,3 @@
-// import { Promise } from 'es6-promise'
 import { logError } from '../logging'
 import { IUser, User } from '../model'
 import ISafeUser from './ISafeUser'
