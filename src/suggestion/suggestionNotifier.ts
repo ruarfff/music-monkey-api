@@ -6,5 +6,5 @@ export const onSuggestionSaved = (suggestion: ISuggestion) => {
 }
 
 export const onSuggestionsAccepted = (eventId: string) => {
-  send('mm-suggestions-' + eventId, 'suggestions-accepted')
+  send('mm-suggestions-' + eventId, 'suggestions-accepted', {})
 }

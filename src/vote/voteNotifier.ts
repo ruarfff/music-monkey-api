@@ -6,5 +6,5 @@ export const onVoteCreated = (vote: IVote) => {
 }
 
 export const onVoteDeleted = (eventId: string) => {
-  send('mm-votes-' + eventId, 'vote-deleted')
+  send('mm-votes-' + eventId, 'vote-deleted', {})
 }

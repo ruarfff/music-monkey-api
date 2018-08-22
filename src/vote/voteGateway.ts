@@ -20,7 +20,7 @@ export const deleteVote = async (voteId: string) => {
     await Vote.destroy(voteId, eventId)
     onVoteDeleted(eventId)
   } catch (err) {
-    console.error('Failed to create vote', err)
+    console.error('Failed to delete vote', err)
     throw err
   }
 }
