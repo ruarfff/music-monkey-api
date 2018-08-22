@@ -50,6 +50,16 @@ export const User = dynamo.define(userTableName, {
       expiresIn: Joi.number(),
       refreshToken: Joi.string()
     },
+    spotifyAuth: {
+      accessToken: Joi.string(),
+      expiresIn: Joi.number(),
+      refreshToken: Joi.string()
+    },
+    facebookAuth: {
+      accessToken: Joi.string(),
+      expiresIn: Joi.number(),
+      refreshToken: Joi.string()
+    },
     birthdate: Joi.string()
       .allow('')
       .optional(),
@@ -71,6 +81,9 @@ export const User = dynamo.define(userTableName, {
       .allow('')
       .optional(),
     spotifyId: Joi.string()
+      .allow('')
+      .optional(),
+    facebookId: Joi.string()
       .allow('')
       .optional(),
     userId: dynamo.types.uuid(),
