@@ -12,6 +12,7 @@ import inviteRouter from './invite/inviteRoutes'
 import recommendationsRouter from './recommendation/recommendationRoutes'
 import legacyAuthRouter from './routes/legacyAuth'
 import legacyEventRouter from './routes/legacyEvents'
+import legacyEventVotesRouter from './routes/legacyEventVotes'
 import legacySuggestionsRouter from './routes/legacySuggestions'
 import rsvpRouter from './rsvp/rsvpRoutes'
 import userRsvpRouter from './rsvp/userRsvpRoutes'
@@ -58,6 +59,7 @@ app.use('/users', userRouter)
 app.use('/suggestions', legacySuggestionsRouter)
 app.use('/invites', inviteRouter)
 app.use('/events', legacyEventRouter)
+app.use('/events', legacyEventVotesRouter)
 
 const apiV1 = '/api/v1'
 app.use(apiV1 + '/suggestions', suggestionsRouter)

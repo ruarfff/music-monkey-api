@@ -16,11 +16,12 @@ router.get(
       const votes: IVote[] = await getVotesByEventId(eventId)
       const votesWithStatus = {} as any
       votes.forEach((vote: IVote) => {
-        const votedByCurrentUser = vote.userId === userId
+        let votedByCurrentUser = vote.userId === userId
         let numberOfVotes = 1
         const voteStatus = votesWithStatus[vote.trackId]
         if (voteStatus) {
           numberOfVotes += voteStatus.numberOfVotes
+          votedByCurrentUser = voteStatus.votedByCurrentUser || votedByCurrentUser
         }
         votesWithStatus[vote.trackId] = { numberOfVotes, votedByCurrentUser }
       })
