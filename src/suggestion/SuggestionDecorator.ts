@@ -1,11 +1,11 @@
 import { find, flatten, forOwn, groupBy } from 'lodash'
 import * as spotifyUri from 'spotify-uri'
 import { logError } from '../logging'
-import { IUser } from '../model'
 import { ISuggestion } from '../model'
 import IPlaylist from '../spotify/IPlaylist'
 import ITrack from '../spotify/ITrack'
 import { getPlaylist, getTrack } from '../spotify/SpotifyClient'
+import IUser from '../user/IUser'
 
 export default class SuggestionDecorator {
   public decorateSuggestions = (suggestions: ISuggestion[], user: IUser) => {

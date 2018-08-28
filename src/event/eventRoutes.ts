@@ -43,14 +43,20 @@ router.get(
 router.get(
   '/:eventId',
   passport.authenticate('jwt', { session: false }),
-  (req: Request, res: Response) => {
-    eventGateway
-      .getEventById(req.params.eventId)
-      .then((event: IEvent) => {
-        const { user } = req
-        eventDecorator.decorateSingleEvent(event, user).then(res.send)
-      })
-      .catch(err => res.status(404).send(err))
+  async (req: Request, res: Response) => {
+    try {
+      const { user } = req
+      const event: IEvent = await eventGateway.getEventById(req.params.eventId)
+      const decoratedEvent = await eventDecorator.decorateSingleEvent(
+        event,
+        user
+      )
+
+      res.send(decoratedEvent)
+    } catch (err) {
+      logError(err)
+      res.status(404).send(err)
+    }
   }
 )
 

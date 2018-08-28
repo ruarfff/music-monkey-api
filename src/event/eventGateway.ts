@@ -71,7 +71,7 @@ export default class EventGateway {
   }
 
   public getEventById(eventId: string) {
-    return new Promise((resolve, reject) => {
+    return new Promise<IEvent>((resolve, reject) => {
       Event.query(eventId).exec((err: Error, eventModel: any) => {
         if (err) {
           reject(err)

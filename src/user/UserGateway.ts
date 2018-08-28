@@ -1,5 +1,6 @@
 import { logError } from '../logging'
-import { IUser, User } from '../model'
+import { User } from '../model'
+import IUser from '../user/IUser'
 import ISafeUser from './ISafeUser'
 
 export default class UserGateway {

@@ -1,5 +1,5 @@
 import { Request, Response, Router } from 'express'
-import { IUser } from '../model'
+import IUser from '../user/IUser'
 import UserGateway from './UserGateway'
 
 const router = Router()

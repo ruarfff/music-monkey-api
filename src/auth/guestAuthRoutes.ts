@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express'
 import * as passport from 'passport'
-import { IUser } from '../model'
+import IUser from '../user/IUser'
 import UserService from '../user/UserService'
 import { spotifyScopes } from './authConstants'
 import { handleCallback, setJwtCookie } from './authRequestLib'

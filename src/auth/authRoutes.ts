@@ -2,7 +2,9 @@ import * as bcrypt from 'bcrypt'
 import { Request, Response, Router } from 'express'
 import { isEmpty } from 'lodash'
 import * as passport from 'passport'
-import { IUser } from '../model'
+import { logError } from '../logging'
+import { refreshToken } from '../spotify/SpotifyClient'
+import IUser from '../user/IUser'
 import UserService from '../user/UserService'
 import { setJwtCookie } from './authRequestLib'
 
@@ -15,9 +17,15 @@ const userService = new UserService()
 router.post(
   '/refresh',
   passport.authenticate('jwt', { session: false }),
-  (req: Request, res: Response) => {
-    const { user } = req
-    res.status(200).send(user.spotifyAuth)
+  async (req: Request, res: Response) => {
+    try {
+      const { user } = req
+      const { spotifyAuth } = await refreshToken(user)
+      res.send(spotifyAuth)
+    } catch (err) {
+      logError(err)
+      res.status(400).send(err.message)
+    }
   }
 )
 

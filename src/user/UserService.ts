@@ -1,6 +1,6 @@
 import * as cache from '../cache'
 import { logError } from '../logging'
-import { IUser } from '../model'
+import IUser from '../user/IUser'
 import UserGateway from './UserGateway'
 
 const userGateway: UserGateway = new UserGateway()
