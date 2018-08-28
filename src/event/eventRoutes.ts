@@ -60,6 +60,22 @@ router.get(
   }
 )
 
+router.post(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  (req: Request, res: Response) => {
+    const event = req.body
+    eventGateway
+      .createEvent(event)
+      .then(savedEvent => {
+        res.send(savedEvent)
+      })
+      .catch(err => {
+        res.status(400).send(err)
+      })
+  }
+)
+
 router.delete(
   '/:eventId',
   passport.authenticate('jwt', { session: false }),
