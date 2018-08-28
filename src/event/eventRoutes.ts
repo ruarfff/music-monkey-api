@@ -35,8 +35,8 @@ router.get(
       }
     } catch (err) {
       logError(err)
+      res.send([])
     }
-    res.send([])
   }
 )
 
