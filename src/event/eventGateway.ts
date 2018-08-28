@@ -1,8 +1,9 @@
 import InviteGateway from '../invite/inviteGateway'
 import { logError } from '../logging'
-import { Event, IEvent, IInvite, IRsvp } from '../model'
+import { Event, IInvite, IRsvp } from '../model'
 import { getRsvpByEventId } from '../rsvp/rsvpGateway'
 import UserGateway from '../user/UserGateway'
+import IEvent from './IEvent'
 import IEventGuest from './IEventGuest'
 
 const inviteGateway: InviteGateway = new InviteGateway()
@@ -96,7 +97,7 @@ export default class EventGateway {
   }
 
   public getEventByInviteId(inviteId: string) {
-    return new Promise((resolve, reject) => {
+    return new Promise<IEvent>((resolve, reject) => {
       inviteGateway
         .getInviteById(inviteId)
         .then((invite: IInvite) => {
@@ -109,7 +110,7 @@ export default class EventGateway {
   }
 
   public getEventsByUserId(userId: string) {
-    return new Promise((resolve: any, reject: any) => {
+    return new Promise<IEvent[]>((resolve: any, reject: any) => {
       Event.query(userId)
         .usingIndex('UserIdIndex')
         .exec((err: Error, eventModel: any) => {

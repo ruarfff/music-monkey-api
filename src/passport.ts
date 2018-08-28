@@ -79,6 +79,45 @@ passport.use(
 )
 
 passport.use(
+  'spotify-host',
+  new SpotifyStrategy(
+    {
+      clientID: spotifyClientId,
+      clientSecret: spotifyClientSecret,
+      callbackURL:
+        'https://api.musicmonkey.io/api/v1/auth/host/spotify/callback'
+    },
+    handleSpotifyLogin
+  )
+)
+
+passport.use(
+  'spotify-host-local',
+  new SpotifyStrategy(
+    {
+      clientID: spotifyClientId,
+      clientSecret: spotifyClientSecret,
+      callbackURL:
+        'https://api.musicmonkey.io/api/v1/auth/host/spotify/callback/local'
+    },
+    handleSpotifyLogin
+  )
+)
+
+passport.use(
+  'spotify-host-local-dev',
+  new SpotifyStrategy(
+    {
+      clientID: spotifyClientId,
+      clientSecret: spotifyClientSecret,
+      callbackURL:
+        'http://localhost:8080/api/v1/auth/host/spotify/callback/local/dev'
+    },
+    handleSpotifyLogin
+  )
+)
+
+passport.use(
   'spotify-guest',
   new SpotifyStrategy(
     {

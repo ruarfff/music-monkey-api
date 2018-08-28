@@ -4,40 +4,6 @@ const dynamo = require('dynamodb')
 import * as Joi from 'joi'
 import { userTableName } from './modelConstants'
 
-export interface IUserAuth {
-  accessToken: string
-  expiresIn: number
-  refreshToken: string
-}
-
-export interface ISpotifyAuth {
-  accessToken: string
-  expiresAt: number
-  refreshToken: string
-}
-
-export interface IFacebookAuth {
-  accessToken: string
-  refreshToken: string
-}
-
-export interface IUser {
-  auth: IUserAuth
-  birthdate: string
-  country: string
-  displayName: string
-  email: string
-  facebookAuth: IFacebookAuth
-  facebookId: string
-  image: string
-  passwordHash: string
-  spotifyAuth: ISpotifyAuth
-  spotifyId: string
-  userId: string
-  isGuest: boolean
-  isVerified: boolean
-}
-
 export const User = dynamo.define(userTableName, {
   hashKey: 'userId',
   rangeKey: 'email',

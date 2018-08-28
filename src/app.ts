@@ -6,6 +6,8 @@ import { expressLogger } from './logging'
 import passport from './passport'
 
 import authRouter from './auth/authRoutes'
+import guestAuthRouter from './auth/guestAuthRoutes'
+import hostAuthRouter from './auth/hostAuthRoutes'
 import eventsRouter from './event/eventRoutes'
 import indexRouter from './indexRoutes'
 import inviteRouter from './invite/inviteRoutes'
@@ -30,7 +32,8 @@ if (app.get('env') === 'production') {
 }
 
 const whitelist = [
-  'http://localhost:3000',
+  'http://localhost:3001',
+  'http://localhost:3002',
   'https://hosts.musicmonkey.io',
   'https://guests.musicmonkey.io'
 ]
@@ -64,6 +67,8 @@ app.use('/events', legacyEventVotesRouter)
 const apiV1 = '/api/v1'
 app.use(apiV1 + '/suggestions', suggestionsRouter)
 app.use(apiV1 + '/auth', authRouter)
+app.use(apiV1 + '/auth', guestAuthRouter)
+app.use(apiV1 + '/auth', hostAuthRouter)
 app.use(apiV1 + '/users', userPlaylistRouter)
 app.use(apiV1 + '/users', userRsvpRouter)
 app.use(apiV1 + '/events', eventsRouter)

@@ -1,13 +1,25 @@
-import {logError} from '../logging'
-import { IEvent, IUser } from '../model'
+import { logError } from '../logging'
 import IPlaylist from '../spotify/IPlaylist'
 import IPlaylistQuery from '../spotify/IPlaylistQuery'
 import parsePlaylistUrl from '../spotify/parsePlaylistUrl'
 import { getPlaylist } from '../spotify/SpotifyClient'
+import IUser from '../user/IUser'
+import EventGateway from './eventGateway'
+import IEvent from './IEvent'
+
+const eventGateway: EventGateway = new EventGateway()
 
 const defaultEventImage = '/img/partycover-sm.png'
 
 export default class EventDecorator {
+  public decorateEvents = (events: IEvent[], user: IUser) => {
+    return Promise.all(events.map(event => this.decorateEvent(event, user)))
+  }
+
+  public decorateSingleEvent = (event: IEvent, user: IUser) => {
+    return this.decorateEvent(event, user)
+  }
+
   public getEventPlaylist = (event: IEvent, user: IUser) => {
     const playlistQuery: IPlaylistQuery | undefined = parsePlaylistUrl(
       event.playlistUrl
@@ -20,41 +32,50 @@ export default class EventDecorator {
     }
   }
 
-  public decorateEvent = (event: IEvent, user: IUser) => {
-    return new Promise(resolve => {
-      this.getEventPlaylist(event, user)
-        .then(({ body }: any) => {
-          const playlist: IPlaylist = body
-          let imageUrl = event.imageUrl
-          if (!imageUrl) {
-            imageUrl =
-              playlist.images && playlist.images.length > 0
-                ? playlist.images[0].url
-                : defaultEventImage
-          }
-          const decoratedEvent: IEvent = {
-            ...event,
-            imageUrl,
-            playlist
-          }
-
-          resolve(decoratedEvent)
-        })
-        .catch((err: any) => {
-          logError('Error decorating event', err)
-          resolve({
-            ...event,
-            imageUrl: event.imageUrl ? event.imageUrl : defaultEventImage
-          })
-        })
-    })
+  private decorateEvent = async (event: IEvent, user: IUser) => {
+    let decoratedEvent: IEvent = await this.decorateEventWithPlaylist(
+      event,
+      user
+    )
+    decoratedEvent = await this.decorateEventWithGuests(decoratedEvent)
+    return decoratedEvent
   }
 
-  public decorateEvents = (events: IEvent[], user: IUser) => {
-    return Promise.all(events.map(event => this.decorateEvent(event, user)))
+  private decorateEventWithPlaylist = async (event: IEvent, user: IUser) => {
+    try {
+      const { body } = await this.getEventPlaylist(event, user)
+      const playlist: IPlaylist = body
+      let imageUrl = event.imageUrl
+
+      if (!imageUrl) {
+        imageUrl =
+          playlist.images && playlist.images.length > 0
+            ? playlist.images[0].url
+            : defaultEventImage
+      }
+      const decoratedEvent: IEvent = {
+        ...event,
+        imageUrl,
+        playlist
+      }
+
+      return decoratedEvent
+    } catch (err) {
+      logError('Error decorating event', err)
+      return {
+        ...event,
+        imageUrl: event.imageUrl ? event.imageUrl : defaultEventImage
+      }
+    }
   }
 
-  public decorateSingleEvent = (event: IEvent, user: IUser) => {
-    return this.decorateEvent(event, user)
+  private decorateEventWithGuests = async (event: IEvent) => {
+    try {
+      const guests = await eventGateway.getEventGuests(event.eventId)
+      return { ...event, guests } as IEvent
+    } catch (err) {
+      console.error(err)
+    }
+    return { ...event }
   }
 }

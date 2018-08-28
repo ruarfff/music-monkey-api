@@ -4,24 +4,6 @@ import EventGateway from '../event/eventGateway'
 const router = Router()
 const eventGateway = new EventGateway()
 
-router.get('/', (req: Request, res: Response) => {
-  let action = null
-  if (req.query.userId) {
-    action = eventGateway.getEventsByUserId(req.query.userId)
-  } else if (req.query.inviteId) {
-    action = eventGateway.getEventByInviteId(req.query.inviteId)
-  }
-  if (action) {
-    action
-      .then(events => {
-        res.send(events)
-      })
-      .catch(err => res.status(500).send(err))
-  } else {
-    res.send([])
-  }
-})
-
 router.get('/:eventId', (req: Request, res: Response) => {
   eventGateway
     .getEventById(req.params.eventId)
@@ -36,16 +18,6 @@ router.get('/:eventId/guests', (req: Request, res: Response) => {
     .getEventGuests(req.params.eventId)
     .then(guests => {
       res.send(guests)
-    })
-    .catch(err => res.status(404).send(err))
-})
-
-router.delete('/:eventId', (req: Request, res: Response) => {
-  const userId = req.query.userId
-  eventGateway
-    .deleteEvent(req.params.eventId, userId)
-    .then(event => {
-      res.send(event)
     })
     .catch(err => res.status(404).send(err))
 })

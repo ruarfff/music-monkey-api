@@ -2,35 +2,7 @@
 const dynamo = require('dynamodb')
 
 import * as Joi from 'joi'
-import IPlaylist from '../spotify/IPlaylist'
 import { eventTableName } from './modelConstants'
-
-export interface ILatLng {
-  lat: string
-  lng: string
-}
-
-export interface IEventLocation {
-  address: string
-  latLng: ILatLng
-}
-
-export interface IEvent {
-  eventId: string
-  usrId: string
-  organizer: string
-  imageUrl: string
-  name: string
-  description: string
-  venue: string
-  location: IEventLocation
-  startDateTime: string
-  endDateTime: string
-  eventCode: string
-  playlist: IPlaylist
-  playlistUrl: string
-  invites: string[]
-}
 
 export const Event = dynamo.define(eventTableName, {
   hashKey: 'eventId',

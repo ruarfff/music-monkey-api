@@ -1,8 +1,9 @@
 import { Request, Response, Router } from 'express'
 import * as passport from 'passport'
-import { IEvent } from '../model'
+import { logError } from '../logging'
 import EventDecorator from './EventDecorator'
 import EventGateway from './eventGateway'
+import IEvent from './IEvent'
 const router = Router()
 const eventGateway = new EventGateway()
 const eventDecorator = new EventDecorator()
@@ -10,25 +11,32 @@ const eventDecorator = new EventDecorator()
 router.get(
   '/',
   passport.authenticate('jwt', { session: false }),
-  (req: Request, res: Response) => {
+  async (req: Request, res: Response) => {
     const { user } = req
-    let action = null
-    if (req.query.inviteId) {
-      action = eventGateway.getEventByInviteId(req.query.inviteId)
+    try {
+      if (req.query.inviteId) {
+        const event: IEvent = await eventGateway.getEventByInviteId(
+          req.query.inviteId
+        )
+        const decoratedEvent = await eventDecorator.decorateSingleEvent(
+          event,
+          user
+        )
+        res.send(decoratedEvent)
+      } else {
+        const events: IEvent[] = await eventGateway.getEventsByUserId(
+          user.userId
+        )
+        const decoratedEvents = await eventDecorator.decorateEvents(
+          events,
+          user
+        )
+        res.send(decoratedEvents)
+      }
+    } catch (err) {
+      logError(err)
     }
-    if (action) {
-      action
-        .then((event: IEvent) => {
-          eventDecorator
-            .decorateSingleEvent(event, user)
-            .then(decoratedEvent => {
-              res.send(decoratedEvent)
-            })
-        })
-        .catch(err => res.status(500).send(err))
-    } else {
-      res.send([])
-    }
+    res.send([])
   }
 )
 
@@ -41,6 +49,20 @@ router.get(
       .then((event: IEvent) => {
         const { user } = req
         eventDecorator.decorateSingleEvent(event, user).then(res.send)
+      })
+      .catch(err => res.status(404).send(err))
+  }
+)
+
+router.delete(
+  '/:eventId',
+  passport.authenticate('jwt', { session: false }),
+  (req: Request, res: Response) => {
+    const userId = req.user.userId
+    eventGateway
+      .deleteEvent(req.params.eventId, userId)
+      .then(event => {
+        res.send(event)
       })
       .catch(err => res.status(404).send(err))
   }
