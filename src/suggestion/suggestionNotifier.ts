@@ -1,5 +1,5 @@
-import { ISuggestion } from '../model'
 import { send } from '../notification'
+import ISuggestion from './ISuggestion'
 
 export const onSuggestionSaved = (suggestion: ISuggestion) => {
   send('mm-suggestions-' + suggestion.eventId, 'suggestion-saved', suggestion)

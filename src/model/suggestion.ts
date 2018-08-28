@@ -4,17 +4,6 @@ const dynamo = require('dynamodb')
 import * as Joi from 'joi'
 import { suggestionTableName } from './modelConstants'
 
-export interface ISuggestion {
-  suggestionId: string
-  eventId: string
-  userId: string
-  type: string
-  trackUri: string
-  playlistUri: string
-  accepted: boolean
-  rejected: boolean
-}
-
 export const Suggestion = dynamo.define(suggestionTableName, {
   hashKey: 'suggestionId',
   rangeKey: 'eventId',

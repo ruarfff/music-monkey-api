@@ -1,5 +1,6 @@
 import { logError } from '../logging'
-import { ISuggestion, Suggestion } from '../model'
+import { Suggestion } from '../model'
+import ISuggestion from './ISuggestion'
 import { onSuggestionsAccepted, onSuggestionSaved } from './suggestionNotifier'
 
 export default class SuggestionGateway {
@@ -69,7 +70,7 @@ export default class SuggestionGateway {
   }
 
   public getSuggestionsByEventId(eventId: string) {
-    return new Promise((resolve: any, reject: any) => {
+    return new Promise<ISuggestion[]>((resolve: any, reject: any) => {
       Suggestion.query(eventId)
         .usingIndex('UserEventIdIndex')
         .exec((err: Error, suggestionModel: any) => {
@@ -86,7 +87,7 @@ export default class SuggestionGateway {
   }
 
   public getSuggestionsByUserIdAndEventId(userId: string, eventId: string) {
-    return new Promise((resolve: any, reject: any) => {
+    return new Promise<ISuggestion[]>((resolve: any, reject: any) => {
       Suggestion.query(eventId)
         .where('userId')
         .equals(userId)

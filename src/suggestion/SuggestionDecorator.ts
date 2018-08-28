@@ -1,71 +1,79 @@
-import { find, flatten, forOwn, groupBy } from 'lodash'
+import { flatten, groupBy } from 'lodash'
 import * as spotifyUri from 'spotify-uri'
 import { logError } from '../logging'
-import { ISuggestion } from '../model'
-import IPlaylist from '../spotify/IPlaylist'
-import ITrack from '../spotify/ITrack'
-import { getPlaylist, getTrack } from '../spotify/SpotifyClient'
+import { getTrack } from '../spotify/SpotifyClient'
 import IUser from '../user/IUser'
+import UserGateway from '../user/UserGateway'
+import IDecoratedSuggestion from './IDecoratedSuggestion'
+import ISuggestion from './ISuggestion'
+
+const userGateway: UserGateway = new UserGateway()
 
 export default class SuggestionDecorator {
-  public decorateSuggestions = (suggestions: ISuggestion[], user: IUser) => {
-    const suggestionsGroupedByType = groupBy(suggestions, 'type')
-    const trackSuggestionPromises = (suggestionsGroupedByType.track || [])
-      .map(trackSuggestion => {
-        const trackDetails = spotifyUri(trackSuggestion.trackUri)
-        return getTrack(trackDetails.id, user).then((track: ITrack) => {
-          return {
-            suggestion: trackSuggestion,
-            track
+  public decorateSuggestions = async (
+    suggestions: ISuggestion[],
+    user: IUser
+  ) => {
+    let decoratedSuggestions: IDecoratedSuggestion[]
+    decoratedSuggestions = await this.decorateSuggestionsWithTracks(
+      suggestions,
+      user
+    )
+
+    decoratedSuggestions = await this.decorateSuggestionsWithUsers(
+      decoratedSuggestions
+    )
+    return decoratedSuggestions
+  }
+
+  private decorateSuggestionsWithUsers = async (
+    suggestions: IDecoratedSuggestion[]
+  ): Promise<IDecoratedSuggestion[]> => {
+    const groupedByUserId: any = groupBy(suggestions, 'suggestion.userId')
+    const suggestionsWithUsers: any = await Promise.all(
+      Object.keys(groupedByUserId).map(async (userId: string) => {
+        try {
+          const user = await userGateway.getUserById(userId)
+          return groupedByUserId[userId].map(
+            (decoratedSuggestion: IDecoratedSuggestion) => ({
+              ...decoratedSuggestion,
+              user
+            })
+          )
+        } catch (err) {
+          logError(err)
+          return []
+        }
+      })
+    )
+
+    return flatten(suggestionsWithUsers)
+  }
+
+  private decorateSuggestionsWithTracks = async (
+    suggestions: ISuggestion[],
+    user: IUser
+  ): Promise<IDecoratedSuggestion[]> => {
+    try {
+      const suggestionTrackDecorations = await Promise.all(
+        suggestions.map(async (suggestion: ISuggestion) => {
+          try {
+            const trackDetails = spotifyUri(suggestion.trackUri)
+            const track = await getTrack(trackDetails.id, user)
+
+            return {
+              suggestion,
+              track
+            } as IDecoratedSuggestion
+          } catch (err) {
+            logError(err)
           }
         })
-      })
-      .map(p =>
-        p.catch((error: any) => {
-          logError('Error decorating suggestion', error)
-        })
       )
-
-    const playlistSuggestionPromises: any[] = []
-
-    if (suggestionsGroupedByType.playlist) {
-      forOwn(
-        groupBy(suggestionsGroupedByType.playlist, 'playlistUri'),
-        (playlistSuggestions, playlistUri) => {
-          const playlistDetails = spotifyUri(playlistUri)
-          playlistSuggestionPromises.push(
-            getPlaylist(playlistDetails.user, playlistDetails.id, user)
-              .then(({ body }: any) => {
-                const playlist: IPlaylist = body
-                const decoratedSuggestions: any[] = []
-                playlist.tracks.items.map(item => {
-                  const matchingSuggestion = find(playlistSuggestions, {
-                    trackUri: item.track.uri
-                  })
-                  if (matchingSuggestion) {
-                    decoratedSuggestions.push({
-                      suggestion: matchingSuggestion,
-                      track: item.track
-                    })
-                  }
-                })
-                return decoratedSuggestions
-              })
-              .catch((err: any) => {
-                logError(
-                  'Error getting playlist during suggestion decoration',
-                  err
-                )
-              })
-          )
-        }
-      )
+      return suggestionTrackDecorations
+    } catch (err) {
+      logError(err)
+      return []
     }
-    return Promise.all([
-      ...trackSuggestionPromises,
-      ...playlistSuggestionPromises
-    ])
-      .then(values => values.filter(v => !(v instanceof Error)))
-      .then(flatten)
   }
 }
