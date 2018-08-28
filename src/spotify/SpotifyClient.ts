@@ -19,103 +19,101 @@ const getSpotifyApi = (token?: string) => {
   return spotifyApi
 }
 
-export const getNewReleases = (country: string, user: IUser) => {
-  return checkToken(user).then((validUser: IUser) => {
-    return getSpotifyApi(validUser.spotifyAuth.accessToken).getNewReleases({
-      limit: 10,
-      offset: 0,
-      country
-    })
+export const getNewReleases = async (country: string, user: IUser) => {
+  const validUser: IUser = await checkToken(user)
+
+  return getSpotifyApi(validUser.spotifyAuth.accessToken).getNewReleases({
+    limit: 10,
+    offset: 0,
+    country
   })
 }
 
-export const getRecommendations = (user: IUser) => {
+export const getRecommendations = async (user: IUser) => {
   const seeds = ['alt_rock', 'blues', 'dance', 'hard_rock', 'hip_hop']
-  return checkToken(user).then((validUser: IUser) => {
-    return getSpotifyApi(validUser.spotifyAuth.accessToken)
-      .getRecommendations({
-        min_energy: 0.5,
-        min_popularity: 50,
-        seed_genres: seeds
-      })
-      .then(({ body }: any) => {
-        return body.tracks
-      })
-      .catch((err: any) => {
-        logError('Error getting recommendations', err)
-      })
-  })
+  const validUser: IUser = await checkToken(user)
+
+  try {
+    const { body } = await getSpotifyApi(
+      validUser.spotifyAuth.accessToken
+    ).getRecommendations({
+      min_energy: 0.5,
+      min_popularity: 50,
+      seed_genres: seeds
+    })
+
+    return body.tracks
+  } catch (err) {
+    logError('Error getting recommendations', err)
+  }
 }
 
-export const searchTracks = (searchTerm: string, user: IUser) => {
-  return checkToken(user).then((validUser: IUser) => {
-    return getSpotifyApi(validUser.spotifyAuth.accessToken).searchTracks(
-      searchTerm
-    )
-  })
+export const searchTracks = async (searchTerm: string, user: IUser) => {
+  const validUser: IUser = await checkToken(user)
+
+  return getSpotifyApi(validUser.spotifyAuth.accessToken).searchTracks(
+    searchTerm
+  )
 }
 
-export const getUserTopTracks = (user: IUser) => {
-  return checkToken(user).then((validUser: IUser) => {
-    return getSpotifyApi(validUser.spotifyAuth.accessToken)
-      .getMyTopTracks()
-      .then(({ body }: any) => {
-        return body.items
-      })
-  })
+export const getUserTopTracks = async (user: IUser) => {
+  const validUser: IUser = await checkToken(user)
+
+  const { body } = await getSpotifyApi(
+    validUser.spotifyAuth.accessToken
+  ).getMyTopTracks()
+
+  return body.items
 }
 
-export const getTrack = (trackId: string, user: IUser) => {
-  return checkToken(user).then((validUser: IUser) => {
-    return getSpotifyApi(validUser.spotifyAuth.accessToken)
-      .getTrack(trackId)
-      .then(({ body }: any) => body)
-  })
+export const getTrack = async (trackId: string, user: IUser) => {
+  const validUser: IUser = await checkToken(user)
+
+  const { body } = await getSpotifyApi(
+    validUser.spotifyAuth.accessToken
+  ).getTrack(trackId)
+  return body
 }
 
-export const getPlaylist = (
+export const getPlaylist = async (
   userName: string,
   playlistId: string,
   user: IUser
 ) => {
-  return checkToken(user).then((validUser: IUser) => {
-    return getSpotifyApi(validUser.spotifyAuth.accessToken).getPlaylist(
-      userName,
-      playlistId
-    )
-  })
+  const validUser: IUser = await checkToken(user)
+
+  return getSpotifyApi(validUser.spotifyAuth.accessToken).getPlaylist(
+    userName,
+    playlistId
+  )
 }
 
-export const getUserPlaylists = (user: IUser) => {
-  return checkToken(user).then((validUser: IUser) => {
-    const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
+export const getUserPlaylists = async (user: IUser) => {
+  const validUser: IUser = await checkToken(user)
+  const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
 
-    return spotifyApi
-      .getUserPlaylists(validUser.spotifyId)
-      .then((response: any) => {
-        const playlists = response.body.items.filter(
-          (playlist: any) => playlist.owner.id === user.spotifyId
-        )
+  const response = await spotifyApi.getUserPlaylists(validUser.spotifyId)
 
-        const playlistsWithTracks = Promise.all(
-          playlists.map(
-            (playlist: any) =>
-              new Promise((r, rej) => {
-                spotifyApi
-                  .getPlaylistTracks(playlist.owner.id, playlist.id)
-                  .then((tracks: any) => {
-                    r({
-                      ...playlist,
-                      tracks: { ...playlist.tracks, items: tracks.items }
-                    })
-                  })
-                  .catch(rej)
-              })
-          )
-        )
-        return playlistsWithTracks
-      })
-  })
+  const playlists = response.body.items.filter(
+    (playlist: any) => playlist.owner.id === user.spotifyId
+  )
+
+  const playlistsWithTracks = await Promise.all(
+    playlists.map(async (playlist: any) => {
+      const { body } = await spotifyApi.getPlaylistTracks(
+        playlist.owner.id,
+        playlist.id
+      )
+      const tracks = body.items
+
+      return {
+        ...playlist,
+        tracks: { ...playlist.tracks, items: tracks }
+      }
+    })
+  )
+
+  return playlistsWithTracks
 }
 
 async function checkToken(user: IUser) {

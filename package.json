@@ -44,7 +44,7 @@
     "querystring": "0.2.0",
     "serve-favicon": "2.5.0",
     "spotify-uri": "1.0.0",
-    "spotify-web-api-node": "3.0.0",
+    "spotify-web-api-node": "3.1.1",
     "uuid": "3.2.1",
     "winston": "3.0.0",
     "winston-loggly-bulk": "2.0.3"
