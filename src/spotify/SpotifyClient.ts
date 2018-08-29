@@ -20,6 +20,14 @@ const getSpotifyApi = (token?: string) => {
   return spotifyApi
 }
 
+export const getUserProfile = async (user: IUser) => {
+  const validUser: IUser = await checkToken(user)
+  const { body } = await getSpotifyApi(
+    validUser.spotifyAuth.accessToken
+  ).getMe()
+  return body
+}
+
 export const getNewReleases = async (country: string, user: IUser) => {
   const validUser: IUser = await checkToken(user)
 

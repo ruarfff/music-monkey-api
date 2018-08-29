@@ -5,6 +5,7 @@ import * as passport from 'passport'
 import { logError } from '../logging'
 import { refreshToken } from '../spotify/SpotifyClient'
 import IUser from '../user/IUser'
+import { checkUserProfile } from '../user/profileCheck'
 import UserService from '../user/UserService'
 import { setJwtCookie } from './authRequestLib'
 
@@ -32,9 +33,10 @@ router.post(
 router.get(
   '/verify',
   passport.authenticate('jwt', { session: false }),
-  (req: Request, res: Response) => {
+  async (req: Request, res: Response) => {
     const { user } = req
-    res.status(200).send(user)
+    const checkedUser = await checkUserProfile(user)
+    res.status(200).send(checkedUser)
   }
 )
 
