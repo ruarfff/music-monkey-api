@@ -12,27 +12,11 @@ router.get(
   '/',
   passport.authenticate('jwt', { session: false }),
   async (req: Request, res: Response) => {
-    const { user } = req
     try {
-      if (req.query.inviteId) {
-        const event: IEvent = await eventGateway.getEventByInviteId(
-          req.query.inviteId
-        )
-        const decoratedEvent = await eventDecorator.decorateSingleEvent(
-          event,
-          user
-        )
-        res.send(decoratedEvent)
-      } else {
-        const events: IEvent[] = await eventGateway.getEventsByUserId(
-          user.userId
-        )
-        const decoratedEvents = await eventDecorator.decorateEvents(
-          events,
-          user
-        )
-        res.send(decoratedEvents)
-      }
+      const { user } = req
+      const events: IEvent[] = await eventGateway.getEventsByUserId(user.userId)
+      const decoratedEvents = await eventDecorator.decorateEvents(events, user)
+      res.send(decoratedEvents)
     } catch (err) {
       logError(err)
       res.send([])

@@ -96,17 +96,10 @@ export default class EventGateway {
     })
   }
 
-  public getEventByInviteId(inviteId: string) {
-    return new Promise<IEvent>((resolve, reject) => {
-      inviteGateway
-        .getInviteById(inviteId)
-        .then((invite: IInvite) => {
-          this.getEventById(invite.eventId)
-            .then(resolve)
-            .catch(reject)
-        })
-        .catch(reject)
-    })
+  public async getEventByInviteId(inviteId: string) {
+    const { eventId }: IInvite = await inviteGateway.getInviteById(inviteId)
+
+    return this.getEventById(eventId)
   }
 
   public getEventsByUserId(userId: string) {

@@ -10,7 +10,7 @@ const suggestionGateway = new SuggestionGateway()
 const suggestionDecorator = new SuggestionDecorator()
 
 router.get(
-  '/',
+  '/suggestions',
   passport.authenticate('jwt', { session: false }),
   async (req: Request, res: Response) => {
     try {
@@ -19,10 +19,6 @@ router.get(
       if (req.query.eventId) {
         suggestions = await suggestionGateway.getSuggestionsByUserIdAndEventId(
           user.userId,
-          req.query.eventId
-        )
-      } else {
-        suggestions = await suggestionGateway.getSuggestionsByEventId(
           req.query.eventId
         )
       }
