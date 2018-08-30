@@ -2,7 +2,7 @@ import * as cookieParser from 'cookie-parser'
 import * as cors from 'cors'
 import * as express from 'express'
 import * as helmet from 'helmet'
-import { expressLogger } from './logging'
+import { expressLogger, rollbarErrorHandler } from './logging'
 import passport from './passport'
 
 import authRouter from './auth/authRoutes'
@@ -82,6 +82,7 @@ app.use(apiV1 + '/recommendations', recommendationsRouter)
 app.use(apiV1 + '/rsvp', rsvpRouter)
 app.use(apiV1 + '/votes', voteRouter)
 
+app.use(rollbarErrorHandler)
 // error handler
 app.use((err: any, req: any, res: any, next: any) => {
   // set locals, only providing error in development
@@ -91,7 +92,5 @@ app.use((err: any, req: any, res: any, next: any) => {
   res.send(err.message)
   next()
 })
-
-// app.use(expressErrorLogger)
 
 export default app

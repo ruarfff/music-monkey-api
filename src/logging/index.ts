@@ -1,6 +1,12 @@
 const expressWinston = require('express-winston')
 const winston = require('winston')
 const { Loggly } = require('winston-loggly-bulk')
+const Rollbar = require('rollbar')
+const rollbar = new Rollbar({
+  accessToken: '6c88840f47b14dec819a15447ee0a36a',
+  captureUncaught: true,
+  captureUnhandledRejections: true
+})
 
 const logger = winston.createLogger()
 
@@ -26,6 +32,8 @@ export const expressLogger = expressWinston.logger({
   winstonInstance: logger
 })
 
+export const rollbarErrorHandler = rollbar.errorHandler()
+
 export const logInfo = (message: string) => {
   logger.log('info', message)
 }
@@ -36,4 +44,5 @@ export const logDebug = (message: string) => {
 
 export const logError = (message: string, err: any = {}) => {
   logger.log('error', message, err)
+  rollbar.error(message, err)
 }
