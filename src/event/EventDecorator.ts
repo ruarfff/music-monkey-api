@@ -74,7 +74,7 @@ export default class EventDecorator {
       const guests = await eventGateway.getEventGuests(event.eventId)
       return { ...event, guests } as IEvent
     } catch (err) {
-      console.error(err)
+      logError('Error decorating event with guests', err)
     }
     return { ...event }
   }
