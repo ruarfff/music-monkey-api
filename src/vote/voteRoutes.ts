@@ -13,7 +13,7 @@ router.post(
       const vote = await createVote(req.body)
       res.send(vote)
     } catch (err) {
-      logError('Error creating vote', err)
+      logError('Error creating vote', err, req)
       res.status(404).send(err)
     }
   }
@@ -27,7 +27,7 @@ router.delete(
       await deleteVote(req.params.voteId)
       res.status(200).send()
     } catch (err) {
-      logError('Failed to delete vote', err)
+      logError('Failed to delete vote', err, req)
       res.status(400).send(err)
     }
   }

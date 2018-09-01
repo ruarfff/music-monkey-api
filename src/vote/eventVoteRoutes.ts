@@ -21,13 +21,14 @@ router.get(
         const voteStatus = votesWithStatus[vote.trackId]
         if (voteStatus) {
           numberOfVotes += voteStatus.numberOfVotes
-          votedByCurrentUser = voteStatus.votedByCurrentUser || votedByCurrentUser
+          votedByCurrentUser =
+            voteStatus.votedByCurrentUser || votedByCurrentUser
         }
         votesWithStatus[vote.trackId] = { numberOfVotes, votedByCurrentUser }
       })
       res.send(votesWithStatus)
     } catch (err) {
-      logError('Error getting votes by event id', err)
+      logError('Error getting votes by event id', err, req)
       res.status(404).send(err)
     }
   }

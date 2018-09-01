@@ -20,7 +20,7 @@ router.get(
         res.send(body)
       }
     } catch (err) {
-      logError('Error searching for tracks', err)
+      logError('Error searching for tracks', err, req)
       const code = err && err.statusCode ? err.statusCode : 400
       res.status(code).send(err ? err.message : 'unknown error')
     }

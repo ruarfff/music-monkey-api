@@ -20,7 +20,7 @@ export const checkUserProfile = async (user: IUser) => {
       }
     }
   } catch (err) {
-    logError(err)
+    logError('Error checking user profile', err)
   }
   return user
 }

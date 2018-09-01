@@ -135,7 +135,7 @@ export const refreshToken = async (user: IUser) => {
     const updatedUser = await userService.updateUser({ ...user, spotifyAuth })
     return updatedUser
   } catch (err) {
-    logError(err)
+    logError('Error getting refresh token', err)
   }
   return user
 }

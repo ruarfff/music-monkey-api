@@ -27,7 +27,7 @@ router.get(
         res.status(404).send()
       }
     } catch (err) {
-      logError(err)
+      logError('Error getting event by invite id', err, req)
       res.status(404).send()
     }
   }

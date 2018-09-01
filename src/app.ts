@@ -28,8 +28,14 @@ import eventVoteRouter from './vote/eventVoteRoutes'
 import voteRouter from './vote/voteRoutes'
 
 const app = express()
+let isProduction = false
 
 if (app.get('env') === 'production') {
+  console.log('Is Production')
+  isProduction = true
+}
+
+if (isProduction) {
   app.set('trust proxy', 1) // trust first proxy
 }
 
@@ -82,7 +88,9 @@ app.use(apiV1 + '/recommendations', recommendationsRouter)
 app.use(apiV1 + '/rsvp', rsvpRouter)
 app.use(apiV1 + '/votes', voteRouter)
 
-app.use(rollbarErrorHandler)
+if (isProduction) {
+  app.use(rollbarErrorHandler)
+}
 // error handler
 app.use((err: any, req: any, res: any, next: any) => {
   // set locals, only providing error in development

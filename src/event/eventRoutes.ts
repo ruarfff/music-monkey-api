@@ -18,7 +18,7 @@ router.get(
       const decoratedEvents = await eventDecorator.decorateEvents(events, user)
       res.send(decoratedEvents)
     } catch (err) {
-      logError(err)
+      logError('Error getting events', err, req)
       res.send([])
     }
   }
@@ -38,7 +38,7 @@ router.get(
 
       res.send(decoratedEvent)
     } catch (err) {
-      logError(err)
+      logError('Error getting event by IDs', err, req)
       res.status(404).send(err)
     }
   }

@@ -24,7 +24,7 @@ router.post(
       const { spotifyAuth } = await refreshToken(user)
       res.send(spotifyAuth)
     } catch (err) {
-      logError(err)
+      logError('Error refreshing token', err, req)
       res.status(400).send(err.message)
     }
   }

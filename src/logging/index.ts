@@ -1,4 +1,5 @@
 const expressWinston = require('express-winston')
+import { Request } from 'express'
 const winston = require('winston')
 const { Loggly } = require('winston-loggly-bulk')
 const Rollbar = require('rollbar')
@@ -42,7 +43,20 @@ export const logDebug = (message: string) => {
   logger.log('debug', message)
 }
 
-export const logError = (message: string, err: any = {}) => {
+export const logError = (
+  message: string,
+  err: Error = new Error(),
+  request: Request = null
+) => {
+  let fullMessage = message
   logger.log('error', message, err)
-  rollbar.error(message, err)
+  if (err.message) {
+    fullMessage += ' : ' + err.message
+  }
+  err.message = fullMessage
+  if (request) {
+    rollbar.error(err, request)
+  } else {
+    rollbar.error(err)
+  }
 }

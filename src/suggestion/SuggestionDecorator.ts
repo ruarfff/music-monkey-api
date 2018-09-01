@@ -41,7 +41,7 @@ export default class SuggestionDecorator {
             })
           )
         } catch (err) {
-          logError(err)
+          logError('Error getting user for suggestion decoration', err)
           return []
         }
       })
@@ -66,13 +66,13 @@ export default class SuggestionDecorator {
               track
             } as IDecoratedSuggestion
           } catch (err) {
-            logError(err)
+            logError('Error decorating a suggestion with track', err)
           }
         })
       )
       return suggestionTrackDecorations
     } catch (err) {
-      logError(err)
+      logError('Error decorating all suggestions wiht tracks', err)
       return []
     }
   }
