@@ -75,12 +75,12 @@ export const getUserTopTracks = async (user: IUser) => {
   return body.items
 }
 
-export const getTrack = async (trackId: string, user: IUser) => {
+export const getMultipleTracks = async (trackIds: string[], user: IUser) => {
   const validUser: IUser = await checkToken(user)
-
   const { body } = await getSpotifyApi(
     validUser.spotifyAuth.accessToken
-  ).getTrack(trackId)
+  ).getTracks(trackIds)
+
   return body
 }
 

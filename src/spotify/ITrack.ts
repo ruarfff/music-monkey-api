@@ -1,6 +1,7 @@
 import IAlbum from './IAlbum'
 
 export default interface ITrack {
+  id: string
   disc_number: number
   duration_ms: number
   explicit: boolean

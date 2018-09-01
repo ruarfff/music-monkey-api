@@ -1,7 +1,8 @@
-import { flatten, groupBy } from 'lodash'
+import { flatten, groupBy, reduce } from 'lodash'
 import * as spotifyUri from 'spotify-uri'
 import { logError } from '../logging'
-import { getTrack } from '../spotify/SpotifyClient'
+import ITrack from '../spotify/ITrack'
+import { getMultipleTracks } from '../spotify/SpotifyClient'
 import IUser from '../user/IUser'
 import UserGateway from '../user/UserGateway'
 import IDecoratedSuggestion from './IDecoratedSuggestion'
@@ -55,11 +56,40 @@ export default class SuggestionDecorator {
     user: IUser
   ): Promise<IDecoratedSuggestion[]> => {
     try {
-      const suggestionTrackDecorations = await Promise.all(
-        suggestions.map(async (suggestion: ISuggestion) => {
+      let allTracks: ITrack[] = []
+      const trackIds = suggestions
+        .map((suggestion: ISuggestion) => {
+          if (suggestion && suggestion.trackUri) {
+            const trackDetails = spotifyUri(suggestion.trackUri)
+            return trackDetails.id
+          }
+          return null
+        })
+        .filter(x => x !== null)
+      if (trackIds.length <= 50) {
+        const { tracks } = await getMultipleTracks(trackIds, user)
+        allTracks = tracks
+      } else {
+        const chunk = 50
+        let i
+        let j
+        let chunkedTrackIds
+        for (i = 0, j = trackIds.length; i < j; i += chunk) {
+          chunkedTrackIds = trackIds.slice(i, i + chunk)
+          const { tracks } = await getMultipleTracks(chunkedTrackIds, user)
+          allTracks = [...allTracks, ...tracks]
+        }
+      }
+      const trackMap: any = reduce(
+        allTracks,
+        (acc, track) => ({ ...acc, [track.id]: track as ITrack }),
+        {}
+      )
+      const suggestionTrackDecorations = suggestions.map(
+        (suggestion: ISuggestion) => {
           try {
             const trackDetails = spotifyUri(suggestion.trackUri)
-            const track = await getTrack(trackDetails.id, user)
+            const track: ITrack = trackMap[trackDetails.id]
 
             return {
               suggestion,
@@ -68,11 +98,12 @@ export default class SuggestionDecorator {
           } catch (err) {
             logError('Error decorating a suggestion with track', err)
           }
-        })
+        }
       )
+
       return suggestionTrackDecorations
     } catch (err) {
-      logError('Error decorating all suggestions wiht tracks', err)
+      logError('Error decorating all suggestions with tracks', err)
       return []
     }
   }
