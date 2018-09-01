@@ -19,6 +19,7 @@ export const User = dynamo.define(userTableName, {
     spotifyAuth: {
       accessToken: Joi.string(),
       expiresIn: Joi.number(),
+      expiresAt: Joi.number(),
       refreshToken: Joi.string()
     },
     facebookAuth: {
