@@ -11,19 +11,13 @@ import hostAuthRouter from './auth/hostAuthRoutes'
 import eventsRouter from './event/eventRoutes'
 import inviteEventRouter from './event/inviteEventRoute'
 import indexRouter from './indexRoutes'
-import inviteRouter from './invite/inviteRoutes'
 import userPlaylistRouter from './playlist/userPlaylistRoutes'
 import recommendationsRouter from './recommendation/recommendationRoutes'
-import legacyAuthRouter from './routes/legacyAuth'
-import legacyEventRouter from './routes/legacyEvents'
-import legacyEventVotesRouter from './routes/legacyEventVotes'
-import legacySuggestionsRouter from './routes/legacySuggestions'
 import rsvpRouter from './rsvp/rsvpRoutes'
 import userRsvpRouter from './rsvp/userRsvpRoutes'
 import searchRouter from './search/searchRoutes'
 import suggestionsRouter from './suggestion/suggestionRoutes'
 import userSuggestionsRouter from './suggestion/userSuggestionRoutes'
-import userRouter from './user/userRoutes'
 import eventVoteRouter from './vote/eventVoteRoutes'
 import voteRouter from './vote/voteRoutes'
 
@@ -65,12 +59,6 @@ app.use(cookieParser())
 app.use(passport.initialize())
 
 app.use('/', indexRouter)
-app.use('/', legacyAuthRouter)
-app.use('/users', userRouter)
-app.use('/suggestions', legacySuggestionsRouter)
-app.use('/invites', inviteRouter)
-app.use('/events', legacyEventRouter)
-app.use('/events', legacyEventVotesRouter)
 
 const apiV1 = '/api/v1'
 app.use(apiV1 + '/suggestions', suggestionsRouter)
