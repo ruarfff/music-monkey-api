@@ -2,10 +2,9 @@ import { Request, Response, Router } from 'express'
 import * as passport from 'passport'
 import { logError } from '../logging'
 import EventDecorator from './EventDecorator'
-import EventGateway from './eventGateway'
+import { getEventByInviteId } from './eventGateway'
 import IEvent from './IEvent'
 const router = Router()
-const eventGateway = new EventGateway()
 const eventDecorator = new EventDecorator()
 
 router.get(
@@ -15,9 +14,7 @@ router.get(
     const { user } = req
     try {
       if (req.params.inviteId) {
-        const event: IEvent = await eventGateway.getEventByInviteId(
-          req.params.inviteId
-        )
+        const event: IEvent = await getEventByInviteId(req.params.inviteId)
         const decoratedEvent = await eventDecorator.decorateSingleEvent(
           event,
           user

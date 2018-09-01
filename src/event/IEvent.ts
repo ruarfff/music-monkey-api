@@ -1,6 +1,7 @@
 import IPlaylist from '../spotify/IPlaylist'
 import IEventGuest from './IEventGuest'
 import IEventLocation from './IEventLocation'
+import IEventSettings from './IEventSettings'
 
 export default interface IEvent {
   eventId: string
@@ -18,4 +19,5 @@ export default interface IEvent {
   playlistUrl: string
   invites: string[]
   guests: IEventGuest[]
+  settings: IEventSettings
 }

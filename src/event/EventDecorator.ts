@@ -4,10 +4,8 @@ import IPlaylistQuery from '../spotify/IPlaylistQuery'
 import parsePlaylistUrl from '../spotify/parsePlaylistUrl'
 import { getPlaylist } from '../spotify/SpotifyClient'
 import IUser from '../user/IUser'
-import EventGateway from './eventGateway'
+import { getEventGuests } from './eventGateway'
 import IEvent from './IEvent'
-
-const eventGateway: EventGateway = new EventGateway()
 
 const defaultEventImage = '/img/partycover-sm.png'
 
@@ -71,7 +69,7 @@ export default class EventDecorator {
 
   private decorateEventWithGuests = async (event: IEvent) => {
     try {
-      const guests = await eventGateway.getEventGuests(event.eventId)
+      const guests = await getEventGuests(event.eventId)
       return { ...event, guests } as IEvent
     } catch (err) {
       logError('Error decorating event with guests', err)

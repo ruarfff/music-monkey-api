@@ -2,10 +2,14 @@ import { Request, Response, Router } from 'express'
 import * as passport from 'passport'
 import { logError } from '../logging'
 import EventDecorator from './EventDecorator'
-import EventGateway from './eventGateway'
+import {
+  createEvent,
+  deleteEvent,
+  getEventById,
+  getEventsByUserId
+} from './eventGateway'
 import IEvent from './IEvent'
 const router = Router()
-const eventGateway = new EventGateway()
 const eventDecorator = new EventDecorator()
 
 router.get(
@@ -14,7 +18,7 @@ router.get(
   async (req: Request, res: Response) => {
     try {
       const { user } = req
-      const events: IEvent[] = await eventGateway.getEventsByUserId(user.userId)
+      const events: IEvent[] = await getEventsByUserId(user.userId)
       const decoratedEvents = await eventDecorator.decorateEvents(events, user)
       res.send(decoratedEvents)
     } catch (err) {
@@ -30,7 +34,7 @@ router.get(
   async (req: Request, res: Response) => {
     try {
       const { user } = req
-      const event: IEvent = await eventGateway.getEventById(req.params.eventId)
+      const event: IEvent = await getEventById(req.params.eventId)
       const decoratedEvent = await eventDecorator.decorateSingleEvent(
         event,
         user
@@ -49,8 +53,8 @@ router.post(
   passport.authenticate('jwt', { session: false }),
   (req: Request, res: Response) => {
     const event = req.body
-    eventGateway
-      .createEvent(event)
+
+    createEvent(event)
       .then(savedEvent => {
         res.send(savedEvent)
       })
@@ -65,8 +69,8 @@ router.delete(
   passport.authenticate('jwt', { session: false }),
   (req: Request, res: Response) => {
     const userId = req.user.userId
-    eventGateway
-      .deleteEvent(req.params.eventId, userId)
+
+    deleteEvent(req.params.eventId, userId)
       .then(event => {
         res.send(event)
       })
