@@ -5,7 +5,7 @@ import { jwtCookieKey } from './auth/authConstants'
 import IUser from './user/IUser'
 import ProfileToUser from './user/ProfileToUser'
 import UserGateway from './user/UserGateway'
-import UserService from './user/UserService'
+import { getUserByEmail, getUserById } from './user/userService'
 
 const LocalStrategy = require('passport-local')
 const SpotifyStrategy = require('passport-spotify').Strategy
@@ -18,7 +18,6 @@ const facebookAppSecret = 'ab450950666b33b434684bc8a2c24ca5'
 const JWTStrategy = passportJWT.Strategy
 const profileToUser = new ProfileToUser()
 const userGateway: UserGateway = new UserGateway()
-const userService: UserService = new UserService()
 
 passport.serializeUser((user, done) => {
   done(null, user)
@@ -35,8 +34,7 @@ passport.use(
       secretOrKey: jwtCookieKey
     },
     (jwtPayload, done) => {
-      return userService
-        .getUserById(jwtPayload.id)
+      return getUserById(jwtPayload.id)
         .then((user: IUser) => {
           return done(null, user)
         })
@@ -55,8 +53,7 @@ passport.use(
     },
     (email: string, password: string, done: any) => {
       try {
-        userService
-          .getUserByEmail(email)
+        getUserByEmail(email)
           .then(async (user: IUser) => {
             const passwordsMatch = await bcrypt.compare(
               password,

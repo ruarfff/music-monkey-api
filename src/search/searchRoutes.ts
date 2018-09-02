@@ -1,7 +1,7 @@
 import { Request, Response, Router } from 'express'
 import * as passport from 'passport'
 import { logError } from '../logging'
-import { searchTracks } from '../spotify/SpotifyClient'
+import { searchTracks } from '../spotify/spotifyClient'
 import IUser from '../user/IUser'
 const router = Router()
 

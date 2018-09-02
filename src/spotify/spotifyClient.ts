@@ -1,13 +1,13 @@
 import ISpotifyAuth from '../auth/ISpotifyAuth'
 import { logError, logInfo } from '../logging'
 import IUser from '../user/IUser'
-import UserService from '../user/UserService'
+import { updateUser } from '../user/userService'
+import IPlaylist from './IPlaylist'
 import { getCreds, saveCreds } from './spotifyCredsCache'
 
 const SpotifyWebApi = require('spotify-web-api-node')
 const clientId = 'ee4aa78cde4c4be08978d79c180e11c9'
 const clientSecret = 'acfc43102e5c4e05902e66284dfdcb19'
-const userService: UserService = new UserService()
 
 const getSpotifyApi = (token?: string) => {
   const spotifyApi = new SpotifyWebApi({
@@ -91,10 +91,10 @@ export const getPlaylist = async (
 ) => {
   const validUser: IUser = await checkToken(user)
 
-  return getSpotifyApi(validUser.spotifyAuth.accessToken).getPlaylist(
-    userName,
-    playlistId
-  )
+  const { body } = await getSpotifyApi(
+    validUser.spotifyAuth.accessToken
+  ).getPlaylist(userName, playlistId)
+  return body
 }
 
 export const getUserPlaylists = async (user: IUser) => {
@@ -125,6 +125,20 @@ export const getUserPlaylists = async (user: IUser) => {
   return playlistsWithTracks
 }
 
+export const replaceTracksInPlaylist = async (
+  user: IUser,
+  playlist: IPlaylist,
+  trackUris: string[]
+) => {
+  const validUser: IUser = await checkToken(user)
+  const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
+  return spotifyApi.replaceTracksInPlaylist(
+    playlist.owner.id,
+    playlist.id,
+    trackUris
+  )
+}
+
 export const refreshToken = async (user: IUser) => {
   try {
     logInfo('Refreshing token for  ' + user.userId)
@@ -132,7 +146,7 @@ export const refreshToken = async (user: IUser) => {
       user.spotifyAuth.accessToken,
       user.spotifyAuth.refreshToken
     )
-    const updatedUser = await userService.updateUser({ ...user, spotifyAuth })
+    const updatedUser = await updateUser({ ...user, spotifyAuth })
     return updatedUser
   } catch (err) {
     logError('Error getting refresh token', err)
@@ -156,7 +170,7 @@ async function checkToken(user: IUser) {
         user.spotifyAuth.refreshToken
       )
       logInfo('Refreshed token ' + JSON.stringify(spotifyAuth))
-      const updatedUser = await userService.updateUser({ ...user, spotifyAuth })
+      const updatedUser = await updateUser({ ...user, spotifyAuth })
       logInfo('Updated user')
       return updatedUser
     }

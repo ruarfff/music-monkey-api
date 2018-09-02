@@ -1,9 +1,7 @@
 import { logError, logInfo } from '../logging'
-import { getUserProfile } from '../spotify/SpotifyClient'
-import UserService from '../user/UserService'
+import { getUserProfile } from '../spotify/spotifyClient'
 import IUser from './IUser'
-
-const userService: UserService = new UserService()
+import { updateUser } from './userService'
 
 export const checkUserProfile = async (user: IUser) => {
   try {
@@ -16,7 +14,7 @@ export const checkUserProfile = async (user: IUser) => {
       if (url && url !== user.image) {
         user.image = url
         logInfo('User image updated to user ' + user.userId)
-        return await userService.updateUser(user)
+        return await updateUser(user)
       }
     }
   } catch (err) {

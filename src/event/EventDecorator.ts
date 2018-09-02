@@ -2,7 +2,7 @@ import { logError } from '../logging'
 import IPlaylist from '../spotify/IPlaylist'
 import IPlaylistQuery from '../spotify/IPlaylistQuery'
 import parsePlaylistUrl from '../spotify/parsePlaylistUrl'
-import { getPlaylist } from '../spotify/SpotifyClient'
+import { getPlaylist } from '../spotify/spotifyClient'
 import IUser from '../user/IUser'
 import { getEventGuests } from './eventGateway'
 import IEvent from './IEvent'
@@ -41,8 +41,7 @@ export default class EventDecorator {
 
   private decorateEventWithPlaylist = async (event: IEvent, user: IUser) => {
     try {
-      const { body } = await this.getEventPlaylist(event, user)
-      const playlist: IPlaylist = body
+      const playlist: IPlaylist = await this.getEventPlaylist(event, user)
       let imageUrl = event.imageUrl
 
       if (!imageUrl) {

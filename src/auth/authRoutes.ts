@@ -3,17 +3,16 @@ import { Request, Response, Router } from 'express'
 import { isEmpty } from 'lodash'
 import * as passport from 'passport'
 import { logError } from '../logging'
-import { refreshToken } from '../spotify/SpotifyClient'
+import { refreshToken } from '../spotify/spotifyClient'
 import IUser from '../user/IUser'
 import { checkUserProfile } from '../user/profileCheck'
-import UserService from '../user/UserService'
+import { createNewUser } from '../user/userService'
 import { setJwtCookie } from './authRequestLib'
 
 const devCookieOpts = {}
 const prodCookieOpts = { httpOnly: true, secure: true }
 
 const router = Router()
-const userService = new UserService()
 
 router.post(
   '/refresh',
@@ -73,8 +72,8 @@ router.post('/signup', async (req: Request, res: Response) => {
       throw new Error('Invalid Password.')
     }
     const passwordHash = await bcrypt.hash(password, hashCost)
-    userService
-      .createNewUser({ email, passwordHash } as IUser)
+
+    createNewUser({ email, passwordHash } as IUser)
       .then((user: IUser) => {
         setJwtCookie(res, user.userId, req.get('env'))
         res.status(200).send()

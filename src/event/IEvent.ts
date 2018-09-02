@@ -5,7 +5,7 @@ import IEventSettings from './IEventSettings'
 
 export default interface IEvent {
   eventId: string
-  usrId: string
+  userId: string
   organizer: string
   imageUrl: string
   name: string

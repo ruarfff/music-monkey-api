@@ -1,12 +1,11 @@
 import { Request, Response, Router } from 'express'
 import * as passport from 'passport'
 import IUser from '../user/IUser'
-import UserService from '../user/UserService'
+import { createGuest } from '../user/userService'
 import { spotifyScopes } from './authConstants'
 import { handleCallback, setJwtCookie } from './authRequestLib'
 
 const router = Router()
-const userService = new UserService()
 const guestsUrl = 'https://guests.musicmonkey.io'
 const devUrl = 'http://localhost:3002'
 
@@ -124,8 +123,7 @@ router.get(
 )
 
 router.post('/login-guest', (req: Request, res: Response) => {
-  userService
-    .createGuest()
+  createGuest()
     .then((user: IUser) => {
       setJwtCookie(res, user.userId, req.get('env'))
       res.status(200).send()

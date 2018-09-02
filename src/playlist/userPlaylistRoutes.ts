@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express'
 import * as passport from 'passport'
-import { getUserPlaylists } from '../spotify/SpotifyClient'
+import { getUserPlaylists } from '../spotify/spotifyClient'
 import IUser from '../user/IUser'
 const router = Router()
 
