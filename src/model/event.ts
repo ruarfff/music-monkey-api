@@ -36,7 +36,10 @@ export const Event = dynamo.define(eventTableName, {
     userId: Joi.string(),
     venue: Joi.string()
       .allow('')
-      .optional()
+      .optional(),
+    settings: {
+      dynamicVotingEnabled: Joi.bool().default(false)
+    }
   },
 
   indexes: [

@@ -71,11 +71,14 @@ router.put(
   async (req: Request, res: Response) => {
     try {
       const userId = req.user.userId
+      const payload = req.body
       const event = await getEventById(req.params.eventId)
       if (userId !== event.userId) {
-        res.status(400).send('Cannot update event')
+        res.status(400).send('Cannot update event belonging to another user')
+      } else if (payload.eventId !== event.eventId) {
+        res.status(400).send('Cannot update event ID')
       } else {
-        const updatedEvent = await updateEvent(event)
+        const updatedEvent = await updateEvent(req.body)
         res.send(updatedEvent)
       }
     } catch (err) {

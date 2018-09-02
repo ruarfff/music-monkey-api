@@ -53,12 +53,12 @@ export const createEvent = (event: IEvent) => {
 
 export const updateEvent = (event: IEvent) => {
   return new Promise((resolve, reject) => {
-    Event.update(event, (err: Error, eventModel: any) => {
+    Event.update(event, (err: Error, { attrs }: any) => {
       if (err) {
         return reject(err)
       }
-      onEventUpdated(eventModel)
-      return resolve(eventModel)
+      onEventUpdated(attrs)
+      return resolve(attrs)
     })
   })
 }
