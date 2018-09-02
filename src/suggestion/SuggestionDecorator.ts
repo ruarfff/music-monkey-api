@@ -56,6 +56,9 @@ export default class SuggestionDecorator {
     user: IUser
   ): Promise<IDecoratedSuggestion[]> => {
     try {
+      if (suggestions && suggestions.length < 1) {
+        return []
+      }
       let allTracks: ITrack[] = []
       const trackIds = suggestions
         .map((suggestion: ISuggestion) => {

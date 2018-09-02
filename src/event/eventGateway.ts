@@ -3,6 +3,7 @@ import { logError } from '../logging'
 import { Event, IInvite, IRsvp } from '../model'
 import { getRsvpByEventId } from '../rsvp/rsvpGateway'
 import UserGateway from '../user/UserGateway'
+import { onEventDeleted, onEventUpdated } from './eventNotifier'
 import IEvent from './IEvent'
 import IEventGuest from './IEventGuest'
 
@@ -56,6 +57,7 @@ export const updateEvent = (event: IEvent) => {
       if (err) {
         return reject(err)
       }
+      onEventUpdated(eventModel)
       return resolve(eventModel)
     })
   })
@@ -67,6 +69,7 @@ export const deleteEvent = (eventId: string, userId: string) => {
       if (err) {
         return reject(err)
       }
+      onEventDeleted(eventId)
       return resolve()
     })
   })

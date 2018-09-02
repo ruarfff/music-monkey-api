@@ -6,7 +6,8 @@ import {
   createEvent,
   deleteEvent,
   getEventById,
-  getEventsByUserId
+  getEventsByUserId,
+  updateEvent
 } from './eventGateway'
 import IEvent from './IEvent'
 const router = Router()
@@ -61,6 +62,25 @@ router.post(
       .catch(err => {
         res.status(400).send(err)
       })
+  }
+)
+
+router.put(
+  '/:eventId',
+  passport.authenticate('jwt', { session: false }),
+  async (req: Request, res: Response) => {
+    try {
+      const userId = req.user.userId
+      const event = await getEventById(req.params.eventId)
+      if (userId !== event.userId) {
+        res.status(400).send('Cannot update event')
+      } else {
+        const updatedEvent = await updateEvent(event)
+        res.send(updatedEvent)
+      }
+    } catch (err) {
+      res.status(404).send(err)
+    }
   }
 )
 
