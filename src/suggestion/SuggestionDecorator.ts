@@ -85,23 +85,14 @@ export default class SuggestionDecorator {
         (acc, track) => ({ ...acc, [track.id]: track as ITrack }),
         {}
       )
-      const suggestionTrackDecorations = suggestions.map(
-        (suggestion: ISuggestion) => {
-          try {
-            const trackDetails = spotifyUri(suggestion.trackUri)
-            const track: ITrack = trackMap[trackDetails.id]
-
-            return {
-              suggestion,
-              track
-            } as IDecoratedSuggestion
-          } catch (err) {
-            logError('Error decorating a suggestion with track', err)
-          }
-        }
-      )
-
-      return suggestionTrackDecorations
+      return suggestions.map((suggestion: ISuggestion) => {
+        const trackDetails = spotifyUri(suggestion.trackUri)
+        const track: ITrack = trackMap[trackDetails.id]
+        return {
+          suggestion,
+          track
+        } as IDecoratedSuggestion
+      })
     } catch (err) {
       logError('Error decorating all suggestions with tracks', err)
       return []
