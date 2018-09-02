@@ -30,7 +30,8 @@ if (isProduction) {
 }
 
 export const expressLogger = expressWinston.logger({
-  winstonInstance: logger
+  winstonInstance: logger,
+  ignoredRoutes: ['/ping']
 })
 
 export const rollbarErrorHandler = rollbar.errorHandler()
