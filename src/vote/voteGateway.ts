@@ -20,8 +20,8 @@ export const createVote = async (vote: IVote) => {
   try {
     const voteId = `${vote.trackId}:${vote.eventId}:${vote.userId}`
     const savedVote = await Vote.create({ ...vote, voteId } as IVote)
+    await handleCreateForDynamicVoting(vote.eventId)
     onVoteCreated(vote)
-    handleCreateForDynamicVoting(vote)
     return savedVote
   } catch (err) {
     logError('Failed to create vote', err)
@@ -32,7 +32,7 @@ export const deleteVote = async (voteId: string) => {
   try {
     const idParts: string[] = voteId.split(':')
     const eventId = idParts[idParts.length - 2]
-    await handleDeleteForDynamicVoting(voteId, eventId)
+    await handleDeleteForDynamicVoting(eventId)
     await Vote.destroy(voteId, eventId)
     onVoteDeleted(eventId)
   } catch (err) {

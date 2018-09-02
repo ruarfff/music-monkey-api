@@ -9,8 +9,6 @@ import { getPlaylist, replaceTracksInPlaylist } from '../spotify/spotifyClient'
 import IUser from '../user/IUser'
 import { getUserById } from '../user/userService'
 import ITrackVoteStatus from './ITrackVoteStatus'
-import IVote from './IVote'
-import { getVoteByIdAndEventId } from './voteGateway'
 import { getVotesWithStatus } from './voteService'
 
 const dynamicVotingEnabled = async (event: IEvent) => {
@@ -22,23 +20,21 @@ const dynamicVotingEnabled = async (event: IEvent) => {
   }
 }
 
-export const handleCreateForDynamicVoting = async (vote: IVote) => {
-  const event = await getEventById(vote.eventId)
+export const handleCreateForDynamicVoting = async (eventId: string) => {
+  const event = await getEventById(eventId)
   const dvEnabled = await dynamicVotingEnabled(event)
   if (dvEnabled) {
     return updateEventPlaylistBasedOnVotes(event)
   }
+  return null
 }
-export const handleDeleteForDynamicVoting = async (
-  voteId: string,
-  eventId: string
-) => {
+export const handleDeleteForDynamicVoting = async (eventId: string) => {
   const event = await getEventById(eventId)
-  const vote = await getVoteByIdAndEventId(voteId, eventId)
-  const dvEnabled = await dynamicVotingEnabled(vote)
+  const dvEnabled = await dynamicVotingEnabled(event)
   if (dvEnabled) {
     return updateEventPlaylistBasedOnVotes(event)
   }
+  return null
 }
 
 async function updateEventPlaylistBasedOnVotes(event: IEvent) {
