@@ -16,7 +16,9 @@
       "check-format",
       "allow-leading-underscore",
       "allow-pascal-case"
-    ]
+    ],
+    "no-unused-expression": false,
+    "no-unused-expression-chai": true
   },
-  "rulesDirectory": []
+  "rulesDirectory": ["tslint-no-unused-expression-chai"]
 }
