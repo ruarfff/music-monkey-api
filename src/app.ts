@@ -22,12 +22,7 @@ import eventVoteRouter from './vote/eventVoteRoutes'
 import voteRouter from './vote/voteRoutes'
 
 const app = express()
-let isProduction = false
-
-if (app.get('env') === 'production') {
-  console.log('Is Production')
-  isProduction = true
-}
+const isProduction = process.env.NODE_ENV === 'production'
 
 if (isProduction) {
   app.set('trust proxy', 1) // trust first proxy
@@ -80,10 +75,10 @@ if (isProduction) {
   app.use(rollbarErrorHandler)
 }
 // error handler
-app.use((err: any, req: any, res: any, next: any) => {
+app.use((err: any, _req: any, res: any, next: any) => {
   // set locals, only providing error in development
   res.locals.message = err.message
-  res.locals.error = req.app.get('env') === 'development' ? err : {}
+  res.locals.error = isProduction ? err : {}
   res.status(err.status || 500)
   res.send(err.message)
   next()

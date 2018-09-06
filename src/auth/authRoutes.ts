@@ -11,7 +11,7 @@ import { setJwtCookie } from './authRequestLib'
 
 const devCookieOpts = {}
 const prodCookieOpts = { httpOnly: true, secure: true }
-
+const isProduction = process.env.NODE_ENV === 'production'
 const router = Router()
 
 router.post(
@@ -39,8 +39,8 @@ router.get(
   }
 )
 
-router.get('/logout', (req: Request, res: Response) => {
-  if (req.get('env') === 'production') {
+router.get('/logout', (_req: Request, res: Response) => {
+  if (isProduction) {
     res.clearCookie('jwt', prodCookieOpts)
   } else {
     res.clearCookie('jwt', devCookieOpts)
@@ -52,15 +52,16 @@ router.post('/login', (req, res) => {
   passport.authenticate('local', { session: false }, (error, user) => {
     if (error || !user) {
       res.status(401).send('Invalid email or password')
+    } else {
+      req.login(user, { session: false }, (loginErr: any) => {
+        if (loginErr) {
+          res.status(400).send({ loginErr })
+        } else {
+          setJwtCookie(res, user.userId)
+          res.status(200).send()
+        }
+      })
     }
-
-    req.login(user, { session: false }, (loginErr: any) => {
-      if (loginErr) {
-        res.status(400).send({ loginErr })
-      }
-      setJwtCookie(res, user.userId, req.get('env'))
-      res.status(200).send()
-    })
   })(req, res)
 })
 
@@ -75,7 +76,7 @@ router.post('/signup', async (req: Request, res: Response) => {
 
     createNewUser({ email, passwordHash } as IUser)
       .then((user: IUser) => {
-        setJwtCookie(res, user.userId, req.get('env'))
+        setJwtCookie(res, user.userId)
         res.status(200).send()
       })
       .catch((err: any) => {

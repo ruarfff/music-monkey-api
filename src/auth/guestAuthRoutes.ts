@@ -122,10 +122,10 @@ router.get(
   handleCallback(guestsUrl)
 )
 
-router.post('/login-guest', (req: Request, res: Response) => {
+router.post('/login-guest', (_req: Request, res: Response) => {
   createGuest()
     .then((user: IUser) => {
-      setJwtCookie(res, user.userId, req.get('env'))
+      setJwtCookie(res, user.userId)
       res.status(200).send()
     })
     .catch((err: any) => {
