@@ -116,10 +116,6 @@
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@types/bcrypt/-/bcrypt-2.0.0.tgz#74cccef82026341fd786cf2eb9c912c7f9107c55"
 
-"@types/bluebird@*":
-  version "3.5.23"
-  resolved "https://registry.yarnpkg.com/@types/bluebird/-/bluebird-3.5.23.tgz#e805da976b76892b2b2e50eec29e84914c730670"
-
 "@types/body-parser@*":
   version "1.17.0"
   resolved "https://registry.yarnpkg.com/@types/body-parser/-/body-parser-1.17.0.tgz#9f5c9d9bd04bb54be32d5eb9fc0d8c974e6cf58c"
@@ -195,11 +191,10 @@
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/@types/http-errors/-/http-errors-1.6.1.tgz#367744a6c04b833383f497f647cc3690b0cd4055"
 
-"@types/ioredis@3.2.14":
-  version "3.2.14"
-  resolved "https://registry.yarnpkg.com/@types/ioredis/-/ioredis-3.2.14.tgz#c7594cedc2b3618bb1b1358e635c9271b8cb3666"
+"@types/ioredis@4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@types/ioredis/-/ioredis-4.0.1.tgz#dfe9de0d5dce54193975c1909f0d082e5574e2f2"
   dependencies:
-    "@types/bluebird" "*"
     "@types/node" "*"
 
 "@types/jest@23.3.1":
