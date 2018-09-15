@@ -2,13 +2,12 @@ import InviteGateway from '../invite/inviteGateway'
 import { logError } from '../logging'
 import { Event, IInvite, IRsvp } from '../model'
 import { getRsvpByEventId } from '../rsvp/rsvpGateway'
-import UserGateway from '../user/UserGateway'
+import { getSafeUserById } from '../user/userService'
 import { onEventDeleted, onEventUpdated } from './eventNotifier'
 import IEvent from './IEvent'
 import IEventGuest from './IEventGuest'
 
 const inviteGateway: InviteGateway = new InviteGateway()
-const userGateway: UserGateway = new UserGateway()
 
 export const getEventGuests = async (
   eventId: string
@@ -16,7 +15,7 @@ export const getEventGuests = async (
   try {
     const rsvps: IRsvp[] = await getRsvpByEventId(eventId)
     const eventGuests = rsvps.map(async (rsvp: IRsvp) => {
-      const user = await userGateway.getSafeUserById(rsvp.userId)
+      const user = await getSafeUserById(rsvp.userId)
       return { user, rsvp } as IEventGuest
     })
     return await Promise.all(eventGuests)

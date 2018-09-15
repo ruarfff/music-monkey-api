@@ -4,8 +4,11 @@ import * as passportJWT from 'passport-jwt'
 import { jwtCookieKey } from './auth/authConstants'
 import IUser from './user/IUser'
 import ProfileToUser from './user/ProfileToUser'
-import UserGateway from './user/UserGateway'
-import { getUserByEmail, getUserById } from './user/userService'
+import {
+  getOrCreateUser,
+  getUserByEmail,
+  getUserById
+} from './user/userService'
 
 const LocalStrategy = require('passport-local')
 const SpotifyStrategy = require('passport-spotify').Strategy
@@ -17,7 +20,6 @@ const facebookAppSecret = 'ab450950666b33b434684bc8a2c24ca5'
 
 const JWTStrategy = passportJWT.Strategy
 const profileToUser = new ProfileToUser()
-const userGateway: UserGateway = new UserGateway()
 
 passport.serializeUser((user, done) => {
   done(null, user)
@@ -206,8 +208,8 @@ function handleFacebookLogin(
     refreshToken,
     profile
   )
-  userGateway
-    .getOrCreateUser(user, 'facebook')
+
+  getOrCreateUser(user, 'facebook')
     .then(validUser => {
       done(null, validUser)
     })
@@ -228,8 +230,7 @@ function handleSpotifyLogin(
     expiresIn,
     profile
   )
-  userGateway
-    .getOrCreateUser(user, 'spotify')
+  getOrCreateUser(user, 'spotify')
     .then(validUser => {
       done(null, validUser)
     })

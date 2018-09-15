@@ -84,16 +84,12 @@ export const getMultipleTracks = async (trackIds: string[], user: IUser) => {
   return body
 }
 
-export const getPlaylist = async (
-  userName: string,
-  playlistId: string,
-  user: IUser
-) => {
+export const getPlaylist = async (playlistId: string, user: IUser) => {
   const validUser: IUser = await checkToken(user)
-
   const { body } = await getSpotifyApi(
     validUser.spotifyAuth.accessToken
-  ).getPlaylist(userName, playlistId)
+  ).getPlaylist(playlistId)
+
   return body
 }
 
@@ -109,10 +105,7 @@ export const getUserPlaylists = async (user: IUser) => {
 
   const playlistsWithTracks = await Promise.all(
     playlists.map(async (playlist: any) => {
-      const { body } = await spotifyApi.getPlaylistTracks(
-        playlist.owner.id,
-        playlist.id
-      )
+      const { body } = await spotifyApi.getPlaylistTracks(playlist.id)
       const tracks = body.items
 
       return {
@@ -132,11 +125,17 @@ export const replaceTracksInPlaylist = async (
 ) => {
   const validUser: IUser = await checkToken(user)
   const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
-  return spotifyApi.replaceTracksInPlaylist(
-    playlist.owner.id,
-    playlist.id,
-    trackUris
-  )
+  return spotifyApi.replaceTracksInPlaylist(playlist.id, trackUris)
+}
+
+export const addTracksToPlaylist = async (
+  user: IUser,
+  playlistId: string,
+  trackUris: string[]
+) => {
+  const validUser: IUser = await checkToken(user)
+  const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
+  return spotifyApi.addTracksToPlaylist(playlistId, trackUris)
 }
 
 export const refreshToken = async (user: IUser) => {

@@ -4,11 +4,9 @@ import { logError } from '../logging'
 import ITrack from '../spotify/ITrack'
 import { getMultipleTracks } from '../spotify/spotifyClient'
 import IUser from '../user/IUser'
-import UserGateway from '../user/UserGateway'
+import { getUserById } from '../user/userService'
 import IDecoratedSuggestion from './IDecoratedSuggestion'
 import ISuggestion from './ISuggestion'
-
-const userGateway: UserGateway = new UserGateway()
 
 export default class SuggestionDecorator {
   public decorateSuggestions = async (
@@ -34,7 +32,7 @@ export default class SuggestionDecorator {
     const suggestionsWithUsers: any = await Promise.all(
       Object.keys(groupedByUserId).map(async (userId: string) => {
         try {
-          const user = await userGateway.getUserById(userId)
+          const user = await getUserById(userId)
           return groupedByUserId[userId].map(
             (decoratedSuggestion: IDecoratedSuggestion) => ({
               ...decoratedSuggestion,

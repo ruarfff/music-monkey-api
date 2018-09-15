@@ -29,6 +29,11 @@ export const Suggestion = dynamo.define(suggestionTableName, {
       name: 'UserEventIdIndex',
       rangeKey: 'userId',
       type: 'global'
+    },
+    {
+      hashKey: 'userId',
+      name: 'UserIdIndex',
+      type: 'global'
     }
   ]
 })

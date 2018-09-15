@@ -44,11 +44,7 @@ async function updateEventPlaylistBasedOnVotes(event: IEvent) {
     user.userId
   )
   const playlistQuery: IPlaylistQuery = parsePlaylistUrl(event.playlistUrl)
-  const playlist = await getPlaylist(
-    playlistQuery.userName,
-    playlistQuery.playlistId,
-    user
-  )
+  const playlist = await getPlaylist(playlistQuery.playlistId, user)
 
   return sortAndUpdatePlaylist(user, playlist, votes)
 }

@@ -1,12 +1,15 @@
 import { Request, Response, Router } from 'express'
 import * as _ from 'lodash'
 import * as passport from 'passport'
+import { logError } from '../logging'
 import ISuggestion from './ISuggestion'
 import SuggestionDecorator from './SuggestionDecorator'
-import SuggestionGateway from './suggestionGateway'
+import {
+  getSuggestionsByUserId,
+  getSuggestionsByUserIdAndEventId
+} from './suggestionService'
 
 const router = Router()
-const suggestionGateway = new SuggestionGateway()
 const suggestionDecorator = new SuggestionDecorator()
 
 router.get(
@@ -17,10 +20,12 @@ router.get(
       const { user } = req
       let suggestions: ISuggestion[]
       if (req.query.eventId) {
-        suggestions = await suggestionGateway.getSuggestionsByUserIdAndEventId(
+        suggestions = await getSuggestionsByUserIdAndEventId(
           user.userId,
           req.query.eventId
         )
+      } else {
+        suggestions = await getSuggestionsByUserId(user.userId)
       }
 
       const decoratedSuggestions = await suggestionDecorator.decorateSuggestions(
@@ -30,99 +35,8 @@ router.get(
 
       res.send(decoratedSuggestions)
     } catch (err) {
+      logError('Failed to fetch users suggestions', err, req)
       res.status(404).send(err)
-    }
-  }
-)
-
-router.get(
-  '/:suggestionId',
-  passport.authenticate('jwt', { session: false }),
-  async (req: Request, res: Response) => {
-    try {
-      const suggestion = await suggestionGateway.getSuggestionById(
-        req.params.suggestionId
-      )
-
-      res.send(suggestion)
-    } catch (err) {
-      res.status(404).send(err)
-    }
-  }
-)
-
-router.delete(
-  '/:suggestionId',
-  passport.authenticate('jwt', { session: false }),
-  async (req: Request, res: Response) => {
-    try {
-      const eventId = req.query.eventId
-      const suggestion = await suggestionGateway.deleteSuggestion(
-        req.params.suggestionId,
-        eventId
-      )
-      res.send(suggestion)
-    } catch (err) {
-      res.status(404).send(err)
-    }
-  }
-)
-
-router.post(
-  '/',
-  passport.authenticate('jwt', { session: false }),
-  async (req: Request, res: Response) => {
-    try {
-      let result
-      if (_.isArray(req.body)) {
-        const suggestions = req.body
-        result = await suggestionGateway.bulkCreateSuggestion(suggestions)
-      } else {
-        const suggestion = req.body
-        result = await suggestionGateway.createSuggestion(suggestion)
-      }
-
-      res.send(result)
-    } catch (err) {
-      res.status(400).send(err)
-    }
-  }
-)
-
-router.post(
-  '/:eventId/accept',
-  passport.authenticate('jwt', { session: false }),
-  async (req: Request, res: Response) => {
-    try {
-      const eventId = req.params.eventId
-      let suggestions = req.body
-      if (!_.isArray(suggestions)) {
-        suggestions = [req.body]
-      }
-      const savedSuggestion = await suggestionGateway.acceptSuggestions(
-        eventId,
-        suggestions
-      )
-
-      res.send(savedSuggestion)
-    } catch (err) {
-      res.status(400).send(err)
-    }
-  }
-)
-
-router.post(
-  '/:suggestionId/reject',
-  passport.authenticate('jwt', { session: false }),
-  async (req: Request, res: Response) => {
-    try {
-      const suggestionId = req.params.suggestionId
-      const rejectedSuggestion = await suggestionGateway.rejectSuggestion(
-        suggestionId
-      )
-      res.send(rejectedSuggestion)
-    } catch (err) {
-      res.status(400).send(err)
     }
   }
 )
