@@ -14,6 +14,15 @@ export default class EventDecorator {
     return Promise.all(events.map(event => this.decorateEvent(event, user)))
   }
 
+  public decorateEvent = async (event: IEvent, user: IUser) => {
+    let decoratedEvent: IEvent = await this.decorateEventWithPlaylist(
+      event,
+      user
+    )
+    decoratedEvent = await this.decorateEventWithGuests(decoratedEvent)
+    return decoratedEvent
+  }
+
   public decorateSingleEvent = (event: IEvent, user: IUser) => {
     return this.decorateEvent(event, user)
   }
@@ -28,15 +37,6 @@ export default class EventDecorator {
     } else {
       return Promise.reject(new Error('Invalid Playlist Url'))
     }
-  }
-
-  private decorateEvent = async (event: IEvent, user: IUser) => {
-    let decoratedEvent: IEvent = await this.decorateEventWithPlaylist(
-      event,
-      user
-    )
-    decoratedEvent = await this.decorateEventWithGuests(decoratedEvent)
-    return decoratedEvent
   }
 
   private decorateEventWithPlaylist = async (event: IEvent, user: IUser) => {

@@ -10,6 +10,7 @@ import guestAuthRouter from './auth/guestAuthRoutes'
 import hostAuthRouter from './auth/hostAuthRoutes'
 import eventsRouter from './event/eventRoutes'
 import inviteEventRouter from './event/inviteEventRoute'
+import userEventRouter from './event/userEventRoute'
 import indexRouter from './indexRoutes'
 import userPlaylistRouter from './playlist/userPlaylistRoutes'
 import recommendationsRouter from './recommendation/recommendationRoutes'
@@ -63,6 +64,7 @@ app.use(apiV1 + '/auth', hostAuthRouter)
 app.use(apiV1 + '/users', userPlaylistRouter)
 app.use(apiV1 + '/users', userRsvpRouter)
 app.use(apiV1 + '/users', userSuggestionsRouter)
+app.use(apiV1 + '/users', userEventRouter)
 app.use(apiV1 + '/events', eventsRouter)
 app.use(apiV1 + '/events', eventVoteRouter)
 app.use(apiV1 + '/invites', inviteEventRouter)
