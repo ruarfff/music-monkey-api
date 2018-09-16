@@ -57,26 +57,24 @@ export const getUserByEmail = (email: string) => {
 }
 
 export const getUserById = async (userId: string) => {
-  let user: IUser
-  try {
-    user = await cache.getObject(userId)
-    if (!user) {
-      user = await fetchUserById(userId)
-      cache.setObject(user.userId, user)
-    }
-  } catch (err) {
-    logError('Error getting user by IDs', err)
+  let user: IUser = await cache.getObject(userId)
+  if (!user) {
+    user = await fetchUserById(userId)
+    cache.setObject(user.userId, user)
   }
+
   return user
 }
 
 export const getSafeUserById = async (userId: string) => {
   const user = await getUserById(userId)
-  return {
-    country: user.country,
-    displayName: user.displayName,
-    image: user.image,
-    userId: user.userId,
-    isGuest: user.isGuest
-  } as ISafeUser
+  return !!user
+    ? ({
+        country: user.country,
+        displayName: user.displayName,
+        image: user.image,
+        userId: user.userId,
+        isGuest: user.isGuest
+      } as ISafeUser)
+    : user
 }

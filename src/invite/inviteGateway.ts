@@ -1,5 +1,4 @@
 import { promisify } from 'util'
-import { logError } from '../logging'
 import { IInvite, Invite } from '../model'
 import cleanModel from '../model/cleanModel'
 
