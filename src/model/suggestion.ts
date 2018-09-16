@@ -10,7 +10,7 @@ export const Suggestion = dynamo.define(suggestionTableName, {
 
   timestamps: true,
 
-  schema: {
+  schema: Joi.object({
     suggestionId: dynamo.types.uuid(),
     eventId: Joi.string(),
     userId: Joi.string(),
@@ -21,7 +21,7 @@ export const Suggestion = dynamo.define(suggestionTableName, {
     trackUri: Joi.string(),
     accepted: Joi.boolean().default(false),
     rejected: Joi.boolean().default(false)
-  },
+  }).options({ stripUnknown: true }),
 
   indexes: [
     {
