@@ -1,5 +1,7 @@
+import { promisify } from 'util'
 import { logError } from '../logging'
 import { User } from '../model'
+import cleanModel from '../model/cleanModel'
 import IUser from './IUser'
 
 export const saveUser = (user: IUser) => {
@@ -8,7 +10,7 @@ export const saveUser = (user: IUser) => {
       if (err) {
         reject(err)
       } else {
-        resolve(userModel.attrs)
+        resolve(cleanModel(userModel.attrs))
       }
     })
   })
@@ -20,7 +22,7 @@ export const modifyUser = (user: IUser) => {
       if (err) {
         return reject(err)
       }
-      return resolve(userModel.attrs)
+      return resolve(cleanModel(userModel.attrs))
     })
   })
 }
@@ -39,18 +41,8 @@ export const destroyUser = (userId: string) => {
 export const fetchUserById = async (userId: string) => {
   let user: IUser
   try {
-    user = await new Promise<IUser>((resolve, reject) => {
-      User.query(userId)
-        .limit(1)
-        .exec((err: Error, userModel: any) => {
-          if (err || userModel.Count < 1) {
-            logError('Error fetching user by ID', err)
-            reject(err)
-          } else {
-            resolve(userModel.Items[0].attrs)
-          }
-        })
-    })
+    const { attrs } = await promisify(User.get)(userId)
+    user = cleanModel(attrs)
   } catch (err) {
     logError('Error fetching user by ID', err)
     throw err
@@ -67,7 +59,7 @@ export const fetchUserByEmail = (email: string) => {
         if (err || userModel.Items.length < 1) {
           return reject(err)
         }
-        return resolve(userModel.Items[0].attrs)
+        return resolve(cleanModel(userModel.Items[0].attrs))
       })
   })
 }

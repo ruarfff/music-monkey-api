@@ -42,7 +42,7 @@ export const createGuest = () => {
 }
 
 export const updateUser = async (user: IUser) => {
-  let updatedUser: IUser
+  let updatedUser: IUser = user
   try {
     updatedUser = await modifyUser(user)
     cache.setObject(user.userId, user)

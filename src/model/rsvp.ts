@@ -18,7 +18,7 @@ export const Rsvp = dynamo.define(rsvpTableName, {
 
   timestamps: true,
 
-  schema: {
+  schema: Joi.object({
     rsvpId: dynamo.types.uuid(),
     inviteId: Joi.string(),
     eventId: Joi.string(),
@@ -26,7 +26,7 @@ export const Rsvp = dynamo.define(rsvpTableName, {
     status: Joi.string()
       .valid(['Going', 'Not Going', 'Maybe', 'Pending'])
       .default('Pending')
-  },
+  }).options({ stripUnknown: true }),
 
   indexes: [
     {
@@ -40,6 +40,11 @@ export const Rsvp = dynamo.define(rsvpTableName, {
       rangeKey: 'userId',
       type: 'global',
       name: 'InviteIdUserIdIndex'
+    },
+    {
+      hashKey: 'userId',
+      name: 'UserIdIndex',
+      type: 'global'
     }
   ]
 })

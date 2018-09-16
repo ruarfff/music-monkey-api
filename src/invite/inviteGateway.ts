@@ -1,5 +1,7 @@
+import { promisify } from 'util'
 import { logError } from '../logging'
 import { IInvite, Invite } from '../model'
+import cleanModel from '../model/cleanModel'
 
 export default class InviteGateway {
   public createInvite(invite: IInvite) {
@@ -8,7 +10,7 @@ export default class InviteGateway {
         if (err) {
           reject(err)
         } else {
-          resolve(inviteModel)
+          resolve(cleanModel(inviteModel))
         }
       })
     })
@@ -25,30 +27,23 @@ export default class InviteGateway {
     })
   }
 
-  public getInviteById(inviteId: string) {
-    return new Promise<IInvite>((resolve, reject) => {
-      Invite.query(inviteId).exec((err: Error, inviteModel: any) => {
-        if (err) {
-          logError('Invite Error', err)
-          reject(err)
-        } else if (inviteModel.Count < 1) {
-          reject(new Error('Not found'))
-        } else {
-          resolve(inviteModel.Items[0].attrs)
-        }
-      })
-    })
+  public async getInviteById(inviteId: string) {
+    const { attrs } = await promisify(Invite.get)(inviteId)
+    const invite = cleanModel(attrs)
+    return invite
   }
 
   public getInvitesByEventId(eventId: string) {
-    return new Promise((resolve: any, reject: any) => {
+    return new Promise<IInvite[]>((resolve: any, reject: any) => {
       Invite.query(eventId)
         .usingIndex('EventIdIndex')
         .exec((err: Error, inviteModel: any) => {
           if (err || inviteModel.Items.length < 1) {
             reject(err)
           } else {
-            const inviteList = inviteModel.Items.map((item: any) => item.attrs)
+            const inviteList = inviteModel.Items.map((item: any) =>
+              cleanModel(item.attrs)
+            )
             resolve(inviteList)
           }
         })

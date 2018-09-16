@@ -1,5 +1,6 @@
 import { logError } from '../logging'
 import { Vote } from '../model'
+import cleanModel from '../model/cleanModel'
 import {
   handleCreateForDynamicVoting,
   handleDeleteForDynamicVoting
@@ -13,15 +14,16 @@ export const getVoteByIdAndEventId = async (
   eventId: string
 ) => {
   const { attrs } = await util.promisify(Vote.get)(voteId, eventId)
-  return attrs
+  return cleanModel(attrs)
 }
 
 export const createVote = async (vote: IVote) => {
   try {
     const voteId = `${vote.trackId}:${vote.eventId}:${vote.userId}`
-    const savedVote = await Vote.create({ ...vote, voteId } as IVote)
-    await handleCreateForDynamicVoting(vote.eventId)
-    onVoteCreated(vote)
+    const { attrs } = await Vote.create({ ...vote, voteId } as IVote)
+    const savedVote = cleanModel(attrs)
+    await handleCreateForDynamicVoting(savedVote.eventId)
+    onVoteCreated(savedVote)
     return savedVote
   } catch (err) {
     logError('Failed to create vote', err)
@@ -49,7 +51,9 @@ export const getVotesByEventId = (eventId: string) => {
         if (err) {
           reject(err)
         } else {
-          resolve(votesModel.Items.map((x: any) => x.attrs as IVote))
+          resolve(
+            votesModel.Items.map((x: any) => cleanModel(x.attrs) as IVote)
+          )
         }
       })
   })

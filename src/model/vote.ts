@@ -10,12 +10,12 @@ export const Vote = dynamo.define(voteTableName, {
 
   timestamps: true,
 
-  schema: {
+  schema: Joi.object({
     voteId: Joi.string(),
     trackId: Joi.string(),
     eventId: Joi.string(),
     userId: Joi.string()
-  },
+  }).options({ stripUnknown: true }),
 
   indexes: [
     {

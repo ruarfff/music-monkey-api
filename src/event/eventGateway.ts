@@ -1,6 +1,8 @@
+import { promisify } from 'util'
 import InviteGateway from '../invite/inviteGateway'
 import { logError } from '../logging'
 import { Event, IInvite, IRsvp } from '../model'
+import cleanModel from '../model/cleanModel'
 import { getRsvpByEventId } from '../rsvp/rsvpGateway'
 import { getSafeUserById } from '../user/userService'
 import { onEventDeleted, onEventUpdated } from './eventNotifier'
@@ -37,13 +39,13 @@ export const createEvent = (event: IEvent) => {
           } as IInvite)
           .then((inviteModel: any) => {
             resolve({
-              ...eventModel.attrs,
+              ...cleanModel(eventModel.attrs),
               invites: [inviteModel.attrs.inviteId]
             })
           })
           .catch(inviteCreateErr => {
             logError('Error creating invite', inviteCreateErr)
-            resolve(eventModel.attrs)
+            resolve(cleanModel(eventModel.attrs))
           })
       }
     })
@@ -56,8 +58,9 @@ export const updateEvent = (event: IEvent) => {
       if (err) {
         return reject(err)
       }
-      onEventUpdated(attrs)
-      return resolve(attrs)
+      const updatedEvent = cleanModel(attrs)
+      onEventUpdated(updatedEvent)
+      return resolve(updatedEvent)
     })
   })
 }
@@ -74,29 +77,21 @@ export const deleteEvent = (eventId: string, userId: string) => {
   })
 }
 
-export const getEventById = (eventId: string) => {
-  return new Promise<IEvent>((resolve, reject) => {
-    Event.query(eventId).exec((err: Error, eventModel: any) => {
-      if (err) {
-        reject(err)
-      } else if (eventModel.Count < 1) {
-        reject(new Error('Event not found'))
-      } else {
-        const event = eventModel.Items[0].attrs
-        inviteGateway
-          .getInvitesByEventId(event.eventId)
-          .then((invites: any) => {
-            resolve({
-              ...event,
-              invites: invites.map((invite: any) => invite.inviteId)
-            })
-          })
-          .catch(inviteErr => {
-            logError('Error fetching invite', inviteErr)
-            resolve(event)
-          })
-      }
-    })
+export const getEventsByMultipleIds = async (eventIds: string[]) => {
+  const events = await promisify(Event.getItems)(eventIds)
+
+  return events
+}
+
+export const getEventById = async (eventId: string) => {
+  const { attrs } = await promisify(Event.get)(eventId)
+  const event = attrs
+  const invites: IInvite[] = await inviteGateway.getInvitesByEventId(
+    event.eventId
+  )
+  return cleanModel({
+    ...event,
+    invites: invites.map((invite: any) => invite.inviteId)
   })
 }
 
@@ -116,7 +111,9 @@ export const getEventsByUserId = (userId: string) => {
         } else if (eventModel.Items.length < 1) {
           resolve([])
         } else {
-          const eventList = eventModel.Items.map((item: any) => item.attrs)
+          const eventList = eventModel.Items.map((item: any) =>
+            cleanModel(item.attrs)
+          )
           resolve(eventList)
         }
       })

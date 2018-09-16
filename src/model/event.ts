@@ -6,11 +6,10 @@ import { eventTableName } from './modelConstants'
 
 export const Event = dynamo.define(eventTableName, {
   hashKey: 'eventId',
-  rangeKey: 'userId',
 
   timestamps: true,
 
-  schema: {
+  schema: Joi.object({
     description: Joi.string()
       .allow('')
       .optional(),
@@ -40,13 +39,12 @@ export const Event = dynamo.define(eventTableName, {
     settings: {
       dynamicVotingEnabled: Joi.bool().default(false)
     }
-  },
+  }).options({ stripUnknown: true }),
 
   indexes: [
     {
       hashKey: 'userId',
       name: 'UserIdIndex',
-      rangeKey: 'organizer',
       type: 'global'
     }
   ]

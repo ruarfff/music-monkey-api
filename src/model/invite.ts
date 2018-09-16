@@ -11,14 +11,13 @@ export interface IInvite {
 
 export const Invite = dynamo.define(inviteTableName, {
   hashKey: 'inviteId',
-  rangeKey: 'eventId',
 
   timestamps: true,
 
-  schema: {
+  schema: Joi.object({
     eventId: Joi.string(),
     inviteId: dynamo.types.uuid()
-  },
+  }).options({ stripUnknown: true }),
 
   indexes: [
     {

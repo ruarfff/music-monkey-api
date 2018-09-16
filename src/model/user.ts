@@ -6,16 +6,10 @@ import { userTableName } from './modelConstants'
 
 export const User = dynamo.define(userTableName, {
   hashKey: 'userId',
-  rangeKey: 'email',
 
   timestamps: true,
 
-  schema: {
-    auth: {
-      accessToken: Joi.string(),
-      expiresIn: Joi.number(),
-      refreshToken: Joi.string()
-    },
+  schema: Joi.object({
     spotifyAuth: {
       accessToken: Joi.string(),
       expiresIn: Joi.number(),
@@ -56,7 +50,7 @@ export const User = dynamo.define(userTableName, {
     userId: dynamo.types.uuid(),
     isGuest: Joi.bool().default(false),
     isVerified: Joi.bool().default(false)
-  },
+  }).options({ stripUnknown: true }),
 
   indexes: [
     {

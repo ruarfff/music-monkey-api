@@ -8,6 +8,16 @@ const router = Router()
 const eventDecorator = new EventDecorator()
 
 router.get(
+  '/invited/events',
+  passport.authenticate('jwt', { session: false }),
+  async (req: Request, res: Response) => {
+    const { user } = req
+
+    res.send(user)
+  }
+)
+
+router.get(
   '/:inviteId/event',
   passport.authenticate('jwt', { session: false }),
   async (req: Request, res: Response) => {

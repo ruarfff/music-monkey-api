@@ -1,5 +1,6 @@
 import { promisify } from 'util'
 import { Suggestion } from '../model'
+import cleanModel from '../model/cleanModel'
 import ISuggestion from './ISuggestion'
 
 export const fetchSuggestionById = (suggestionId: string) => {
@@ -10,7 +11,7 @@ export const fetchSuggestionById = (suggestionId: string) => {
       } else if (suggestionModel.Count < 1) {
         reject(new Error('Not found'))
       } else {
-        resolve(suggestionModel.Items[0].attrs)
+        resolve(cleanModel(suggestionModel.Items[0].attrs))
       }
     })
   })
@@ -24,8 +25,8 @@ export const fetchSuggestionsByEventId = (eventId: string) => {
         if (err) {
           reject(err)
         } else {
-          const suggestionList = suggestionModel.Items.map(
-            (item: any) => item.attrs
+          const suggestionList = suggestionModel.Items.map((item: any) =>
+            cleanModel(item.attrs)
           )
           resolve(suggestionList)
         }
@@ -46,8 +47,8 @@ export const fetchSuggestionsByUserIdAndEventId = (
         if (err) {
           reject(err)
         } else {
-          const suggestionList = suggestionModel.Items.map(
-            (item: any) => item.attrs
+          const suggestionList = suggestionModel.Items.map((item: any) =>
+            cleanModel(item.attrs)
           )
           resolve(suggestionList)
         }
@@ -63,8 +64,8 @@ export const fetchSuggestionsByUserId = (userId: string) => {
         if (err) {
           reject(err)
         } else {
-          const suggestionList = suggestionModel.Items.map(
-            (item: any) => item.attrs
+          const suggestionList = suggestionModel.Items.map((item: any) =>
+            cleanModel(item.attrs)
           )
           resolve(suggestionList)
         }
@@ -79,7 +80,7 @@ export const saveSuggestions = async (suggestions: ISuggestion[]) => {
 
 export const saveSuggestion = async (suggestion: ISuggestion) => {
   const { attrs } = await promisify(Suggestion.create)(suggestion)
-  const savedSuggestion = attrs
+  const savedSuggestion = cleanModel(attrs)
   return savedSuggestion
 }
 
