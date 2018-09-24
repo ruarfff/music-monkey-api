@@ -19,11 +19,42 @@ import userRsvpRouter from './rsvp/userRsvpRoutes'
 import searchRouter from './search/searchRoutes'
 import suggestionsRouter from './suggestion/suggestionRoutes'
 import userSuggestionsRouter from './suggestion/userSuggestionRoutes'
+import userRouter from './user/userRoutes'
 import eventVoteRouter from './vote/eventVoteRoutes'
 import voteRouter from './vote/voteRoutes'
 
-const app = express()
+import swaggerJSDoc = require('swagger-jsdoc')
+
 const isProduction = process.env.NODE_ENV === 'production'
+const app = express()
+
+// swagger definition
+const swaggerDefinition = {
+  info: {
+    title: 'MusicMonkey API',
+    version: '1.0.0',
+    description: 'API server for MusicMonkey application.'
+  },
+  host: isProduction ? 'api.musicmonkey.io' : 'localhost:8080',
+  basePath: '/',
+  securityDefinitions: {
+    cookieAuth: {
+      type: 'apiKey',
+      in: 'cookie',
+      name: 'jwt'
+    }
+  },
+  security: [{ cookieAuth: [] as any[] }]
+}
+// options for the swagger docs
+const options = {
+  // import swaggerDefinitions
+  swaggerDefinition,
+  // path to the API docs
+  apis: ['./**/*Routes.js', 'indexRoutes.js'] // pass all in array
+}
+// initialize swagger-jsdoc
+const swaggerSpec = swaggerJSDoc(options)
 
 if (isProduction) {
   app.set('trust proxy', 1) // trust first proxy
@@ -61,6 +92,7 @@ app.use(apiV1 + '/suggestions', suggestionsRouter)
 app.use(apiV1 + '/auth', authRouter)
 app.use(apiV1 + '/auth', guestAuthRouter)
 app.use(apiV1 + '/auth', hostAuthRouter)
+app.use(apiV1 + '/users', userRouter)
 app.use(apiV1 + '/users', userPlaylistRouter)
 app.use(apiV1 + '/users', userRsvpRouter)
 app.use(apiV1 + '/users', userSuggestionsRouter)
@@ -72,6 +104,13 @@ app.use(apiV1 + '/search', searchRouter)
 app.use(apiV1 + '/recommendations', recommendationsRouter)
 app.use(apiV1 + '/rsvp', rsvpRouter)
 app.use(apiV1 + '/votes', voteRouter)
+
+app.get('/swagger.json', (_req, res) => {
+  res.setHeader('Content-Type', 'application/json')
+  res.send(swaggerSpec)
+})
+
+app.use(express.static('public'))
 
 if (isProduction) {
   app.use(rollbarErrorHandler)

@@ -12,8 +12,39 @@ import { setJwtCookie } from './authRequestLib'
 const devCookieOpts = {}
 const prodCookieOpts = { httpOnly: true, secure: true }
 const isProduction = process.env.NODE_ENV === 'production'
+
+/**
+ * @swagger
+ * definition:
+ *   auth:
+ *     properties:
+ *       email:
+ *         type: string
+ *       password:
+ *         type: string
+ */
 const router = Router()
 
+/**
+ * @swagger
+ * /api/v1/refresh:
+ *   post:
+ *     tags:
+ *       - auth
+ *     summary: Signs up a new user
+ *     description: Creates a new user with the given details
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: Successfully created
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/definitions/Auth'
+ *       description: Authentication details
+ */
 router.post(
   '/refresh',
   passport.authenticate('jwt', { session: false }),
@@ -29,6 +60,23 @@ router.post(
   }
 )
 
+/**
+ * @swagger
+ * /api/v1/verify:
+ *   security:
+ *    - cookieAuth: []
+ *   get:
+ *     tags:
+ *       - auth
+ *     description: Verifies the user is logged in
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: A user
+ *         schema:
+ *           $ref: '#/definitions/users'
+ */
 router.get(
   '/verify',
   passport.authenticate('jwt', { session: false }),
@@ -39,6 +87,19 @@ router.get(
   }
 )
 
+/**
+ * @swagger
+ * /api/v1/logout:
+ *   get:
+ *     tags:
+ *       - auth
+ *     description: Logs the user out
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: Logged out
+ */
 router.get('/logout', (_req: Request, res: Response) => {
   if (isProduction) {
     res.clearCookie('jwt', prodCookieOpts)
@@ -48,6 +109,25 @@ router.get('/logout', (_req: Request, res: Response) => {
   res.status(200).send()
 })
 
+/**
+ * @swagger
+ * /api/v1/login:
+ *   post:
+ *     tags:
+ *       - auth
+ *   summary: Log a user in with email and password
+ *   description: Standard login method
+ *   responses:
+ *     200:
+ *       description: Successfully logged in
+ *   requestBody:
+ *     content:
+ *       application/json:
+ *         schema:
+ *           $ref: '#/definitions/Auth'
+ *     description:  Authentication details
+ *
+ */
 router.post('/login', (req, res) => {
   passport.authenticate('local', { session: false }, (error, user) => {
     if (error || !user) {
@@ -65,6 +145,26 @@ router.post('/login', (req, res) => {
   })(req, res)
 })
 
+/**
+ * @swagger
+ * /api/v1/signup:
+ *   post:
+ *     tags:
+ *       - auth
+ *     summary: Signs up a new user
+ *     description: Creates a new user with the given details
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: Successfully created
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/definitions/Auth'
+ *       description: Authentication details
+ */
 router.post('/signup', async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body
