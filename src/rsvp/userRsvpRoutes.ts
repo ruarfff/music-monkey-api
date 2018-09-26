@@ -4,6 +4,22 @@ import { getRsvpByUserIdAndInviteId } from './rsvpGateway'
 
 const router = Router()
 
+/**
+ * @swagger
+ * /users/{userId}/rsvp:
+ *   get:
+ *     tags:
+ *       - rsvp
+ *     description: Get a users RSVPs
+ *     summary: Get a users RSVPs (responses to invites)
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: An rsvp
+ *         schema:
+ *           $ref: '#/definitions/RSVP'
+ */
 router.get(
   '/:userId/rsvp',
   passport.authenticate('jwt', { session: false }),

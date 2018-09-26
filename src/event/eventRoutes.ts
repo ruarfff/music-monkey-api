@@ -13,6 +13,25 @@ import IEvent from './IEvent'
 const router = Router()
 const eventDecorator = new EventDecorator()
 
+/**
+ * @swagger
+ * /events:
+ *   get:
+ *     tags:
+ *       - events
+ *     description: Get all events created by a user
+ *     summary: Get all events created by a user
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: All events created by a user
+ *         schema:
+ *            type: array
+ *            items:
+ *              type:
+ *                $ref: '#/definitions/Event'
+ */
 router.get(
   '/',
   passport.authenticate('jwt', { session: false }),
@@ -29,6 +48,22 @@ router.get(
   }
 )
 
+/**
+ * @swagger
+ * /events/{eventId}:
+ *   get:
+ *     tags:
+ *       - events
+ *     description: Get an event by ID
+ *     summary: Get an event by ID
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: An event
+ *         schema:
+ *           $ref: '#/definitions/Event'
+ */
 router.get(
   '/:eventId',
   passport.authenticate('jwt', { session: false }),
@@ -49,6 +84,28 @@ router.get(
   }
 )
 
+/**
+ * @swagger
+ * /events:
+ *   post:
+ *     tags:
+ *       - events
+ *     description: Create a new event
+ *     summary: Create a new event
+ *     produces:
+ *       - application/json
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/definitions/Event'
+ *     responses:
+ *       200:
+ *         description: An event
+ *         schema:
+ *           $ref: '#/definitions/Event'
+ */
 router.post(
   '/',
   passport.authenticate('jwt', { session: false }),
@@ -65,6 +122,28 @@ router.post(
   }
 )
 
+/**
+ * @swagger
+ * /events/{eventId}:
+ *   put:
+ *     tags:
+ *       - events
+ *     description: Update an event
+ *     summary: Update an event
+ *     produces:
+ *       - application/json
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/definitions/Event'
+ *     responses:
+ *       200:
+ *         description: An event
+ *         schema:
+ *           $ref: '#/definitions/Event'
+ */
 router.put(
   '/:eventId',
   passport.authenticate('jwt', { session: false }),
@@ -87,6 +166,20 @@ router.put(
   }
 )
 
+/**
+ * @swagger
+ * /events/{eventId}:
+ *   delete:
+ *     tags:
+ *       - events
+ *     description: Delete an event
+ *     summary: Delete an event
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: Event was deleted
+ */
 router.delete(
   '/:eventId',
   passport.authenticate('jwt', { session: false }),

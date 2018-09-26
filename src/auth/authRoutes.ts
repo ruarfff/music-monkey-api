@@ -13,21 +13,11 @@ const devCookieOpts = {}
 const prodCookieOpts = { httpOnly: true, secure: true }
 const isProduction = process.env.NODE_ENV === 'production'
 
-/**
- * @swagger
- * definition:
- *   auth:
- *     properties:
- *       email:
- *         type: string
- *       password:
- *         type: string
- */
 const router = Router()
 
 /**
  * @swagger
- * /api/v1/refresh:
+ * /refresh:
  *   post:
  *     tags:
  *       - auth
@@ -62,20 +52,19 @@ router.post(
 
 /**
  * @swagger
- * /api/v1/verify:
- *   security:
- *    - cookieAuth: []
+ * /verify:
  *   get:
  *     tags:
  *       - auth
  *     description: Verifies the user is logged in
+ *     summary: Verifies the user is logged in and returns the logged in user
  *     produces:
  *       - application/json
  *     responses:
  *       200:
  *         description: A user
  *         schema:
- *           $ref: '#/definitions/users'
+ *           $ref: '#/definitions/User'
  */
 router.get(
   '/verify',
@@ -89,11 +78,12 @@ router.get(
 
 /**
  * @swagger
- * /api/v1/logout:
+ * /logout:
  *   get:
  *     tags:
  *       - auth
  *     description: Logs the user out
+ *     summary: Logs the user out by removing cookies
  *     produces:
  *       - application/json
  *     responses:
@@ -111,21 +101,21 @@ router.get('/logout', (_req: Request, res: Response) => {
 
 /**
  * @swagger
- * /api/v1/login:
+ * /login:
  *   post:
  *     tags:
  *       - auth
- *   summary: Log a user in with email and password
- *   description: Standard login method
- *   responses:
- *     200:
- *       description: Successfully logged in
- *   requestBody:
- *     content:
- *       application/json:
- *         schema:
- *           $ref: '#/definitions/Auth'
- *     description:  Authentication details
+ *     summary: Log a user in with email and password
+ *     description: Standard login method
+ *     responses:
+ *       200:
+ *         description: Successfully logged in
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/definitions/Auth'
+ *       description:  Authentication details
  *
  */
 router.post('/login', (req, res) => {
@@ -147,7 +137,7 @@ router.post('/login', (req, res) => {
 
 /**
  * @swagger
- * /api/v1/signup:
+ * /signup:
  *   post:
  *     tags:
  *       - auth

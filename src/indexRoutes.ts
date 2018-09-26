@@ -1,20 +1,65 @@
 import { Request, Response, Router } from 'express'
 
-const router = Router()
-
 /**
  * @swagger
- * /ping:
- *   get:
- *     tags:
- *       - ping
- *     description: Returns pong
- *     produces:
- *       - application/json
- *     responses:
- *       200:
- *         description: Simple check if the server is alive
+ * definition:
+ *   User:
+ *     properties:
+ *       displayName:
+ *         type: string
+ *       image:
+ *         type: string
+ *       userId:
+ *         type: string
+ *       isGuest:
+ *         type: boolean
+ *  @swagger
+ * definition:
+ *   Auth:
+ *     properties:
+ *       email:
+ *         type: string
+ *       password:
+ *         type: string
+ *  @swagger
+ * definition:
+ *  Event:
+ *     properties:
+ *       eventId:
+ *         type: string
+ *       userId:
+ *         type: string
+ *       organizer:
+ *         type: string
+ *       imageUrl:
+ *         type: string
+ *       name:
+ *         type: string
+ *       description:
+ *         type: string
+ *       venue:
+ *         type: string
+ *       location:
+ *         type: object
+ *       startDateTime:
+ *         type: string
+ *       endDateTime:
+ *         type: string
+ *       eventCode:
+ *         type: string
+ *       playlist:
+ *         type: object
+ *       playlistUrl:
+ *         type: string
+ *       invites:
+ *         type: array
+ *       guests:
+ *         type: array
+ *       settings:
+ *         type: object
  */
+const router = Router()
+
 router.get('/ping', (_req: Request, res: Response) => {
   res.send('pong')
 })

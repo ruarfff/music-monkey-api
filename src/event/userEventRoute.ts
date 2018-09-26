@@ -4,6 +4,22 @@ import { getAllEventsUserWasInvitedTo } from './userEventService'
 
 const router = Router()
 
+/**
+ * @swagger
+ * /api/v1/users/invited/events:
+ *   get:
+ *     tags:
+ *       - events
+ *     description: Get all the events the current user was invited to
+ *     summary: Get all the events the current user was invited to
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: Some events
+ *         schema:
+ *           $ref: '#/definitions/Event'
+ */
 router.get(
   '/invited/events',
   passport.authenticate('jwt', { session: false }),

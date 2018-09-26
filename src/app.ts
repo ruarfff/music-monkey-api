@@ -36,7 +36,7 @@ const swaggerDefinition = {
     description: 'API server for MusicMonkey application.'
   },
   host: isProduction ? 'api.musicmonkey.io' : 'localhost:8080',
-  basePath: '/',
+  basePath: '/api/v1/',
   securityDefinitions: {
     cookieAuth: {
       type: 'apiKey',

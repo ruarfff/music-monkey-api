@@ -3,39 +3,23 @@ import * as passport from 'passport'
 import IUser from '../user/IUser'
 import { getSafeUserById } from './userService'
 
-/**
- * @swagger
- * definition:
- *   users:
- *     properties:
- *       displayName:
- *         type: string
- *       image:
- *         type: string
- *       userId:
- *         type: string
- *       isGuest:
- *         type: boolean
- */
-
 const router = Router()
 
 /**
  * @swagger
- * /api/v1/users/{userId}:
- *   security:
- *    - cookieAuth: []
+ * /users/{userId}:
  *   get:
  *     tags:
  *       - users
  *     description: Returns a user by ID
+ *     summary: Returns a user by ID
  *     produces:
  *       - application/json
  *     responses:
  *       200:
  *         description: A user
  *         schema:
- *           $ref: '#/definitions/users'
+ *           $ref: '#/definitions/User'
  */
 router.get(
   '/:userId',
@@ -51,20 +35,19 @@ router.get(
 
 /**
  * @swagger
- * /api/v1/users/me:
- *   security:
- *     - cookieAuth: []
+ * /users/me:
  *   get:
  *     tags:
  *       - users
  *     description: Returns the currently authorised user
+ *     summary: Returns the currently authorised user
  *     produces:
  *       - application/json
  *     responses:
  *       200:
  *         description: The current user
  *         schema:
- *           $ref: '#/definitions/users'
+ *           $ref: '#/definitions/User'
  */
 router.get(
   '/me',

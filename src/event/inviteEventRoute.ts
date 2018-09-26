@@ -7,6 +7,22 @@ import IEvent from './IEvent'
 const router = Router()
 const eventDecorator = new EventDecorator()
 
+/**
+ * @swagger
+ * /api/v1/invites/{inviteId}/event:
+ *   get:
+ *     tags:
+ *       - events
+ *     description: Get an event by invite ID
+ *     summary: Get an event by invite ID
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: An event
+ *         schema:
+ *           $ref: '#/definitions/Event'
+ */
 router.get(
   '/:inviteId/event',
   passport.authenticate('jwt', { session: false }),

@@ -5,6 +5,31 @@ import { searchTracks } from '../spotify/spotifyClient'
 import IUser from '../user/IUser'
 const router = Router()
 
+/**
+ * @swagger
+ * /search:
+ *   get:
+ *     tags:
+ *       - search
+ *     description: Search for a track
+ *     summary: Search for a track
+ *     parameters:
+ *       - in: query
+ *         name: searchTerm
+ *         schema:
+ *           type: string
+ *         description: Term used to search for tracks
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: An event
+ *         schema:
+ *            type: array
+ *            items:
+ *              type:
+ *                $ref: '#/definitions/Event'
+ */
 router.get(
   '/',
   passport.authenticate('jwt', { session: false }),

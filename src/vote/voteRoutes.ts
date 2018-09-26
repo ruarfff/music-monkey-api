@@ -5,6 +5,28 @@ import { createVote, deleteVote } from './voteGateway'
 
 const router = Router()
 
+/**
+ * @swagger
+ * /votes:
+ *   post:
+ *     tags:
+ *       - votes
+ *     description: Create a new vote
+ *     summary: Create a new vote
+ *     produces:
+ *       - application/json
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/definitions/Vote'
+ *     responses:
+ *       200:
+ *         description: A vote
+ *         schema:
+ *           $ref: '#/definitions/Vote'
+ */
 router.post(
   '/',
   passport.authenticate('jwt', { session: false }),
@@ -19,6 +41,20 @@ router.post(
   }
 )
 
+/**
+ * @swagger
+ * /votes/{voteId}:
+ *   delete:
+ *     tags:
+ *       - votes
+ *     description: Delete a vote
+ *     summary: Delete a vote
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: Vote was deleted
+ */
 router.delete(
   '/:voteId',
   passport.authenticate('jwt', { session: false }),

@@ -4,6 +4,31 @@ import InviteGateway from './inviteGateway'
 const router = Router()
 const inviteGateway = new InviteGateway()
 
+/**
+ * @swagger
+ * /invites:
+ *   get:
+ *     tags:
+ *       - invites
+ *     description: Get a list of invites filtered by event ID
+ *     summary: Get a list of invites filtered by event ID
+ *     parameters:
+ *       - in: query
+ *         name: eventId
+ *         schema:
+ *           type: string
+ *         description: Event ID for filter on
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: All invites for an event
+ *         schema:
+ *            type: array
+ *            items:
+ *              type:
+ *                $ref: '#/definitions/Invite'
+ */
 router.get('/', (req: Request, res: Response) => {
   if (!req.query.eventId) {
     res.send([])
@@ -16,6 +41,22 @@ router.get('/', (req: Request, res: Response) => {
     .catch(err => res.status(404).send(err))
 })
 
+/**
+ * @swagger
+ * /invites/{inviteId}:
+ *   get:
+ *     tags:
+ *       - invites
+ *     description: Get an invite by ID
+ *     summary: Get an invite by ID
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: An invite
+ *         schema:
+ *           $ref: '#/definitions/Invite'
+ */
 router.get('/:inviteId', (req: Request, res: Response) => {
   inviteGateway
     .getInviteById(req.params.inviteId)
@@ -25,6 +66,20 @@ router.get('/:inviteId', (req: Request, res: Response) => {
     .catch(err => res.status(404).send(err))
 })
 
+/**
+ * @swagger
+ * /invites/{inviteId}:
+ *   delete:
+ *     tags:
+ *       - invites
+ *     description: Delete an invite
+ *     summary: Delete an invite
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: Invite was deleted
+ */
 router.delete('/:inviteId', (req: Request, res: Response) => {
   const inviteId = req.query.inviteId
   inviteGateway
@@ -35,6 +90,28 @@ router.delete('/:inviteId', (req: Request, res: Response) => {
     .catch(err => res.status(404).send(err))
 })
 
+/**
+ * @swagger
+ * /invites:
+ *   post:
+ *     tags:
+ *       - invites
+ *     description: Create a new invite
+ *     summary: Create a new invite
+ *     produces:
+ *       - application/json
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/definitions/Invite'
+ *     responses:
+ *       200:
+ *         description: An invite
+ *         schema:
+ *           $ref: '#/definitions/Invite'
+ */
 router.post('/', (req: Request, res: Response) => {
   const invite = req.body
   inviteGateway

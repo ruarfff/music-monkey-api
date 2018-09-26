@@ -16,6 +16,31 @@ import {
 const router = Router()
 const suggestionDecorator = new SuggestionDecorator()
 
+/**
+ * @swagger
+ * /suggestions:
+ *   get:
+ *     tags:
+ *       - suggestions
+ *     description: Get a list of suggestions filtered by event ID
+ *     summary: Get a list of suggestions filtered by event ID
+ *     parameters:
+ *       - in: query
+ *         name: eventId
+ *         schema:
+ *           type: string
+ *         description: Event ID for filter on
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: All suggestions for an event
+ *         schema:
+ *            type: array
+ *            items:
+ *              type:
+ *                $ref: '#/definitions/Suggestion'
+ */
 router.get(
   '/',
   passport.authenticate('jwt', { session: false }),
@@ -40,6 +65,22 @@ router.get(
   }
 )
 
+/**
+ * @swagger
+ * /suggestions/{suggestionId}:
+ *   get:
+ *     tags:
+ *       - suggestions
+ *     description: Get an suggestion by ID
+ *     summary: Get an suggestion by ID
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: A suggestion
+ *         schema:
+ *           $ref: '#/definitions/Suggestion'
+ */
 router.get(
   '/:suggestionId',
   passport.authenticate('jwt', { session: false }),
@@ -55,6 +96,20 @@ router.get(
   }
 )
 
+/**
+ * @swagger
+ * /suggestions/{suggestionId}:
+ *   delete:
+ *     tags:
+ *       - suggestions
+ *     description: Delete a suggestion
+ *     summary: Delete a suggestion
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: Suggestion was deleted
+ */
 router.delete(
   '/:suggestionId',
   passport.authenticate('jwt', { session: false }),
@@ -73,6 +128,28 @@ router.delete(
   }
 )
 
+/**
+ * @swagger
+ * /suggestions:
+ *   post:
+ *     tags:
+ *       - suggestions
+ *     description: Create a new suggestion
+ *     summary: Create a new suggestion
+ *     produces:
+ *       - application/json
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/definitions/Suggestion'
+ *     responses:
+ *       200:
+ *         description: A suggestion
+ *         schema:
+ *           $ref: '#/definitions/Suggestion'
+ */
 router.post(
   '/',
   passport.authenticate('jwt', { session: false }),
@@ -95,6 +172,28 @@ router.post(
   }
 )
 
+/**
+ * @swagger
+ * /suggestions/{eventId}/accept:
+ *   post:
+ *     tags:
+ *       - suggestions
+ *     description: Accept one or more than one suggestion
+ *     summary: Accept one or more than one suggestion
+ *     produces:
+ *       - application/json
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/definitions/Suggestion'
+ *     responses:
+ *       200:
+ *         description: A suggestion
+ *         schema:
+ *           $ref: '#/definitions/Suggestion'
+ */
 router.post(
   '/:eventId/accept',
   passport.authenticate('jwt', { session: false }),
@@ -115,6 +214,28 @@ router.post(
   }
 )
 
+/**
+ * @swagger
+ * /suggestions/{eventId}/reject:
+ *   post:
+ *     tags:
+ *       - suggestions
+ *     description: Reject one or more than one suggestion
+ *     summary: Reject one or more than one suggestion
+ *     produces:
+ *       - application/json
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/definitions/Suggestion'
+ *     responses:
+ *       200:
+ *         description: A suggestion
+ *         schema:
+ *           $ref: '#/definitions/Suggestion'
+ */
 router.post(
   '/:suggestionId/reject',
   passport.authenticate('jwt', { session: false }),

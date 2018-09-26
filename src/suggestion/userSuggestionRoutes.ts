@@ -12,6 +12,31 @@ import {
 const router = Router()
 const suggestionDecorator = new SuggestionDecorator()
 
+/**
+ * @swagger
+ * /users/suggestions:
+ *   get:
+ *     tags:
+ *       - suggestions
+ *     description: Get a users suggestion
+ *     summary: Get a users suggestion
+ *     parameters:
+ *       - in: query
+ *         name: eventId
+ *         schema:
+ *           type: string
+ *         description: Event ID for filter on
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: All suggestions for a user possibly filtered by event
+ *         schema:
+ *            type: array
+ *            items:
+ *              type:
+ *                $ref: '#/definitions/Suggestion'
+ */
 router.get(
   '/suggestions',
   passport.authenticate('jwt', { session: false }),

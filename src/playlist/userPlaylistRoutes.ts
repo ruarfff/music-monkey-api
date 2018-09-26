@@ -4,6 +4,25 @@ import { getUserPlaylists } from '../spotify/spotifyClient'
 import IUser from '../user/IUser'
 const router = Router()
 
+/**
+ * @swagger
+ * /users/{userId}/playlists:
+ *   get:
+ *     tags:
+ *       - playlists
+ *     description: Get a users playlists
+ *     summary: Get a users playlists
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: All a users playlists
+ *         schema:
+ *            type: array
+ *            items:
+ *              type:
+ *                $ref: '#/definitions/Playlist'
+ */
 router.get(
   '/:userId/playlists',
   passport.authenticate('jwt', { session: false }),

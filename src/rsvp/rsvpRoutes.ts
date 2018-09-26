@@ -4,6 +4,28 @@ import { createRsvp } from './rsvpGateway'
 
 const router = Router()
 
+/**
+ * @swagger
+ * /rsvp:
+ *   post:
+ *     tags:
+ *       - rsvp
+ *     description: Create a new RSVP
+ *     summary: Create a new RSVP
+ *     produces:
+ *       - application/json
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/definitions/RSVP'
+ *     responses:
+ *       200:
+ *         description: An RSVP
+ *         schema:
+ *           $ref: '#/definitions/RSVP'
+ */
 router.post(
   '/',
   passport.authenticate('jwt', { session: false }),

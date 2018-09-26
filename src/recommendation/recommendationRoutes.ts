@@ -4,6 +4,25 @@ import { getRecommendations, getUserTopTracks } from '../spotify/spotifyClient'
 import IUser from '../user/IUser'
 const router = Router()
 
+/**
+ * @swagger
+ * /recommendations:
+ *   get:
+ *     tags:
+ *       - recommendations
+ *     description: Get recommended tracks for a user
+ *     summary: Get recommended tracks for a user
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: All a users recommendations
+ *         schema:
+ *            type: array
+ *            items:
+ *              type:
+ *                $ref: '#/definitions/Track'
+ */
 router.get(
   '/',
   passport.authenticate('jwt', { session: false }),
