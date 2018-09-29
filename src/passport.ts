@@ -2,6 +2,12 @@ import * as bcrypt from 'bcrypt'
 import * as passport from 'passport'
 import * as passportJWT from 'passport-jwt'
 import { jwtCookieKey } from './auth/authConstants'
+import {
+  FACEBOOK_APP_ID,
+  FACEBOOK_APP_SECRET,
+  SPOTIFY_CLIENT_ID,
+  SPOTIFY_CLIENT_SECRET
+} from './config'
 import IUser from './user/IUser'
 import ProfileToUser from './user/ProfileToUser'
 import {
@@ -10,16 +16,20 @@ import {
   getUserById
 } from './user/userService'
 
+const profileToUser = new ProfileToUser()
 const LocalStrategy = require('passport-local')
 const SpotifyStrategy = require('passport-spotify').Strategy
 const FacebookStrategy = require('passport-facebook').Strategy
-const spotifyClientId = 'ee4aa78cde4c4be08978d79c180e11c9'
-const spotifyClientSecret = 'acfc43102e5c4e05902e66284dfdcb19'
-const facebookAppId = '226286181115039'
-const facebookAppSecret = 'ab450950666b33b434684bc8a2c24ca5'
-
 const JWTStrategy = passportJWT.Strategy
-const profileToUser = new ProfileToUser()
+const spotifyConfig = {
+  clientID: SPOTIFY_CLIENT_ID,
+  clientSecret: SPOTIFY_CLIENT_SECRET
+}
+const facebookConfig = {
+  clientID: FACEBOOK_APP_ID,
+  clientSecret: FACEBOOK_APP_SECRET,
+  profileFields: ['id', 'displayName', 'photos', 'email']
+}
 
 passport.serializeUser((user, done) => {
   done(null, user)
@@ -81,8 +91,7 @@ passport.use(
   'spotify-host',
   new SpotifyStrategy(
     {
-      clientID: spotifyClientId,
-      clientSecret: spotifyClientSecret,
+      ...spotifyConfig,
       callbackURL:
         'https://api.musicmonkey.io/api/v1/auth/host/spotify/callback'
     },
@@ -94,8 +103,7 @@ passport.use(
   'spotify-host-local',
   new SpotifyStrategy(
     {
-      clientID: spotifyClientId,
-      clientSecret: spotifyClientSecret,
+      ...spotifyConfig,
       callbackURL:
         'https://api.musicmonkey.io/api/v1/auth/host/spotify/callback/local'
     },
@@ -107,8 +115,7 @@ passport.use(
   'spotify-host-local-dev',
   new SpotifyStrategy(
     {
-      clientID: spotifyClientId,
-      clientSecret: spotifyClientSecret,
+      ...spotifyConfig,
       callbackURL:
         'http://localhost:8080/api/v1/auth/host/spotify/callback/local/dev'
     },
@@ -120,8 +127,7 @@ passport.use(
   'spotify-guest',
   new SpotifyStrategy(
     {
-      clientID: spotifyClientId,
-      clientSecret: spotifyClientSecret,
+      ...spotifyConfig,
       callbackURL:
         'https://api.musicmonkey.io/api/v1/auth/guest/spotify/callback'
     },
@@ -133,8 +139,7 @@ passport.use(
   'spotify-guest-local',
   new SpotifyStrategy(
     {
-      clientID: spotifyClientId,
-      clientSecret: spotifyClientSecret,
+      ...spotifyConfig,
       callbackURL:
         'https://api.musicmonkey.io/api/v1/auth/guest/spotify/callback/local'
     },
@@ -146,8 +151,7 @@ passport.use(
   'spotify-guest-local-dev',
   new SpotifyStrategy(
     {
-      clientID: spotifyClientId,
-      clientSecret: spotifyClientSecret,
+      ...spotifyConfig,
       callbackURL:
         'http://localhost:8080/api/v1/auth/guest/spotify/callback/local/dev'
     },
@@ -159,11 +163,9 @@ passport.use(
   'facebook-guest',
   new FacebookStrategy(
     {
-      clientID: facebookAppId,
-      clientSecret: facebookAppSecret,
+      ...facebookConfig,
       callbackURL:
-        'https://api.musicmonkey.io/api/v1/auth/guest/facebook/callback',
-      profileFields: ['id', 'displayName', 'photos', 'email']
+        'https://api.musicmonkey.io/api/v1/auth/guest/facebook/callback'
     },
     handleFacebookLogin
   )
@@ -173,11 +175,9 @@ passport.use(
   'facebook-guest-local',
   new FacebookStrategy(
     {
-      clientID: facebookAppId,
-      clientSecret: facebookAppSecret,
+      ...facebookConfig,
       callbackURL:
-        'https://api.musicmonkey.io/api/v1/auth/guest/facebook/callback/local',
-      profileFields: ['id', 'displayName', 'photos', 'email']
+        'https://api.musicmonkey.io/api/v1/auth/guest/facebook/callback/local'
     },
     handleFacebookLogin
   )
@@ -187,11 +187,9 @@ passport.use(
   'facebook-guest-local-dev',
   new FacebookStrategy(
     {
-      clientID: facebookAppId,
-      clientSecret: facebookAppSecret,
+      ...facebookConfig,
       callbackURL:
-        'http://localhost:8080/api/v1/auth/guest/facebook/callback/local/dev',
-      profileFields: ['id', 'displayName', 'photos', 'email']
+        'http://localhost:8080/api/v1/auth/guest/facebook/callback/local/dev'
     },
     handleFacebookLogin
   )

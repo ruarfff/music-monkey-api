@@ -1,10 +1,17 @@
+import {
+  PUSHER_APP_ID,
+  PUSHER_CLUSTER,
+  PUSHER_KEY,
+  PUSHER_SECRET
+} from '../config'
+
 const Pusher = require('pusher')
 
 const pusher = new Pusher({
-  appId: '536146',
-  key: 'd7c284d8f17d26f74047',
-  secret: 'b745eb542c9fc267ead7',
-  cluster: 'eu',
+  appId: PUSHER_APP_ID,
+  key: PUSHER_KEY,
+  secret: PUSHER_SECRET,
+  cluster: PUSHER_CLUSTER,
   encrypted: true
 })
 

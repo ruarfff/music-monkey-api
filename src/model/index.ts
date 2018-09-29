@@ -1,5 +1,6 @@
 // tslint:disable-next-line:no-var-requires
 const dynamo = require('dynamodb')
+import { DYNAMO_DB_ID, DYNAMO_DB_REGION, DYNAMO_DB_SECRET_KEY } from '../config'
 import { logError, logInfo } from '../logging'
 import {
   eventTableName,
@@ -11,9 +12,9 @@ import {
 } from './modelConstants'
 
 dynamo.AWS.config.update({
-  accessKeyId: 'AKIAIPMZTEODQOZYSNQA',
-  region: 'eu-west-1',
-  secretAccessKey: '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'
+  accessKeyId: DYNAMO_DB_ID,
+  region: DYNAMO_DB_REGION,
+  secretAccessKey: DYNAMO_DB_SECRET_KEY
 })
 
 export * from './event'

@@ -1,22 +1,28 @@
 const expressWinston = require('express-winston')
 import { Request } from 'express'
+import {
+  LOGGLY_SUB_DOMAIN,
+  LOGGLY_TOKEN,
+  ROLLBAR_ACCESS_TOKEN
+} from '../config'
 const winston = require('winston')
 const { Loggly } = require('winston-loggly-bulk')
 const Rollbar = require('rollbar')
 const rollbar = new Rollbar({
-  accessToken: '6c88840f47b14dec819a15447ee0a36a',
+  accessToken: ROLLBAR_ACCESS_TOKEN,
   captureUncaught: true,
   captureUnhandledRejections: true
 })
-
+const test = process.env
+console.log(test)
 const logger = winston.createLogger()
 
 const isProduction = process.env.NODE_ENV === 'production'
 
 if (isProduction) {
   const logglyTransport = {
-    token: '9bcc7303-1a8d-4a2e-acec-aa840a51fe78',
-    subdomain: 'ruairiobrien',
+    token: LOGGLY_TOKEN,
+    subdomain: LOGGLY_SUB_DOMAIN,
     tags: ['music-monkey-api'],
     json: true
   }

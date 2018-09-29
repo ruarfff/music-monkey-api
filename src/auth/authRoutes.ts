@@ -2,6 +2,7 @@ import * as bcrypt from 'bcrypt'
 import { Request, Response, Router } from 'express'
 import { isEmpty } from 'lodash'
 import * as passport from 'passport'
+import { IS_PRODUCTION } from '../config'
 import { logError } from '../logging'
 import { refreshToken } from '../spotify/spotifyClient'
 import IUser from '../user/IUser'
@@ -11,7 +12,6 @@ import { setJwtCookie } from './authRequestLib'
 
 const devCookieOpts = {}
 const prodCookieOpts = { httpOnly: true, secure: true }
-const isProduction = process.env.NODE_ENV === 'production'
 
 const router = Router()
 
@@ -91,7 +91,7 @@ router.get(
  *         description: Logged out
  */
 router.get('/logout', (_req: Request, res: Response) => {
-  if (isProduction) {
+  if (IS_PRODUCTION) {
     res.clearCookie('jwt', prodCookieOpts)
   } else {
     res.clearCookie('jwt', devCookieOpts)

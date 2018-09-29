@@ -59,6 +59,7 @@ function normalizePort(val: any) {
  */
 
 function onError(error: any) {
+  logError(error)
   if (error.syscall !== 'listen') {
     throw error
   }
@@ -88,7 +89,6 @@ function onListening() {
   const addr = server.address()
   const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port
   debug('Listening on ' + bind)
-
   createTables()
   redisGateway.connect()
   if (process.env.NODE_ENV === 'development') {

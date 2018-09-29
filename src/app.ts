@@ -8,6 +8,7 @@ import passport from './passport'
 import authRouter from './auth/authRoutes'
 import guestAuthRouter from './auth/guestAuthRoutes'
 import hostAuthRouter from './auth/hostAuthRoutes'
+import { IS_PRODUCTION } from './config'
 import eventsRouter from './event/eventRoutes'
 import inviteEventRouter from './event/inviteEventRoute'
 import userEventRouter from './event/userEventRoute'
@@ -19,44 +20,14 @@ import userRsvpRouter from './rsvp/userRsvpRoutes'
 import searchRouter from './search/searchRoutes'
 import suggestionsRouter from './suggestion/suggestionRoutes'
 import userSuggestionsRouter from './suggestion/userSuggestionRoutes'
+import { swaggerSpec } from './swagger'
 import userRouter from './user/userRoutes'
 import eventVoteRouter from './vote/eventVoteRoutes'
 import voteRouter from './vote/voteRoutes'
 
-import swaggerJSDoc = require('swagger-jsdoc')
-
-const isProduction = process.env.NODE_ENV === 'production'
 const app = express()
 
-// swagger definition
-const swaggerDefinition = {
-  info: {
-    title: 'MusicMonkey API',
-    version: '1.0.0',
-    description: 'API server for MusicMonkey application.'
-  },
-  host: isProduction ? 'api.musicmonkey.io' : 'localhost:8080',
-  basePath: '/api/v1/',
-  securityDefinitions: {
-    cookieAuth: {
-      type: 'apiKey',
-      in: 'cookie',
-      name: 'jwt'
-    }
-  },
-  security: [{ cookieAuth: [] as any[] }]
-}
-// options for the swagger docs
-const options = {
-  // import swaggerDefinitions
-  swaggerDefinition,
-  // path to the API docs
-  apis: ['./**/*Routes.js', 'indexRoutes.js'] // pass all in array
-}
-// initialize swagger-jsdoc
-const swaggerSpec = swaggerJSDoc(options)
-
-if (isProduction) {
+if (IS_PRODUCTION) {
   app.set('trust proxy', 1) // trust first proxy
 }
 
@@ -112,14 +83,14 @@ app.get('/swagger.json', (_req, res) => {
 
 app.use(express.static('public'))
 
-if (isProduction) {
+if (IS_PRODUCTION) {
   app.use(rollbarErrorHandler)
 }
 // error handler
 app.use((err: any, _req: any, res: any, next: any) => {
   // set locals, only providing error in development
   res.locals.message = err.message
-  res.locals.error = isProduction ? err : {}
+  res.locals.error = IS_PRODUCTION ? err : {}
   res.status(err.status || 500)
   res.send(err.message)
   next()
