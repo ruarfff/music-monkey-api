@@ -13,8 +13,6 @@ const rollbar = new Rollbar({
   captureUncaught: true,
   captureUnhandledRejections: true
 })
-const test = process.env
-console.log(test)
 const logger = winston.createLogger()
 
 const isProduction = process.env.NODE_ENV === 'production'
