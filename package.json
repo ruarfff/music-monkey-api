@@ -19,6 +19,7 @@
     "copy-to-build": "node copyToBuild.js"
   },
   "dependencies": {
+    "@sendgrid/mail": "6.3.1",
     "aws-sdk": "2.324.0",
     "bcrypt": "3.0.1",
     "body-parser": "1.18.3",

@@ -36,7 +36,8 @@ const whitelist = [
   'http://localhost:3001',
   'http://localhost:3002',
   'https://hosts.musicmonkey.io',
-  'https://guests.musicmonkey.io'
+  'https://guests.musicmonkey.io',
+  'chrome-extension://coohjcphdfgbiolnekdpbcijmhambjff'
 ]
 const corsOptions = {
   credentials: true,

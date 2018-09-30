@@ -9,6 +9,7 @@ import IUser from '../user/IUser'
 import { checkUserProfile } from '../user/profileCheck'
 import { createNewUser } from '../user/userService'
 import { setJwtCookie } from './authRequestLib'
+import forgotPassword from './forgotPassword'
 
 const devCookieOpts = {}
 const prodCookieOpts = { httpOnly: true, secure: true }
@@ -176,6 +177,37 @@ router.post('/signup', async (req: Request, res: Response) => {
     res.status(400).send({
       error: 'req body should take the form { email, password }'
     })
+  }
+})
+
+/**
+ * @swagger
+ * /forgot:
+ *   post:
+ *     tags:
+ *       - auth
+ *     summary: For when a user forgot their password
+ *     description: For when a user forgot their password
+ *     responses:
+ *       200:
+ *         description: Success
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/definitions/Auth'
+ *       description:  Authentication details
+ *
+ */
+router.post('/forgot', (req: Request, res: Response) => {
+  try {
+    const { email } = req.body
+    forgotPassword(email)
+    res.status(200).send()
+  } catch (err) {
+    const message = 'An unexpected error occurred. Please try again. '
+    logError(message, err, req)
+    res.status(500).send(message)
   }
 })
 

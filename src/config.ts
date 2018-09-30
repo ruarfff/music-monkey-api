@@ -19,6 +19,8 @@ const pusherKey = process.env.PUSHER_KEY
 const pusherSecret = process.env.PUSHER_SECRET
 const pusherCluster = process.env.PUSHER_CLUSTER
 
+const sendGridApiKey = process.env.SENDGRID_API_KEY
+
 export const IS_PRODUCTION = isProduction
 
 export const SPOTIFY_CLIENT_ID = spotifyClientId
@@ -39,3 +41,5 @@ export const PUSHER_APP_ID = pusherAppId
 export const PUSHER_KEY = pusherKey
 export const PUSHER_SECRET = pusherSecret
 export const PUSHER_CLUSTER = pusherCluster
+
+export const SENDGRID_API_KEY = sendGridApiKey
