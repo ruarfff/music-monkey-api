@@ -13,6 +13,7 @@ import eventsRouter from './event/eventRoutes'
 import inviteEventRouter from './event/inviteEventRoute'
 import userEventRouter from './event/userEventRoute'
 import indexRouter from './indexRoutes'
+import inviteRouter from './invite/inviteRoutes'
 import userPlaylistRouter from './playlist/userPlaylistRoutes'
 import recommendationsRouter from './recommendation/recommendationRoutes'
 import rsvpRouter from './rsvp/rsvpRoutes'
@@ -71,6 +72,7 @@ app.use(apiV1 + '/users', userRouter)
 app.use(apiV1 + '/events', eventsRouter)
 app.use(apiV1 + '/events', eventVoteRouter)
 app.use(apiV1 + '/invites', inviteEventRouter)
+app.use(apiV1 + '/invites', inviteRouter)
 app.use(apiV1 + '/search', searchRouter)
 app.use(apiV1 + '/recommendations', recommendationsRouter)
 app.use(apiV1 + '/rsvp', rsvpRouter)
