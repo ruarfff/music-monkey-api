@@ -40,4 +40,40 @@ router.post(
   }
 )
 
+/**
+ * @swagger
+ * /rsvp/{rsvpId}:
+ *   put:
+ *     tags:
+ *       - rsvp
+ *     description: Update an RSVP
+ *     summary: Update an RSVP
+ *     produces:
+ *       - application/json
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/definitions/RSVP'
+ *     responses:
+ *       200:
+ *         description: Updated RSVP
+ *         schema:
+ *           $ref: '#/definitions/RSVP'
+ */
+router.put(
+  '/:rsvpId',
+  passport.authenticate('jwt', { session: false }),
+  async (req: Request, res: Response) => {
+    try {
+      const rsvp = { ...req.body, userId: req.user.userId }
+      const savedRsvp = await createRsvp(rsvp)
+      res.send(savedRsvp)
+    } catch (err) {
+      res.status(400).send(err)
+    }
+  }
+)
+
 export default router

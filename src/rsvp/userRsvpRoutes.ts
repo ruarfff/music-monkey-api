@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express'
 import * as passport from 'passport'
-import { getRsvpByUserIdAndInviteId } from './rsvpGateway'
+import { getRsvpByUserId, getRsvpByUserIdAndInviteId } from './rsvpGateway'
 
 const router = Router()
 
@@ -27,7 +27,12 @@ router.get(
     try {
       const inviteId = req.query.inviteId
       const userId = req.params.userId
-      const savedRsvp = await getRsvpByUserIdAndInviteId(userId, inviteId)
+      let savedRsvp
+      if (inviteId) {
+        savedRsvp = await getRsvpByUserIdAndInviteId(userId, inviteId)
+      } else {
+        savedRsvp = await getRsvpByUserId(userId)
+      }
 
       res.send(savedRsvp)
     } catch (err) {

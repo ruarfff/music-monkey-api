@@ -13,6 +13,27 @@ export const createRsvp = async (rsvp: IRsvp) => {
   }
 }
 
+export const updateRsvp = async (rsvp: IRsvp) => {
+  try {
+    const existingRsvp = await getRsvpByUserIdAndInviteId(
+      rsvp.userId,
+      rsvp.inviteId
+    )
+    if (!existingRsvp) {
+      throw new Error('Could not find existing rsvp to update')
+    }
+    const { attrs } = await util.promisify(Rsvp.update)({
+      ...existingRsvp,
+      rsvp
+    })
+
+    return attrs
+  } catch (err) {
+    logError('Error updating rsvp', err)
+    throw err
+  }
+}
+
 export const getRsvpByUserIdAndInviteId = (
   userId: string,
   inviteId: string
