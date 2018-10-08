@@ -1,5 +1,9 @@
 import { promisify } from 'util'
-import InviteGateway from '../invite/inviteGateway'
+import {
+  createInvite,
+  getInviteById,
+  getInvitesByEventId
+} from '../invite/inviteGateway'
 import { logError } from '../logging'
 import { Event, IInvite, IRsvp } from '../model'
 import cleanModel from '../model/cleanModel'
@@ -8,8 +12,6 @@ import { getSafeUserById } from '../user/userService'
 import { onEventDeleted, onEventUpdated } from './eventNotifier'
 import IEvent from './IEvent'
 import IEventGuest from './IEventGuest'
-
-const inviteGateway: InviteGateway = new InviteGateway()
 
 export const getEventGuests = async (
   eventId: string
@@ -33,10 +35,9 @@ export const createEvent = (event: IEvent) => {
       if (err) {
         reject(err)
       } else {
-        inviteGateway
-          .createInvite({
-            eventId: eventModel.get('eventId')
-          } as IInvite)
+        createInvite({
+          eventId: eventModel.get('eventId')
+        } as IInvite)
           .then((inviteModel: any) => {
             resolve({
               ...cleanModel(eventModel.attrs),
@@ -86,9 +87,7 @@ export const getEventsByMultipleIds = async (eventIds: string[]) => {
 export const getEventById = async (eventId: string) => {
   const { attrs } = await promisify(Event.get)(eventId)
   const event = attrs
-  const invites: IInvite[] = await inviteGateway.getInvitesByEventId(
-    event.eventId
-  )
+  const invites: IInvite[] = await getInvitesByEventId(event.eventId)
   return cleanModel({
     ...event,
     invites: invites.map((invite: any) => invite.inviteId)
@@ -96,7 +95,7 @@ export const getEventById = async (eventId: string) => {
 }
 
 export const getEventByInviteId = async (inviteId: string) => {
-  const { eventId }: IInvite = await inviteGateway.getInviteById(inviteId)
+  const { eventId }: IInvite = await getInviteById(inviteId)
 
   return this.getEventById(eventId)
 }

@@ -3,10 +3,14 @@ import * as passport from 'passport'
 import { getEventByInviteId } from '../event/eventGateway'
 import IEvent from '../event/IEvent'
 import { logError } from '../logging'
-import InviteGateway from './inviteGateway'
+import {
+  createInvite,
+  deleteInvite,
+  getInviteById,
+  getInvitesByEventId
+} from './inviteGateway'
 
 const router = Router()
-const inviteGateway = new InviteGateway()
 
 /**
  * @swagger
@@ -36,16 +40,17 @@ const inviteGateway = new InviteGateway()
 router.get(
   '/',
   passport.authenticate('jwt', { session: false }),
-  (req: Request, res: Response) => {
+  async (req: Request, res: Response) => {
     if (!req.query.eventId) {
       res.send([])
+      return
     }
-    inviteGateway
-      .getInvitesByEventId(req.query.eventId)
-      .then(invite => {
-        res.send(invite)
-      })
-      .catch(err => res.status(404).send(err))
+    try {
+      const invites = await getInvitesByEventId(req.query.eventId)
+      res.send(invites)
+    } catch (err) {
+      res.status(404).send(err)
+    }
   }
 )
 
@@ -66,9 +71,14 @@ router.get(
  *           $ref: '#/definitions/Invite'
  */
 router.get('/:inviteId', async (req: Request, res: Response) => {
+  const inviteId = req.params.inviteId
+  if (!inviteId) {
+    res.status(404).send('Invalid invite ID')
+    return
+  }
   try {
-    const event: IEvent = await getEventByInviteId(req.params.inviteId)
-    const invite = inviteGateway.getInviteById(req.params.inviteId)
+    const event: IEvent = await getEventByInviteId(inviteId)
+    const invite = await getInviteById(inviteId)
 
     res.send({ ...invite, event })
   } catch (err) {
@@ -94,14 +104,18 @@ router.get('/:inviteId', async (req: Request, res: Response) => {
 router.delete(
   '/:inviteId',
   passport.authenticate('jwt', { session: false }),
-  (req: Request, res: Response) => {
+  async (req: Request, res: Response) => {
     const inviteId = req.query.inviteId
-    inviteGateway
-      .deleteInvite(req.params.inviteId, inviteId)
-      .then(invite => {
-        res.send(invite)
-      })
-      .catch(err => res.status(404).send(err))
+    if (!inviteId) {
+      res.status(400).send('Invalid invite ID')
+      return
+    }
+    try {
+      const result = await deleteInvite(req.params.inviteId, inviteId)
+      res.send(result)
+    } catch (err) {
+      res.status(400).send(err)
+    }
   }
 )
 
@@ -130,16 +144,14 @@ router.delete(
 router.post(
   '/',
   passport.authenticate('jwt', { session: false }),
-  (req: Request, res: Response) => {
+  async (req: Request, res: Response) => {
     const invite = req.body
-    inviteGateway
-      .createInvite(invite)
-      .then(savedInvite => {
-        res.send(savedInvite)
-      })
-      .catch(err => {
-        res.status(400).send(err)
-      })
+    try {
+      const savedInvite = await createInvite(invite)
+      res.send(savedInvite)
+    } catch (err) {
+      res.status(400).send(err)
+    }
   }
 )
 
