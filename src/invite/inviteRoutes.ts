@@ -8,7 +8,7 @@ import {
   deleteInvite,
   getInviteById,
   getInvitesByEventId
-} from './inviteGateway'
+} from './inviteService'
 
 const router = Router()
 
