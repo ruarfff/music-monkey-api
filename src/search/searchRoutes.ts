@@ -38,12 +38,12 @@ router.get(
       const { user, query } = req
       const userData: IUser = user
       const searchTerm = query.q
-      if (!searchTerm) {
+      if (!searchTerm || !userData) {
         res.send([])
-      } else {
-        const { body } = await searchTracks(searchTerm, userData)
-        res.send(body)
+        return
       }
+      const { body } = await searchTracks(searchTerm, userData)
+      res.send(body)
     } catch (err) {
       logError('Error searching for tracks', err, req)
       const code = err && err.statusCode ? err.statusCode : 400

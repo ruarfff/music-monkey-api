@@ -154,8 +154,7 @@ export const refreshToken = async (user: IUser) => {
 }
 
 async function checkToken(user: IUser) {
-  logInfo('Checking token')
-  if (!user.spotifyId && !user.spotifyAuth) {
+  if (!user.spotifyId || !user.spotifyAuth) {
     logInfo('Giving user app auth')
     return giveUserSpotifyAppCredential(user)
   }
@@ -163,21 +162,20 @@ async function checkToken(user: IUser) {
   try {
     if (user.spotifyAuth.expiresAt < Date.now()) {
       logInfo('TOKEN Expired')
-      logInfo('spotifyAuth ' + JSON.stringify(user.spotifyAuth, null, 4))
       const spotifyAuth = await getRefreshedToken(
         user.spotifyAuth.accessToken,
         user.spotifyAuth.refreshToken
       )
-      logInfo('Refreshed token ' + JSON.stringify(spotifyAuth))
       const updatedUser = await updateUser({ ...user, spotifyAuth })
-      logInfo('Updated user')
       return updatedUser
     }
   } catch (err) {
-    logError('Failed to refresh user token ', err)
+    logError(
+      'Failed to refresh user token: ' + JSON.stringify(user, null, 4),
+      err
+    )
     return giveUserSpotifyAppCredential(user)
   }
-  logInfo('Token probably OK')
   return user
 }
 
