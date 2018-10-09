@@ -62,7 +62,7 @@
     "@types/helmet": "0.0.42",
     "@types/http-errors": "1.6.1",
     "@types/ioredis": "4.0.3",
-    "@types/jest": "23.3.3",
+    "@types/jest": "23.3.4",
     "@types/joi": "13.6.0",
     "@types/lodash": "4.14.116",
     "@types/morgan": "1.7.35",
