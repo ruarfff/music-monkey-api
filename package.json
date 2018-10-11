@@ -32,7 +32,7 @@
     "express-session": "1.15.6",
     "express-winston": "2.6.0",
     "helmet": "3.13.0",
-    "ioredis": "4.0.1",
+    "ioredis": "4.0.2",
     "joi": "13.7.0",
     "jsonwebtoken": "8.3.0",
     "lodash": "4.17.11",
