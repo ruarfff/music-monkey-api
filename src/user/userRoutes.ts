@@ -66,7 +66,7 @@ router.put(
   passport.authenticate('jwt', {  session: false}),
   async (req: Request, res: Response) => {
     try {
-      const userId = req.body.userId
+      const userId = req.body.user.userId
       const payload = req.body
       const user = await getSafeUserById(userId)
 
