@@ -64,12 +64,23 @@ router.get(
 router.put(
   '/:userId',
   passport.authenticate('jwt', {  session: false}),
-  (req: Request, res: Response) => {
-    updateUser(req.user)
-      .then((user: IUser) => {
-        res.send(user)
-      })
-      .catch(err => res.status(404).send(err))
+  async (req: Request, res: Response) => {
+    try {
+      const userId = req.body.userId
+      const payload = req.body
+      const user = await getSafeUserById(userId)
+
+      if (userId !== user.userId) {
+        res.status(400).send('Cannot update user details belonging to another user')
+      } else if (payload.eventId !== user.userId) {
+        res.status(400).send('Cannot update user ID')
+      } else {
+        const updatedUser = await updateUser(req.body)
+        res.send(updatedUser)
+      }
+    } catch (err) {
+      res.status(404).send(err)
+    }
   }
 )
 
