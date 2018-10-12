@@ -1,7 +1,7 @@
 import { Request, Response, Router } from 'express'
 import * as passport from 'passport'
 import IUser from '../user/IUser'
-import { getSafeUserById } from './userService'
+import { getSafeUserById, updateUser } from './userService'
 
 const router = Router()
 
@@ -58,6 +58,18 @@ router.get(
     } else {
       res.status(400).send('No user')
     }
+  }
+)
+
+router.put(
+  '/:userId',
+  passport.authenticate('jwt', {  session: false}),
+  (req: Request, res: Response) => {
+    updateUser(req.user)
+      .then((user: IUser) => {
+        res.send(user)
+      })
+      .catch(err => res.status(404).send(err))
   }
 )
 

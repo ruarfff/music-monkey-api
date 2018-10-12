@@ -44,7 +44,16 @@ export const User = dynamo.define(userTableName, {
     spotifyId: Joi.string()
       .allow('')
       .optional(),
+    phone: Joi.string()
+      .allow('')
+      .optional(),
     facebookId: Joi.string()
+      .allow('')
+      .optional(),
+    instagramId: Joi.string()
+      .allow('')
+      .optional(),
+    twitterId: Joi.string()
       .allow('')
       .optional(),
     userId: dynamo.types.uuid(),

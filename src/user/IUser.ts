@@ -7,7 +7,10 @@ export default interface IUser {
   displayName: string
   email: string
   facebookAuth: IFacebookAuth
+  phone: string
   facebookId: string
+  instagramId: string
+  twitterId: string
   image: string
   passwordHash: string
   spotifyAuth: ISpotifyAuth
