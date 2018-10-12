@@ -72,10 +72,10 @@ router.put(
 
       if (userId !== user.userId) {
         res.status(400).send('Cannot update user details belonging to another user')
-      } else if (payload.eventId !== user.userId) {
+      } else if (payload.userId !== user.userId) {
         res.status(400).send('Cannot update user ID')
       } else {
-        const updatedUser = await updateUser(req.body)
+        const updatedUser = await updateUser(payload)
         res.send(updatedUser)
       }
     } catch (err) {
