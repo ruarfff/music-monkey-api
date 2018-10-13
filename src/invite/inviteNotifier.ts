@@ -1,4 +1,4 @@
-import { IInvite } from '../model'
+import { IInvite } from '../invite'
 import { send } from '../notification'
 
 export const onInviteCreated = (invite: IInvite) => {

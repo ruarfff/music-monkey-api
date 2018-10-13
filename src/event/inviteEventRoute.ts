@@ -3,7 +3,7 @@ import * as passport from 'passport'
 import { logError } from '../logging'
 import EventDecorator from './EventDecorator'
 import { getEventByInviteId } from './eventGateway'
-import IEvent from './IEvent'
+import IEvent from './model/IEvent'
 const router = Router()
 const eventDecorator = new EventDecorator()
 

@@ -1,4 +1,4 @@
-import IPlaylist from '../spotify/IPlaylist'
+import IPlaylist from '../../spotify/IPlaylist'
 import IEventGuest from './IEventGuest'
 import IEventLocation from './IEventLocation'
 import IEventSettings from './IEventSettings'

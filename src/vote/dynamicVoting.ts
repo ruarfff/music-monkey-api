@@ -1,5 +1,5 @@
 import { getEventById } from '../event/eventGateway'
-import IEvent from '../event/IEvent'
+import IEvent from '../event/model/IEvent'
 import { logError } from '../logging'
 import IPlaylist from '../spotify/IPlaylist'
 import IPlaylistItem from '../spotify/IPlaylistItem'

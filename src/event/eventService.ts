@@ -1,7 +1,7 @@
 import IUser from '../user/IUser'
 import EventDecorator from './EventDecorator'
 import { getEventById } from './eventGateway'
-import IEvent from './IEvent'
+import IEvent from './model/IEvent'
 
 const eventDecorator = new EventDecorator()
 

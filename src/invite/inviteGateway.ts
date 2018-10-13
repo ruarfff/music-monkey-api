@@ -1,6 +1,7 @@
 import { promisify } from 'util'
-import { IInvite, Invite } from '../model'
+import { Invite } from '../model'
 import cleanModel from '../model/cleanModel'
+import { IInvite } from './model/IInvite'
 
 const create = promisify(Invite.create)
 const destroy = promisify(Invite.destroy)

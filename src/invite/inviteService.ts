@@ -1,4 +1,4 @@
-import { IInvite } from '../model'
+import { IInvite } from '../invite'
 import * as inviteGateway from './inviteGateway'
 import { onInviteCreated, onInviteDeleted } from './inviteNotifier'
 

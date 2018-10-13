@@ -1,7 +1,7 @@
 import { Request, Response, Router } from 'express'
 import * as passport from 'passport'
 import { getEventByInviteId } from '../event/eventGateway'
-import IEvent from '../event/IEvent'
+import IEvent from '../event/model/IEvent'
 import { logError } from '../logging'
 import {
   createInvite,

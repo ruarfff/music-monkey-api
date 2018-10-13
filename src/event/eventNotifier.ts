@@ -1,5 +1,5 @@
 import { send } from '../notification'
-import IEvent from './IEvent'
+import IEvent from './model/IEvent'
 
 export const onEventUpdated = (event: IEvent) => {
   send('mm-events-' + event.eventId, 'event-updated', event)

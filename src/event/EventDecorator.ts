@@ -5,7 +5,7 @@ import parsePlaylistUrl from '../spotify/parsePlaylistUrl'
 import { getPlaylist } from '../spotify/spotifyClient'
 import IUser from '../user/IUser'
 import { getEventGuests } from './eventGateway'
-import IEvent from './IEvent'
+import IEvent from './model/IEvent'
 
 const defaultEventImage = '/img/partycover-sm.png'
 

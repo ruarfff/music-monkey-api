@@ -4,11 +4,6 @@ const dynamo = require('dynamodb')
 import * as Joi from 'joi'
 import { inviteTableName } from './modelConstants'
 
-export interface IInvite {
-  inviteId: string
-  eventId: string
-}
-
 export const Invite = dynamo.define(inviteTableName, {
   hashKey: 'inviteId',
 

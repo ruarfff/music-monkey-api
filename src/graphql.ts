@@ -1,20 +1,21 @@
-import { ApolloServer, gql } from 'apollo-server-express'
+import { ApolloServer, gql, makeExecutableSchema } from 'apollo-server-express'
+import { merge } from 'lodash'
+import { resolvers as eventResolvers, typeDef as Event } from './event'
 
-const typeDefs = gql`
+const Query = gql`
   type Query {
-    "A simple type for getting started!"
-    hello: String
+    _empty: String
   }
 `
+const resolvers = {}
+const schema = makeExecutableSchema({
+  typeDefs: [Query, Event],
+  resolvers: merge(resolvers, eventResolvers)
+})
 
-// A map of functions which return data for the schema.
-const resolvers = {
-  Query: {
-    hello: () => 'world'
-  }
-}
-
-const graphqlServer = new ApolloServer({ typeDefs, resolvers })
+const graphqlServer = new ApolloServer({
+  schema
+})
 
 export default (app: any) => {
   graphqlServer.applyMiddleware({ app })

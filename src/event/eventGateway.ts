@@ -1,17 +1,19 @@
 import { promisify } from 'util'
+import { IInvite } from '../invite'
 import {
   createInvite,
   getInviteById,
   getInvitesByEventId
 } from '../invite/inviteGateway'
 import { logError } from '../logging'
-import { Event, IInvite, IRsvp } from '../model'
+import { IRsvp } from '../model'
 import cleanModel from '../model/cleanModel'
 import { getRsvpByEventId } from '../rsvp/rsvpGateway'
 import { getSafeUserById } from '../user/userService'
 import { onEventDeleted, onEventUpdated } from './eventNotifier'
-import IEvent from './IEvent'
-import IEventGuest from './IEventGuest'
+import { Event } from '../model/event'
+import IEvent from './model/IEvent'
+import IEventGuest from './model/IEventGuest'
 
 export const getEventGuests = async (
   eventId: string

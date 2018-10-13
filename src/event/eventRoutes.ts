@@ -9,7 +9,7 @@ import {
   getEventsByUserId,
   updateEvent
 } from './eventGateway'
-import IEvent from './IEvent'
+import IEvent from './model/IEvent'
 const router = Router()
 const eventDecorator = new EventDecorator()
 
