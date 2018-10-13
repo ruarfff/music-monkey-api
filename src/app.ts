@@ -35,8 +35,10 @@ if (IS_PRODUCTION) {
 const whitelist = [
   'http://localhost:3001',
   'http://localhost:3002',
+  'http://localhost:8080',
   'https://hosts.musicmonkey.io',
   'https://guests.musicmonkey.io',
+  'https://api.musicmonkey.io',
   'chrome-extension://coohjcphdfgbiolnekdpbcijmhambjff'
 ]
 const corsOptions = {

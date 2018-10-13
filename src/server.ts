@@ -3,10 +3,10 @@
 /**
  * Module dependencies.
  */
-
 import * as debugFun from 'debug'
 import * as http from 'http'
 import app from './app'
+import graphql from './graphql'
 import { logError } from './logging'
 import { createTables } from './model'
 import * as redisGateway from './redis/redisGateway'
@@ -16,16 +16,11 @@ const debug = debugFun('music-monkey-api:server')
 /**
  * Get port from environment and store in Express.
  */
-
 const port = normalizePort(process.env.PORT || '8080')
 app.set('port', port)
-
-/**
- * Create HTTP server.
- */
+graphql(app)
 
 const server = http.createServer(app)
-
 /**
  * Listen on provided port, on all network interfaces.
  */

@@ -7,7 +7,7 @@
     "outDir": "build/server",
     "sourceMap": true,
     "noImplicitAny": true,
-    "lib": ["es2015.promise", "es5", "es6", "dom"]
+    "lib": ["esnext", "dom"]
   },
   "include": ["src/**/*"],
   "exclude": ["src/**/*.test.ts"]
