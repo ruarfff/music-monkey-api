@@ -1,7 +1,7 @@
 import * as cache from '../cache'
 import { logError } from '../logging'
-import ISafeUser from './ISafeUser'
-import IUser from './IUser'
+import ISafeUser from './model/ISafeUser'
+import IUser from './model/IUser'
 import {
   fetchOrCreateUser,
   fetchUserByEmail,

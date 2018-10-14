@@ -1,7 +1,7 @@
 import { isEmpty } from 'lodash'
 import IFacebookPassportProfile from '../facebook/IFacebookPassportProfile'
 import { ISpotifyPassportProfile } from '../spotify/ISpotifyPassportProfile'
-import IUser from '../user/IUser'
+import IUser from './model/IUser'
 
 /**
  * This class is to support converting different types of profiles (Spotify, Facebook etc.) to our internal User model.

@@ -1,6 +1,6 @@
 import ISpotifyAuth from '../auth/ISpotifyAuth'
 import { logError, logInfo } from '../logging'
-import IUser from '../user/IUser'
+import IUser from '../user/model/IUser'
 import { updateUser } from '../user/userService'
 import IPlaylist from './IPlaylist'
 import { getCreds, saveCreds } from './spotifyCredsCache'

@@ -3,7 +3,7 @@ import IPlaylist from '../spotify/IPlaylist'
 import IPlaylistQuery from '../spotify/IPlaylistQuery'
 import parsePlaylistUrl from '../spotify/parsePlaylistUrl'
 import { getPlaylist } from '../spotify/spotifyClient'
-import IUser from '../user/IUser'
+import IUser from '../user/model/IUser'
 import { getEventGuests } from './eventGateway'
 import IEvent from './model/IEvent'
 

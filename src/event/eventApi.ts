@@ -2,10 +2,11 @@ import { gql } from 'apollo-server-express'
 
 export const typeDef = gql`
   extend type Query {
-    event(id: String!): Event
+    event(eventId: String!): Event
   }
   type Event {
-    id: String
+    eventId: String!
+    userId: String!
   }
 `
 export const resolvers = {

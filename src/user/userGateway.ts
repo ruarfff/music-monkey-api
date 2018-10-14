@@ -2,7 +2,7 @@ import { promisify } from 'util'
 import { logError } from '../logging'
 import { User } from '../model'
 import cleanModel from '../model/cleanModel'
-import IUser from './IUser'
+import IUser from './model/IUser'
 
 export const saveUser = (user: IUser) => {
   return new Promise((resolve, reject) => {

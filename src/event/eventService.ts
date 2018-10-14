@@ -1,4 +1,4 @@
-import IUser from '../user/IUser'
+import IUser from '../user/model/IUser'
 import EventDecorator from './EventDecorator'
 import { getEventById } from './eventGateway'
 import IEvent from './model/IEvent'

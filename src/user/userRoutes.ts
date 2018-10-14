@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express'
 import * as passport from 'passport'
-import IUser from '../user/IUser'
+import IUser from './model/IUser'
 import { getSafeUserById, updateUser } from './userService'
 
 const router = Router()

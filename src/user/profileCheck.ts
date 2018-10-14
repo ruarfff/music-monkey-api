@@ -1,6 +1,6 @@
 import { logError, logInfo } from '../logging'
 import { getUserProfile } from '../spotify/spotifyClient'
-import IUser from './IUser'
+import IUser from './model/IUser'
 import { updateUser } from './userService'
 
 export const checkUserProfile = async (user: IUser) => {

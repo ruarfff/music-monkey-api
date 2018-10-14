@@ -8,7 +8,7 @@ import {
   SPOTIFY_CLIENT_ID,
   SPOTIFY_CLIENT_SECRET
 } from './config'
-import IUser from './user/IUser'
+import IUser from './user/model/IUser'
 import ProfileToUser from './user/ProfileToUser'
 import {
   getOrCreateUser,

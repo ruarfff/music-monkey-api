@@ -1,5 +1,5 @@
-import IFacebookAuth from '../auth/IFacebookAuth'
-import ISpotifyAuth from '../auth/ISpotifyAuth'
+import IFacebookAuth from '../../auth/IFacebookAuth'
+import ISpotifyAuth from '../../auth/ISpotifyAuth'
 
 export default interface IUser {
   birthdate: string
