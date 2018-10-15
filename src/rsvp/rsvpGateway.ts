@@ -1,11 +1,13 @@
 import { logError } from '../logging'
 import { IRsvp, Rsvp } from '../model'
 import cleanModel from '../model/cleanModel'
+import { onRsvpSaved } from './rsvpNotifier'
 const util = require('util')
 
 export const createRsvp = async (rsvp: IRsvp) => {
   try {
     const { attrs } = await util.promisify(Rsvp.create)(rsvp)
+    onRsvpSaved(attrs)
     return cleanModel(attrs)
   } catch (err) {
     logError('Error creating rsvp', err)
