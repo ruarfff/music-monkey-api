@@ -36,7 +36,7 @@
     "express-session": "1.15.6",
     "express-winston": "2.6.0",
     "graphql": "14.0.2",
-    "helmet": "3.13.0",
+    "helmet": "3.14.0",
     "ioredis": "4.0.2",
     "joi": "13.7.0",
     "jsonwebtoken": "8.3.0",
