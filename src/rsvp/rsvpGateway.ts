@@ -1,3 +1,4 @@
+import { getEventById } from '../event/eventGateway'
 import { logError } from '../logging'
 import { IRsvp, Rsvp } from '../model'
 import cleanModel from '../model/cleanModel'
@@ -7,7 +8,8 @@ const util = require('util')
 export const createRsvp = async (rsvp: IRsvp) => {
   try {
     const { attrs } = await util.promisify(Rsvp.create)(rsvp)
-    onRsvpSaved(attrs)
+    const event = await getEventById(attrs.eventId)
+    onRsvpSaved(attrs, event.userId)
     return cleanModel(attrs)
   } catch (err) {
     logError('Error creating rsvp', err)
