@@ -34,7 +34,7 @@
     "dynamodb": "1.1.2",
     "express": "4.16.4",
     "express-session": "1.15.6",
-    "express-winston": "2.6.0",
+    "express-winston": "3.0.0",
     "graphql": "14.0.2",
     "helmet": "3.14.0",
     "ioredis": "4.0.2",
