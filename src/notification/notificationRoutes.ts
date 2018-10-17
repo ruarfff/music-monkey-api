@@ -35,7 +35,7 @@ router.get(
   passport.authenticate('jwt', { session: false }),
   async (res: Response) => {
     try {
-      res.send(mockData)
+      res.status(200).send('test')
     } catch (err) {
       res.status(400).send(err)
     }
