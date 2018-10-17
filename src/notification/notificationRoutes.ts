@@ -8,7 +8,7 @@ const mockData = [
     userId: 'host-userId',
     type: 'rsvp',
     context: 'event',
-    contextId: 'eventId',
+    contextId: 'eventId1',
     text: 'Some Person is going to Event X.',
     status: 'Unread'
   },
@@ -16,7 +16,7 @@ const mockData = [
     userId: 'host-userId',
     type: 'rsvp',
     context: 'event',
-    contextId: 'eventId',
+    contextId: 'eventId2',
     text: 'Some Person is going to Event X.',
     status: 'Unread'
   },
@@ -24,7 +24,7 @@ const mockData = [
     userId: 'host-userId',
     type: 'rsvp',
     context: 'event',
-    contextId: 'eventId',
+    contextId: 'eventId3',
     text: 'Some Person is going to Event X.',
     status: 'Unread'
   }
