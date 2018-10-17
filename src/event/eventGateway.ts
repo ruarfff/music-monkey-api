@@ -8,10 +8,10 @@ import {
 import { logError } from '../logging'
 import { IRsvp } from '../model'
 import cleanModel from '../model/cleanModel'
+import { Event } from '../model/event'
 import { getRsvpByEventId } from '../rsvp/rsvpGateway'
 import { getSafeUserById } from '../user/userService'
 import { onEventDeleted, onEventUpdated } from './eventNotifier'
-import { Event } from '../model/event'
 import IEvent from './model/IEvent'
 import IEventGuest from './model/IEventGuest'
 

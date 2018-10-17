@@ -21,6 +21,7 @@ import userRsvpRouter from './rsvp/userRsvpRoutes'
 import searchRouter from './search/searchRoutes'
 import suggestionsRouter from './suggestion/suggestionRoutes'
 import userSuggestionsRouter from './suggestion/userSuggestionRoutes'
+import notificationRouter from './notification/notificationRoutes'
 import { swaggerSpec } from './swagger'
 import userRouter from './user/userRoutes'
 import eventVoteRouter from './vote/eventVoteRoutes'
@@ -80,6 +81,7 @@ app.use(apiV1 + '/search', searchRouter)
 app.use(apiV1 + '/recommendations', recommendationsRouter)
 app.use(apiV1 + '/rsvp', rsvpRouter)
 app.use(apiV1 + '/votes', voteRouter)
+app.use(apiV1 + '/notification', notificationRouter)
 
 app.get('/swagger.json', (_req, res) => {
   res.setHeader('Content-Type', 'application/json')
