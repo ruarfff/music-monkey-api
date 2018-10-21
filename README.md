@@ -4,6 +4,10 @@
 
 ## Developing locally
 
+You have 2 options. Install required tools locally or use docker (with docker-compose in this case).
+
+### Using dev tools in local environment
+
 This app relies on redis for caching. It also connects to dynamodb when running locally. These should both be stubbed out for local development but not gotten there yet.
 
 Install [Redis](https://redis.io/) and make sure it's running.
@@ -12,23 +16,39 @@ To run the app `yarn dev`
 
 This compiles the typescript in the app and runs it.
 
-You can just compile the typescript with:
-
-`yarn compile`
-
-If you want the compile to run automatically on each change use this:
-
-`yarn compile:watch`
-
-To start the web app use:
-
-`yarn start`
-
 This will launch the application on [localhost:8080](http://localhost:8080)
 
-To restart the app automatically on changes:
+### Using docker-compose
 
-`yarn start:watch`
+This project has a dockerfile and a docker-compose file.
+
+If you have installed docker, then you should have the `docker-compose` command.
+
+You will first need to build the docker image using `docker-compose build` (from the root of the project directory)
+
+Then run `docker-compose up` to run the project.
+
+It will also be available at [localhost:8080](http://localhost:8080)
+
+If you add any new dependencies, you will need to run `docker-compose build` again.
+
+### Environment variables
+
+This app picks up all its configurations from environment variables. We haven't implemented a nice way of dealing with this for local development yet so in the meantime, make sure you have configured values for all of these:
+
+SPOTIFY_CLIENT_ID
+SPOTIFY_CLIENT_SECRET
+PUSHER_APP_ID
+PUSHER_KEY
+PUSHER_SECRET
+PUSHER_CLUSTER
+DYNAMO_DB_USER_ID
+DYNAMO_DB_SECRET_KEY
+DYNAMO_DB_REGION
+LOGGLY_SUB_DOMAIN
+LOGGLY_TOKEN
+ROLLBAR_ACCESS_TOKEN
+FACEBOOK_APP_ID
 
 ## Deploying
 

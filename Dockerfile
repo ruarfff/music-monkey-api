@@ -1,14 +1,8 @@
-FROM keymetrics/pm2:8-alpine
+FROM node:8.11.4
 
-COPY build/server build/server/
+WORKDIR /usr/app
+
 COPY package.json .
-COPY package-lock.json .
-COPY pm2.json .
+RUN yarn install --silent
 
-# Install app dependencies
-ENV NPM_CONFIG_LOGLEVEL warn
-RUN npm install --production
-
-EXPOSE 8080
-
-CMD [ "pm2-runtime", "start", "pm2.json" , " --web"]
+COPY . .

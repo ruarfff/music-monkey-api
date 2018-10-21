@@ -1,10 +1,32 @@
 version: '3.3'
 services:
-  web:
-    image: keymetrics/pm2:latest-alpine
-    ports:
-      - "8080:8080"
+  redis:
+    image: redis:5.0.0
+  api:
+    build: .
+    links:
+      - redis
+    depends_on:
+      - redis
+    environment:
+      - SPOTIFY_CLIENT_ID
+      - SPOTIFY_CLIENT_SECRET
+      - PUSHER_APP_ID
+      - PUSHER_KEY
+      - PUSHER_SECRET
+      - PUSHER_CLUSTER
+      - DYNAMO_DB_USER_ID
+      - DYNAMO_DB_SECRET_KEY
+      - DYNAMO_DB_REGION
+      - LOGGLY_SUB_DOMAIN
+      - LOGGLY_TOKEN
+      - ROLLBAR_ACCESS_TOKEN
+      - FACEBOOK_APP_ID
+      - REDIS_ADDRESS=redis
     volumes:
-      - .:/host
-    working_dir: /host
-    command: ["npm", "start"]
+      - .:/usr/app
+      - /usr/app/node_modules
+    ports:
+      - '8080:8080'
+    working_dir: /usr/app
+    command: ['yarn', 'dev']

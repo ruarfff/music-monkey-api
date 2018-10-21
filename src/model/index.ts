@@ -11,11 +11,13 @@ import {
   voteTableName
 } from './modelConstants'
 
-dynamo.AWS.config.update({
+const dbConfig = {
   accessKeyId: DYNAMO_DB_ID,
   region: DYNAMO_DB_REGION,
   secretAccessKey: DYNAMO_DB_SECRET_KEY
-})
+}
+
+dynamo.AWS.config.update(dbConfig)
 
 export * from './event'
 export * from './user'
