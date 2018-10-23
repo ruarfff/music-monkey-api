@@ -6077,10 +6077,10 @@ rimraf@~2.4.0:
   dependencies:
     glob "^6.0.1"
 
-rollbar@2.4.7:
-  version "2.4.7"
-  resolved "https://registry.yarnpkg.com/rollbar/-/rollbar-2.4.7.tgz#9b1de1a0fab6b6e63fcfcd322c26081a1d8242e8"
-  integrity sha512-EkcaCRWiiroE7xscrhCkiZXvZPIDYz5yxN04EpNWv//zHYjE8m2nRggnclgvN3dzma2OjJK8hL/ZfmcOKBZsxQ==
+rollbar@2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/rollbar/-/rollbar-2.5.0.tgz#dbb513eea34f1e3bae57611810c3e6df0ef50a12"
+  integrity sha512-T70jGgC57GSyMeX7NxMH8r7/Ob5dXJl2yBd5PLlDHoQZZh2jeu7vV+OMTXvxk4jPDRc1rAN62SNBPvzXnY297g==
   dependencies:
     async "~1.2.1"
     console-polyfill "0.3.0"
