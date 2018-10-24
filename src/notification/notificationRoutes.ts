@@ -1,4 +1,4 @@
-import { Response, Router } from 'express'
+import { Request, Response, Router } from 'express'
 import * as passport from 'passport'
 
 const router = Router()
@@ -33,12 +33,9 @@ const mockData = [
 router.get(
   '/:userId',
   passport.authenticate('jwt', { session: false }),
-  (res: Response) => {
-    try {
-      res.send(mockData)
-    } catch (err) {
-      res.status(400).send(err)
-    }
+  (req: Request, res: Response) => {
+    console.log(req)
+    res.send(mockData)
   }
 )
 
