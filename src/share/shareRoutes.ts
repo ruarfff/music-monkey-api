@@ -7,8 +7,13 @@ router.post(
   '/email',
   passport.authenticate('jwt', { session: false }),
   (req: Request, res: Response) => {
-    console.log(req.body)
-    console.log(res)
+    const { emails } = req.body
+    try {
+      console.log(emails)
+      res.status(200).send('Emails successfully sended')
+    } catch (e) {
+      res.status(500).send(e.message)
+    }
   }
 )
 
