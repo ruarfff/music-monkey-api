@@ -1,6 +1,5 @@
 import { Request, Response, Router } from 'express'
 import * as passport from 'passport'
-import { logError } from '../logging'
 import EventDecorator from './EventDecorator'
 import { getEventByInviteId } from './eventGateway'
 import IEvent from './model/IEvent'
@@ -40,7 +39,6 @@ router.get(
         res.status(404).send()
       }
     } catch (err) {
-      logError('Error getting event by invite id', err, req)
       res.status(404).send()
     }
   }

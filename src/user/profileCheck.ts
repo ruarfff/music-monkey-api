@@ -1,4 +1,4 @@
-import { logError, logInfo } from '../logging'
+import { logDebug, logInfo } from '../logging'
 import { getUserProfile } from '../spotify/spotifyClient'
 import IUser from './model/IUser'
 import { updateUser } from './userService'
@@ -18,7 +18,7 @@ export const checkUserProfile = async (user: IUser) => {
       }
     }
   } catch (err) {
-    logError('Error checking user profile', err)
+    logDebug('Error checking user profile: ' + err)
   }
   return user
 }
