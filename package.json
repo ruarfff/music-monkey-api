@@ -7,7 +7,7 @@
     "lint": "tslint --fix -c tslint.json src/**/*.ts",
     "start": "node ./build/server/server.js",
     "predev": "npm run build",
-    "dev": "npm-run-all -p compile:watch start:watch",
+    "dev": "NODE_ENV=development npm-run-all -p compile:watch start:watch",
     "build": "npm-run-all -s compile copy-to-build",
     "start:watch": "nodemon ./build/server/server.js --watch build",
     "compile": "tsc",

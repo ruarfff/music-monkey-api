@@ -99,7 +99,7 @@ if (IS_PRODUCTION) {
 app.use((err: any, _req: any, res: any, next: any) => {
   // set locals, only providing error in development
   res.locals.message = err.message
-  res.locals.error = IS_PRODUCTION ? err : {}
+  res.locals.error = IS_PRODUCTION ? {} : err
   res.status(err.status || 500)
   res.send(err.message)
   next()
