@@ -91,7 +91,7 @@
     "nsp": "3.2.1",
     "rimraf": "2.6.2",
     "sinon": "7.1.0",
-    "snyk": "1.104.2",
+    "snyk": "1.105.0",
     "supertest": "3.3.0",
     "swagger-jsdoc": "3.2.3",
     "ts-jest": "23.10.4",
