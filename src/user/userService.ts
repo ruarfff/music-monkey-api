@@ -45,7 +45,7 @@ export const updateUser = async (user: IUser) => {
   let updatedUser: IUser = user
   try {
     updatedUser = await modifyUser(user)
-    cache.setObject(user.userId, user)
+    cache.setObject(updatedUser.userId, updatedUser)
   } catch (err) {
     logError('Error updating user', err)
   }

@@ -139,21 +139,13 @@ export const addTracksToPlaylist = async (
 }
 
 export const refreshToken = async (user: IUser) => {
-  try {
-    logInfo('Refreshing token for  ' + user.userId)
-    const spotifyAuth = await getRefreshedToken(
-      user.spotifyAuth.accessToken,
-      user.spotifyAuth.refreshToken
-    )
-    const updatedUser = await updateUser({ ...user, spotifyAuth })
-    return updatedUser
-  } catch (err) {
-    logError(
-      'Error getting refresh token for:  ' + JSON.stringify(user, null, 4),
-      err
-    )
-  }
-  return user
+  logInfo('Refreshing token for  ' + user.userId)
+  const spotifyAuth = await getRefreshedToken(
+    user.spotifyAuth.accessToken,
+    user.spotifyAuth.refreshToken
+  )
+  const updatedUser = await updateUser({ ...user, spotifyAuth })
+  return updatedUser
 }
 
 async function checkToken(user: IUser) {
@@ -165,13 +157,8 @@ async function checkToken(user: IUser) {
   try {
     if (user.spotifyAuth.expiresAt < Date.now()) {
       logInfo('TOKEN Expired')
-      const spotifyAuth = await getRefreshedToken(
-        user.spotifyAuth.accessToken,
-        user.spotifyAuth.refreshToken
-      )
-      logInfo('AUTH updated: ' + spotifyAuth)
-      const updatedUser = await updateUser({ ...user, spotifyAuth })
-      logInfo('USER updated: ' + updatedUser)
+      const updatedUser = await refreshToken(user)
+
       return updatedUser
     }
   } catch (err) {
