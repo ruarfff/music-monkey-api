@@ -169,7 +169,9 @@ async function checkToken(user: IUser) {
         user.spotifyAuth.accessToken,
         user.spotifyAuth.refreshToken
       )
+      logInfo('AUTH updated: ' + spotifyAuth)
       const updatedUser = await updateUser({ ...user, spotifyAuth })
+      logInfo('USER updated: ' + updatedUser)
       return updatedUser
     }
   } catch (err) {
