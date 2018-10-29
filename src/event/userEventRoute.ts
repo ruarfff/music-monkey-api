@@ -25,7 +25,7 @@ router.get(
   passport.authenticate('jwt', { session: false }),
   async (req: Request, res: Response) => {
     const { user } = req
-    const events = await getAllEventsUserWasInvitedTo(user.userId)
+    const events = await getAllEventsUserWasInvitedTo(user)
     res.send(events)
   }
 )

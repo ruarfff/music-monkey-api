@@ -1,4 +1,4 @@
-const REDIS_ADDRESS = process.env.REDIS_ADDRESS || 'redis://127.0.0.1:6379'
+const REDIS_ADDRESS = process.env.REDIS_ADDRESS
 import * as Redis from 'ioredis'
 import { logError, logInfo } from '../logging'
 
@@ -7,7 +7,11 @@ let redis = {} as any
 export const connect = () => {
   try {
     logInfo('Connecting to Redis')
-    redis = new Redis(REDIS_ADDRESS)
+    if (REDIS_ADDRESS) {
+      redis = new Redis(REDIS_ADDRESS)
+    } else {
+      redis = new Redis()
+    }
 
     redis.on('connect', () => {
       logInfo('Redis connected')

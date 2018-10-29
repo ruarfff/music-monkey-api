@@ -21,7 +21,7 @@ export const resolvers = {
   },
   User: {
     eventsInvitedTo: async (user: IUser) => {
-      return getAllEventsUserWasInvitedTo(user.userId)
+      return getAllEventsUserWasInvitedTo(user)
     }
   }
 }
