@@ -1,9 +1,9 @@
+import util = require('util')
 import { getEventById } from '../event/eventGateway'
 import { logError } from '../logging'
 import { IRsvp, Rsvp } from '../model'
 import cleanModel from '../model/cleanModel'
 import { onRsvpSaved } from './rsvpNotifier'
-const util = require('util')
 
 export const createRsvp = async (rsvp: IRsvp) => {
   try {

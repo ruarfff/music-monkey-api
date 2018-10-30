@@ -1,7 +1,7 @@
 import ISpotifyAuth from '../auth/ISpotifyAuth'
 import { logError, logInfo } from '../logging'
 import IUser from '../user/model/IUser'
-import { updateUser } from '../user/userService'
+import { removeCachedUser, updateUser } from '../user/userService'
 import IPlaylist from './IPlaylist'
 import { getCreds, saveCreds } from './spotifyCredsCache'
 
@@ -140,6 +140,7 @@ export const addTracksToPlaylist = async (
 
 export const refreshToken = async (user: IUser) => {
   logInfo('Refreshing token for  ' + user.userId)
+  removeCachedUser(user.userId)
   const spotifyAuth = await getRefreshedToken(
     user.spotifyAuth.accessToken,
     user.spotifyAuth.refreshToken

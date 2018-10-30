@@ -10,6 +10,12 @@ import {
   saveUser
 } from './userGateway'
 
+const cachedUserTTL = 600
+
+export const removeCachedUser = (userId: string) => {
+  cache.del(userId)
+}
+
 export const getOrCreateUser = async (user: IUser, strategy: string) => {
   return await fetchOrCreateUser(user, strategy)
 }
@@ -45,7 +51,7 @@ export const updateUser = async (user: IUser) => {
   let updatedUser: IUser = user
   try {
     updatedUser = await modifyUser(user)
-    cache.setObject(updatedUser.userId, updatedUser, 10000)
+    cache.setObject(updatedUser.userId, updatedUser, cachedUserTTL)
   } catch (err) {
     logError('Error updating user', err)
   }
@@ -60,7 +66,7 @@ export const getUserById = async (userId: string) => {
   let user: IUser = await cache.getObject(userId)
   if (!user) {
     user = await fetchUserById(userId)
-    cache.setObject(user.userId, user, 10000)
+    cache.setObject(user.userId, user, cachedUserTTL)
   }
 
   return user

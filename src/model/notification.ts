@@ -32,18 +32,6 @@ export const Notification = dynamo.define(notificationTableName, {
 
   indexes: [
     {
-      hashKey: 'eventId',
-      rangeKey: 'userId',
-      name: 'EventIdUserIdIndex',
-      type: 'global'
-    },
-    {
-      hashKey: 'inviteId',
-      rangeKey: 'userId',
-      type: 'global',
-      name: 'InviteIdUserIdIndex'
-    },
-    {
       hashKey: 'userId',
       name: 'UserIdIndex',
       type: 'global'

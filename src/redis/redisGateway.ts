@@ -65,6 +65,10 @@ export const set = (key: string, value: any, expiresIn: number = 0) => {
   }
 }
 
+export const del = (key: string) => {
+  redis.del(key)
+}
+
 export const enableMonitoring = () => {
   logInfo('Enabling monitoring')
   const redisMonitorConnection = new Redis(REDIS_ADDRESS)

@@ -9,7 +9,7 @@
     "predev": "npm run build",
     "dev": "NODE_ENV=development npm-run-all -p compile:watch start:watch",
     "build": "npm-run-all -s compile copy-to-build",
-    "start:watch": "nodemon ./build/server/server.js --watch build --delay 2500",
+    "start:watch": "nodemon ./build/server/server.js --watch build --delay 2.5",
     "compile": "tsc",
     "compile:watch": "npm run compile -- -w",
     "clean": "rimraf build/*",

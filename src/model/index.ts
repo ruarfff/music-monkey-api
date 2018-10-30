@@ -5,6 +5,7 @@ import { logError, logInfo } from '../logging'
 import {
   eventTableName,
   inviteTableName,
+  notificationTableName,
   rsvpTableName,
   suggestionTableName,
   userTableName,
@@ -25,6 +26,7 @@ export * from './invite'
 export * from './suggestion'
 export * from './rsvp'
 export * from './vote'
+export * from './notification'
 
 export const createTables = () => {
   dynamo.createTables(
@@ -34,7 +36,8 @@ export const createTables = () => {
       [rsvpTableName]: { readCapacity: 5, writeCapacity: 2 },
       [suggestionTableName]: { readCapacity: 5, writeCapacity: 5 },
       [userTableName]: { readCapacity: 5, writeCapacity: 2 },
-      [voteTableName]: { readCapacity: 5, writeCapacity: 5 }
+      [voteTableName]: { readCapacity: 5, writeCapacity: 5 },
+      [notificationTableName]: { readCapacity: 5, writeCapacity: 5 }
     },
     (err: Error) => {
       if (err) {
