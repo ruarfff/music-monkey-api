@@ -45,7 +45,7 @@ export const updateUser = async (user: IUser) => {
   let updatedUser: IUser = user
   try {
     updatedUser = await modifyUser(user)
-    cache.setObject(updatedUser.userId, updatedUser)
+    cache.setObject(updatedUser.userId, updatedUser, 10000)
   } catch (err) {
     logError('Error updating user', err)
   }
@@ -60,7 +60,7 @@ export const getUserById = async (userId: string) => {
   let user: IUser = await cache.getObject(userId)
   if (!user) {
     user = await fetchUserById(userId)
-    cache.setObject(user.userId, user)
+    cache.setObject(user.userId, user, 10000)
   }
 
   return user

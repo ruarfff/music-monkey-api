@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express'
 import * as passport from 'passport'
-import { getNotificationByUserId } from '../model/notification'
+import { getNotificationByUserId } from './notificationService'
 
 const router = Router()
 

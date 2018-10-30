@@ -2,7 +2,6 @@ import { getEventById } from '../event/eventGateway'
 import { logError } from '../logging'
 import { IRsvp, Rsvp } from '../model'
 import cleanModel from '../model/cleanModel'
-import { createNotification } from '../model/notification'
 import { onRsvpSaved } from './rsvpNotifier'
 const util = require('util')
 
@@ -11,7 +10,6 @@ export const createRsvp = async (rsvp: IRsvp) => {
     const { attrs } = await util.promisify(Rsvp.create)(rsvp)
     const event = await getEventById(attrs.eventId)
     onRsvpSaved(attrs, event.userId)
-    createNotification(event, 'rsvp')
     return cleanModel(attrs)
   } catch (err) {
     logError('Error creating rsvp', err)

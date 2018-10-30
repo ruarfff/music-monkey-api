@@ -1,48 +1,52 @@
-export const notifications = [
-  {
-    userId: 'host-userId',
-    type: 'rsvp',
-    context: 'event',
-    contextId: 'eventId1',
-    text: 'Some Person is going to Event X.',
-    status: 'Unread'
-  },
-  {
-    userId: 'host-userId',
-    type: 'rsvp',
-    context: 'event',
-    contextId: 'eventId2',
-    text: 'Some Person is going to Event X.',
-    status: 'Unread'
-  },
-  {
-    userId: 'host-userId',
-    type: 'rsvp',
-    context: 'event',
-    contextId: 'eventId3',
-    text: 'Some Person is going to Event X.',
-    status: 'Unread'
-  }
-]
+// tslint:disable-next-line:no-var-requires
+const dynamo = require('dynamodb')
 
-export const createNotification = (data: any, option: string) => {
-  const {
-    userId,
-    event,
-  } = data
-  switch (option) {
-    case 'rsvp':
-      notifications.push({
-        userId,
-        type: 'rsvp',
-        context: event,
-        contextId: event.eventId,
-        text: `Some Person is going to Event ${event.name}`,
-        status: 'Unread'
-      })
-  }
+import * as Joi from 'joi'
+import { notificationTableName } from './modelConstants'
+
+export interface INotification {
+  notificationId: string
+  userId: string
+  context: string
+  contextId: string
+  content: string
+  status: string
 }
 
-export const getNotificationByUserId = (userId: string) => {
-  return notifications.filter(n => n.userId === userId)
-}
+export const Notification = dynamo.define(notificationTableName, {
+  hashKey: 'notificationId',
+  rangeKey: 'userId',
+
+  timestamps: true,
+
+  schema: Joi.object({
+    notificationId: dynamo.types.uuid(),
+    userId: Joi.string(),
+    context: Joi.string(),
+    contextId: Joi.string(),
+    content: Joi.string(),
+    status: Joi.string()
+      .valid(['Unread', 'Seen', 'Read'])
+      .default('Unread')
+  }).options({ stripUnknown: true }),
+
+  indexes: [
+    {
+      hashKey: 'eventId',
+      rangeKey: 'userId',
+      name: 'EventIdUserIdIndex',
+      type: 'global'
+    },
+    {
+      hashKey: 'inviteId',
+      rangeKey: 'userId',
+      type: 'global',
+      name: 'InviteIdUserIdIndex'
+    },
+    {
+      hashKey: 'userId',
+      name: 'UserIdIndex',
+      type: 'global'
+    }
+  ]
+})
