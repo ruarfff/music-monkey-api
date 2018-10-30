@@ -1,7 +1,10 @@
 import { IRsvp } from '../model'
 import { send } from '../notification'
 
-export const onRsvpSaved = (rsvp: IRsvp, userId: string) => {
+export const onRsvpCreated = (rsvp: IRsvp) => {
   send('mm-rsvps-' + rsvp.eventId, 'rsvp-saved', rsvp)
-  send('mm-user-notifications-' + userId, 'notifications-saved', rsvp)
+}
+
+export const onRsvpUpdated = (rsvp: IRsvp) => {
+  send('mm-rsvps-' + rsvp.eventId, 'rsvp-updated', rsvp)
 }

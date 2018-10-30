@@ -1,5 +1,5 @@
 import { IRsvp } from '../model'
-import { getRsvpByUserId } from '../rsvp/rsvpGateway'
+import { getRsvpByUserId } from '../rsvp/rsvpService'
 import IUser from '../user/model/IUser'
 import { getPopulatedEventById } from './eventService'
 

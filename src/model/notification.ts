@@ -4,15 +4,6 @@ const dynamo = require('dynamodb')
 import * as Joi from 'joi'
 import { notificationTableName } from './modelConstants'
 
-export interface INotification {
-  notificationId: string
-  userId: string
-  context: string
-  contextId: string
-  content: string
-  status: string
-}
-
 export const Notification = dynamo.define(notificationTableName, {
   hashKey: 'notificationId',
   rangeKey: 'userId',
@@ -22,6 +13,7 @@ export const Notification = dynamo.define(notificationTableName, {
   schema: Joi.object({
     notificationId: dynamo.types.uuid(),
     userId: Joi.string(),
+    type: Joi.string(),
     context: Joi.string(),
     contextId: Joi.string(),
     content: Joi.string(),

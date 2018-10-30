@@ -1,45 +1,41 @@
-export const notifications = [
-  {
-    userId: 'host-userId',
-    type: 'rsvp',
-    context: 'event',
-    contextId: 'eventId1',
-    text: 'Some Person is going to Event X.',
-    status: 'Unread'
-  },
-  {
-    userId: 'host-userId',
-    type: 'rsvp',
-    context: 'event',
-    contextId: 'eventId2',
-    text: 'Some Person is going to Event X.',
-    status: 'Unread'
-  },
-  {
-    userId: 'host-userId',
-    type: 'rsvp',
-    context: 'event',
-    contextId: 'eventId3',
-    text: 'Some Person is going to Event X.',
-    status: 'Unread'
-  }
-]
+import INotification from './INotification'
+import {
+  fetchNotificationByIdAndUserId,
+  getNotificationsByUserId,
+  modifyNotification,
+  saveNotification
+} from './notificationGateway'
+import { onNotificationSaved } from './notificationNotifier'
 
-export const createNotification = (data: any, option: string) => {
-  const { userId, event } = data
-  switch (option) {
-    case 'rsvp':
-      notifications.push({
-        userId,
-        type: 'rsvp',
-        context: event,
-        contextId: event.eventId,
-        text: `Some Person is going to Event ${event.name}`,
-        status: 'Unread'
-      })
+export const createNotification = async (notification: INotification) => {
+  const defaultStatus = 'Unread'
+  let savedNotification: INotification = null
+  if (!notification.userId) {
+    throw new Error('UserId is required to create a notification')
   }
+  if (!notification.status) {
+    savedNotification = await saveNotification({
+      ...notification,
+      status: defaultStatus
+    })
+  } else {
+    savedNotification = await saveNotification(notification)
+  }
+  onNotificationSaved(savedNotification)
+  return savedNotification
 }
 
-export const getNotificationByUserId = (userId: string) => {
-  return notifications.filter(n => n.userId === userId)
+export const updateNotification = async (notification: INotification) => {
+  return await modifyNotification(notification)
+}
+
+export const getUsersNotifications = async (userId: string) => {
+  return await getNotificationsByUserId(userId)
+}
+
+export const getNotificationByIdAndUserId = async (
+  notificationId: string,
+  userId: string
+) => {
+  return await fetchNotificationByIdAndUserId(notificationId, userId)
 }

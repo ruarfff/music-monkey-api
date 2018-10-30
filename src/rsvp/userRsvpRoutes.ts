@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express'
 import * as passport from 'passport'
-import { getRsvpByUserId, getRsvpByUserIdAndInviteId } from './rsvpGateway'
+import { getRsvpByUserId, getRsvpByUserIdAndInviteId } from './rsvpService'
 
 const router = Router()
 

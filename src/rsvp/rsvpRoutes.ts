@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express'
 import * as passport from 'passport'
-import { createRsvp } from './rsvpGateway'
+import { createRsvp, updateRsvp } from './rsvpService'
 
 const router = Router()
 
@@ -32,7 +32,7 @@ router.post(
   async (req: Request, res: Response) => {
     try {
       const rsvp = { ...req.body, userId: req.user.userId }
-      const savedRsvp = await createRsvp(rsvp)
+      const savedRsvp = await createRsvp(rsvp, req.user)
       res.send(savedRsvp)
     } catch (err) {
       res.status(400).send(err)
@@ -68,7 +68,7 @@ router.put(
   async (req: Request, res: Response) => {
     try {
       const rsvp = { ...req.body, userId: req.user.userId }
-      const savedRsvp = await createRsvp(rsvp)
+      const savedRsvp = await updateRsvp(rsvp, req.user)
       res.send(savedRsvp)
     } catch (err) {
       res.status(400).send(err)

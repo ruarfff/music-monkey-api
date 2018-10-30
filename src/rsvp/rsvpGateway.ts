@@ -1,15 +1,11 @@
 import util = require('util')
-import { getEventById } from '../event/eventGateway'
 import { logError } from '../logging'
 import { IRsvp, Rsvp } from '../model'
 import cleanModel from '../model/cleanModel'
-import { onRsvpSaved } from './rsvpNotifier'
 
-export const createRsvp = async (rsvp: IRsvp) => {
+export const saveRsvp = async (rsvp: IRsvp) => {
   try {
     const { attrs } = await util.promisify(Rsvp.create)(rsvp)
-    const event = await getEventById(attrs.eventId)
-    onRsvpSaved(attrs, event.userId)
     return cleanModel(attrs)
   } catch (err) {
     logError('Error creating rsvp', err)
@@ -17,9 +13,9 @@ export const createRsvp = async (rsvp: IRsvp) => {
   }
 }
 
-export const updateRsvp = async (rsvp: IRsvp) => {
+export const modifyRsvp = async (rsvp: IRsvp) => {
   try {
-    const existingRsvp = await getRsvpByUserIdAndInviteId(
+    const existingRsvp = await fetchRsvpByUserIdAndInviteId(
       rsvp.userId,
       rsvp.inviteId
     )
@@ -38,7 +34,7 @@ export const updateRsvp = async (rsvp: IRsvp) => {
   }
 }
 
-export const getRsvpByUserIdAndInviteId = (
+export const fetchRsvpByUserIdAndInviteId = (
   userId: string,
   inviteId: string
 ) => {
@@ -57,7 +53,7 @@ export const getRsvpByUserIdAndInviteId = (
   })
 }
 
-export const getRsvpByEventId = (eventId: string) => {
+export const fetchRsvpByEventId = (eventId: string) => {
   return new Promise<IRsvp[]>((resolve: any, reject: any) => {
     Rsvp.query(eventId)
       .usingIndex('EventIdUserIdIndex')
@@ -71,7 +67,7 @@ export const getRsvpByEventId = (eventId: string) => {
   })
 }
 
-export const getRsvpByUserId = (userId: string) => {
+export const fetchRsvpByUserId = (userId: string) => {
   return new Promise<IRsvp[]>((resolve: any, reject: any) => {
     Rsvp.query(userId)
       .usingIndex('UserIdIndex')
