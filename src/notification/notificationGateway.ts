@@ -6,9 +6,17 @@ import cleanModel from '../model/cleanModel'
 import INotification from './INotification'
 
 export const getNotificationsByUserId = async (userId: string) => {
-  const result: any = await util.promisify(
-    Notification.query(userId).usingIndex('UserIdIndex').exec
-  )
+  const result: any = await new Promise((resolve, reject) => {
+    Notification.query(userId)
+      .usingIndex('UserIdIndex')
+      .exec((err: any, notificationsModel: any) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(notificationsModel)
+        }
+      })
+  })
   if (isEmpty(result) || isEmpty(result.Items)) {
     return []
   }

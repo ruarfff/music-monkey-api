@@ -82,7 +82,7 @@ app.use(apiV1 + '/search', searchRouter)
 app.use(apiV1 + '/recommendations', recommendationsRouter)
 app.use(apiV1 + '/rsvp', rsvpRouter)
 app.use(apiV1 + '/votes', voteRouter)
-app.use(apiV1 + '/notification', notificationRouter)
+app.use(apiV1 + '/notifications', notificationRouter)
 app.use(apiV1 + '/share', shareRouter)
 
 app.get('/swagger.json', (_req, res) => {

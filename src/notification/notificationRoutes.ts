@@ -8,20 +8,45 @@ import {
 
 const router = Router()
 
+/**
+ * @swagger
+ * /notifications/{userId}:
+ *   get:
+ *     tags:
+ *       - notifications
+ *     description: Get a list of notifications filtered by user ID
+ *     summary: Get a list of notifications filtered by user ID
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *        - in: path
+ *          name: userId
+ *          required: true
+ *          schema:
+ *                type: string
+ *     responses:
+ *       200:
+ *         description: All notifications for a user
+ *         schema:
+ *            type: array
+ *            items:
+ *              type:
+ *                $ref: '#/definitions/Notification'
+ */
 router.get(
   '/:userId',
   passport.authenticate('jwt', { session: false }),
   async (req: Request, res: Response) => {
     try {
-      const { userId } = req.params
-      if (req.user.userId !== userId) {
-        res
-          .status(401)
-          .send(
-            'You do not have permission to view another users notifications'
-          )
-        return
-      }
+      // const { userId } = req.params
+      // if (req.user.userId !== userId) {
+      //   res
+      //     .status(401)
+      //     .send(
+      //       'You do not have permission to view another users notifications'
+      //     )
+      //   return
+      // }
       const userNotifications = await getUsersNotifications(req.params.userId)
       res.send(userNotifications)
     } catch (e) {

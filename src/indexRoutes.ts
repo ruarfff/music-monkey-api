@@ -57,6 +57,14 @@ import { Request, Response, Router } from 'express'
  *         type: array
  *       settings:
  *         type: object
+ *  @swagger
+ *  definition:
+ *   Notification:
+ *     properties:
+ *       notificationId:
+ *         type: string
+ *       userId:
+ *         type: string
  */
 const router = Router()
 
