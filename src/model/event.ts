@@ -28,6 +28,7 @@ export const Event = dynamo.define(eventTableName, {
         lng: Joi.number().optional()
       }
     },
+    genre: Joi.string(),
     name: Joi.string(),
     organizer: Joi.string(),
     playlistUrl: Joi.string(),
