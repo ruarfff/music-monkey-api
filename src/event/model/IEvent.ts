@@ -9,6 +9,7 @@ export default interface IEvent {
   organizer: string
   imageUrl: string
   name: string
+  genre: string
   description: string
   venue: string
   location: IEventLocation
