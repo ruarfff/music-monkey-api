@@ -1,4 +1,5 @@
 import ISpotifyAuth from '../auth/ISpotifyAuth'
+import { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } from '../config'
 import { logError, logInfo } from '../logging'
 import IUser from '../user/model/IUser'
 import { removeCachedUser, updateUser } from '../user/userService'
@@ -6,13 +7,11 @@ import IPlaylist from './IPlaylist'
 import { getCreds, saveCreds } from './spotifyCredsCache'
 
 const SpotifyWebApi = require('spotify-web-api-node')
-const clientId = 'ee4aa78cde4c4be08978d79c180e11c9'
-const clientSecret = 'acfc43102e5c4e05902e66284dfdcb19'
 
 const getSpotifyApi = (token?: string) => {
   const spotifyApi = new SpotifyWebApi({
-    clientId,
-    clientSecret
+    SPOTIFY_CLIENT_ID,
+    SPOTIFY_CLIENT_SECRET
   })
   if (token) {
     spotifyApi.setAccessToken(token)

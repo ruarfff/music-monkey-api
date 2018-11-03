@@ -45,14 +45,13 @@ passport.use(
       jwtFromRequest: req => req.cookies.jwt,
       secretOrKey: jwtCookieKey
     },
-    (jwtPayload, done) => {
-      return getUserById(jwtPayload.id)
-        .then((user: IUser) => {
-          return done(null, user)
-        })
-        .catch((err: Error) => {
-          return done(err, jwtPayload)
-        })
+    async (jwtPayload, done) => {
+      try {
+        const user = await getUserById(jwtPayload.id)
+        return done(null, user)
+      } catch (err) {
+        return done(err, jwtPayload)
+      }
     }
   )
 )
