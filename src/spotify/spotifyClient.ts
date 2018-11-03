@@ -1,6 +1,7 @@
 import ISpotifyAuth from '../auth/ISpotifyAuth'
 import { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } from '../config'
 import { logError, logInfo } from '../logging'
+import IPlaylistParams from '../playlist/IPlaylistParams'
 import IUser from '../user/model/IUser'
 import { removeCachedUser, updateUser } from '../user/userService'
 import IPlaylist from './IPlaylist'
@@ -81,6 +82,22 @@ export const getMultipleTracks = async (trackIds: string[], user: IUser) => {
   ).getTracks(trackIds)
 
   return body
+}
+
+export const createPlaylist = async (
+  user: IUser,
+  playlistParams: IPlaylistParams
+) => {
+  const name = playlistParams.name
+  delete playlistParams.name
+  const validUser: IUser = await checkToken(user)
+  const api = getSpotifyApi(validUser.spotifyAuth.accessToken)
+
+  try {
+    return await api.createPlaylist(user.spotifyId, name, playlistParams)
+  } catch (err) {
+    throw err
+  }
 }
 
 export const getPlaylist = async (playlistId: string, user: IUser) => {
