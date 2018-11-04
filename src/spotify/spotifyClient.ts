@@ -6,7 +6,6 @@ import IPlaylistParams from '../playlist/IPlaylistParams'
 import IUser from '../user/model/IUser'
 import { removeCachedUser, updateUser } from '../user/userService'
 import { getCreds, saveCreds } from './spotifyCredsCache'
-// const x = 'NDc0YmFjZDU0YTQ3NDUzYmIxNzUyMzcyZTkzMDc0MTA6NmRmYzgyODY2ZDEwNDlkZGEyZGVkMDQ4YWQ0OTFkZmI='
 
 axios.defaults.headers.common.Authorization = `Basic ${Buffer.from(
   SPOTIFY_CLIENT_ID + ':' + SPOTIFY_CLIENT_SECRET
