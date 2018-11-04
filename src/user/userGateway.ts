@@ -51,7 +51,7 @@ export const fetchUserById = async (userId: string) => {
 }
 
 export const fetchUserByEmail = (email: string) => {
-  return new Promise((resolve, reject) => {
+  return new Promise<IUser>((resolve, reject) => {
     User.query(email)
       .usingIndex('EmailIndex')
       .limit(1)

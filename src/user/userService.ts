@@ -20,23 +20,17 @@ export const getOrCreateUser = async (user: IUser, strategy: string) => {
   return await fetchOrCreateUser(user, strategy)
 }
 
-// NOTE: Funny looking flow here but success if user not found basically.
-export const createNewUser = (user: IUser): any => {
-  return new Promise((resolve, reject) => {
-    getUserByEmail(user.email)
-      .then((foundUser: IUser) => {
-        reject('A user with the email ' + foundUser.email + ' already exists.')
-      })
-      .catch((err: any) => {
-        if (!err) {
-          saveUser(user)
-            .then(resolve)
-            .catch(reject)
-        } else {
-          reject(err)
-        }
-      })
-  })
+export const createNewUser = async (user: IUser) => {
+  const existingUser: IUser = await getUserByEmail(user.email)
+  if (existingUser) {
+    throw new Error(
+      'A user with the email ' + existingUser.email + ' already exists.'
+    )
+  }
+
+  const savedUser = await saveUser(user)
+
+  return savedUser
 }
 
 export const createGuest = () => {
@@ -58,8 +52,8 @@ export const updateUser = async (user: IUser) => {
   return updatedUser
 }
 
-export const getUserByEmail = (email: string) => {
-  return fetchUserByEmail(email)
+export const getUserByEmail = async (email: string) => {
+  return await fetchUserByEmail(email)
 }
 
 export const getUserById = async (userId: string) => {
