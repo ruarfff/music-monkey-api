@@ -1,3 +1,4 @@
+import axios from 'axios'
 import ISpotifyAuth from '../auth/ISpotifyAuth'
 import { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } from '../config'
 import { logError, logInfo } from '../logging'
@@ -5,7 +6,11 @@ import IPlaylistParams from '../playlist/IPlaylistParams'
 import IUser from '../user/model/IUser'
 import { removeCachedUser, updateUser } from '../user/userService'
 import { getCreds, saveCreds } from './spotifyCredsCache'
+// const x = 'NDc0YmFjZDU0YTQ3NDUzYmIxNzUyMzcyZTkzMDc0MTA6NmRmYzgyODY2ZDEwNDlkZGEyZGVkMDQ4YWQ0OTFkZmI='
 
+axios.defaults.headers.common.Authorization = `Basic ${Buffer.from(
+  SPOTIFY_CLIENT_ID + ':' + SPOTIFY_CLIENT_SECRET
+).toString('base64')}`
 const SpotifyWebApi = require('spotify-web-api-node')
 
 export const getUserProfile = async (user: IUser) => {
@@ -193,6 +198,7 @@ async function checkToken(user: IUser) {
     if (user.spotifyAuth.expiresAt < Date.now()) {
       logInfo('TOKEN Expired')
       const updatedUser = await refreshToken(user)
+      logInfo('TOKEN Refreshed')
 
       return updatedUser
     }
@@ -235,17 +241,19 @@ async function giveUserSpotifyAppCredential(user: IUser) {
   return userWithAppCreds
 }
 
-async function getRefreshedToken(
-  oldAccessToken: string,
-  userRefreshToken: string
-) {
-  const spotifyApi = getSpotifyApi(oldAccessToken)
-  spotifyApi.setRefreshToken(userRefreshToken)
+async function getRefreshedToken(userRefreshToken: string) {
+  const { data }: any = await axios({
+    method: 'post',
+    url: 'https://accounts.spotify.com/api/token',
+    params: {
+      grant_type: 'refresh_token',
+      refresh_token: userRefreshToken
+    }
+  })
 
-  const { body } = await spotifyApi.refreshAccessToken()
-  const accessToken = body.access_token
-  const expiresAt = Date.now() + body.expires_in * 1000
-  const expiresIn = body.expires_in
+  const accessToken = data.access_token
+  const expiresAt = Date.now() + data.expires_in * 1000
+  const expiresIn = data.expires_in
 
   return {
     accessToken,
@@ -258,10 +266,7 @@ async function getRefreshedToken(
 async function refreshToken(user: IUser) {
   logInfo('Refreshing token for  ' + user.userId)
   removeCachedUser(user.userId)
-  const spotifyAuth = await getRefreshedToken(
-    user.spotifyAuth.accessToken,
-    user.spotifyAuth.refreshToken
-  )
+  const spotifyAuth = await getRefreshedToken(user.spotifyAuth.refreshToken)
   const updatedUser = await updateUser({ ...user, spotifyAuth })
   return updatedUser
 }
