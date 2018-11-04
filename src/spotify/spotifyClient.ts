@@ -8,17 +8,6 @@ import { getCreds, saveCreds } from './spotifyCredsCache'
 
 const SpotifyWebApi = require('spotify-web-api-node')
 
-const getSpotifyApi = (token?: string) => {
-  const spotifyApi = new SpotifyWebApi({
-    SPOTIFY_CLIENT_ID,
-    SPOTIFY_CLIENT_SECRET
-  })
-  if (token) {
-    spotifyApi.setAccessToken(token)
-  }
-  return spotifyApi
-}
-
 export const getUserProfile = async (user: IUser) => {
   const validUser: IUser = await checkToken(user)
   const { body } = await getSpotifyApi(
@@ -194,17 +183,6 @@ export const getAudioFeaturesForTracks = async (
   return spotifyApi.getAudioFeaturesForTracks(trackIds)
 }
 
-export const refreshToken = async (user: IUser) => {
-  logInfo('Refreshing token for  ' + user.userId)
-  removeCachedUser(user.userId)
-  const spotifyAuth = await getRefreshedToken(
-    user.spotifyAuth.accessToken,
-    user.spotifyAuth.refreshToken
-  )
-  const updatedUser = await updateUser({ ...user, spotifyAuth })
-  return updatedUser
-}
-
 async function checkToken(user: IUser) {
   if (!user.spotifyId || !user.spotifyAuth) {
     logInfo('Giving user app auth')
@@ -275,4 +253,26 @@ async function getRefreshedToken(
     expiresIn,
     refreshToken: userRefreshToken
   } as ISpotifyAuth
+}
+
+async function refreshToken(user: IUser) {
+  logInfo('Refreshing token for  ' + user.userId)
+  removeCachedUser(user.userId)
+  const spotifyAuth = await getRefreshedToken(
+    user.spotifyAuth.accessToken,
+    user.spotifyAuth.refreshToken
+  )
+  const updatedUser = await updateUser({ ...user, spotifyAuth })
+  return updatedUser
+}
+
+function getSpotifyApi(token?: string) {
+  const spotifyApi = new SpotifyWebApi({
+    SPOTIFY_CLIENT_ID,
+    SPOTIFY_CLIENT_SECRET
+  })
+  if (token) {
+    spotifyApi.setAccessToken(token)
+  }
+  return spotifyApi
 }

@@ -4,7 +4,6 @@ import { isEmpty } from 'lodash'
 import * as passport from 'passport'
 import { IS_PRODUCTION } from '../config'
 import { logError } from '../logging'
-import { refreshToken } from '../spotify/spotifyClient'
 import IUser from '../user/model/IUser'
 import { checkUserProfile } from '../user/profileCheck'
 import { createNewUser } from '../user/userService'
@@ -15,41 +14,6 @@ const devCookieOpts = {}
 const prodCookieOpts = { httpOnly: true, secure: true }
 
 const router = Router()
-
-/**
- * @swagger
- * /refresh:
- *   post:
- *     tags:
- *       - auth
- *     summary: Signs up a new user
- *     description: Creates a new user with the given details
- *     produces:
- *       - application/json
- *     responses:
- *       200:
- *         description: Successfully created
- *     requestBody:
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/definitions/Auth'
- *       description: Authentication details
- */
-router.post(
-  '/refresh',
-  passport.authenticate('jwt', { session: false }),
-  async (req: Request, res: Response) => {
-    try {
-      const { user } = req
-      const { spotifyAuth } = await refreshToken(user)
-      res.send(spotifyAuth)
-    } catch (err) {
-      logError('Error refreshing token', err, req)
-      res.status(400).send(err.message)
-    }
-  }
-)
 
 /**
  * @swagger
