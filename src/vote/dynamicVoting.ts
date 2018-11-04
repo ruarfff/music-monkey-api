@@ -44,7 +44,7 @@ async function updateEventPlaylistBasedOnVotes(event: IEvent) {
     user.userId
   )
   const playlistQuery: IPlaylistQuery = parsePlaylistUrl(event.playlistUrl)
-  const playlist = await getPlaylist(playlistQuery.playlistId, user)
+  const playlist = await getPlaylist(user, playlistQuery.playlistId)
 
   return sortAndUpdatePlaylist(user, playlist, votes)
 }
@@ -63,7 +63,7 @@ async function sortAndUpdatePlaylist(
   )
   let result
   try {
-    result = await replaceTracksInPlaylist(eventOwner, playlist, trackIUris)
+    result = await replaceTracksInPlaylist(eventOwner, playlist.id, trackIUris)
   } catch (err) {
     logError('Failed to update playlist order on vote', err)
   }

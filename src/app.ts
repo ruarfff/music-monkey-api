@@ -25,6 +25,7 @@ import searchRouter from './search/searchRoutes'
 import shareRouter from './share/shareRoutes'
 import suggestionsRouter from './suggestion/suggestionRoutes'
 import userSuggestionsRouter from './suggestion/userSuggestionRoutes'
+import trackRouter from './track/trackRoutes'
 import userRouter from './user/userRoutes'
 import eventVoteRouter from './vote/eventVoteRoutes'
 import voteRouter from './vote/voteRoutes'
@@ -80,6 +81,7 @@ app.use(apiV1 + '/recommendations', recommendationsRouter)
 app.use(apiV1 + '/search', searchRouter)
 app.use(apiV1 + '/share', shareRouter)
 app.use(apiV1 + '/suggestions', suggestionsRouter)
+app.use(apiV1 + '/tracks', trackRouter)
 app.use(apiV1 + '/users', userPlaylistRouter)
 app.use(apiV1 + '/users', userRsvpRouter)
 app.use(apiV1 + '/users', userSuggestionsRouter)

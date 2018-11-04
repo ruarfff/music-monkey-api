@@ -4,7 +4,6 @@ import { logError, logInfo } from '../logging'
 import IPlaylistParams from '../playlist/IPlaylistParams'
 import IUser from '../user/model/IUser'
 import { removeCachedUser, updateUser } from '../user/userService'
-import IPlaylist from './IPlaylist'
 import { getCreds, saveCreds } from './spotifyCredsCache'
 
 const SpotifyWebApi = require('spotify-web-api-node')
@@ -100,7 +99,7 @@ export const createPlaylist = async (
   }
 }
 
-export const getPlaylist = async (playlistId: string, user: IUser) => {
+export const getPlaylist = async (user: IUser, playlistId: string) => {
   const validUser: IUser = await checkToken(user)
   const { body } = await getSpotifyApi(
     validUser.spotifyAuth.accessToken
@@ -134,14 +133,33 @@ export const getUserPlaylists = async (user: IUser) => {
   return playlistsWithTracks
 }
 
+export const reorderTracksInPlaylist = async (
+  user: IUser,
+  playlistId: string,
+  fromIndex: number,
+  toIndex: number
+) => {
+  const validUser: IUser = await checkToken(user)
+  const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
+  let insertBefore = toIndex
+  if (fromIndex < toIndex) {
+    insertBefore++
+  }
+  return await spotifyApi.reorderTracksInPlaylist(
+    playlistId,
+    fromIndex,
+    insertBefore
+  )
+}
+
 export const replaceTracksInPlaylist = async (
   user: IUser,
-  playlist: IPlaylist,
+  playlistId: string,
   trackUris: string[]
 ) => {
   const validUser: IUser = await checkToken(user)
   const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
-  return spotifyApi.replaceTracksInPlaylist(playlist.id, trackUris)
+  return spotifyApi.replaceTracksInPlaylist(playlistId, trackUris)
 }
 
 export const addTracksToPlaylist = async (
@@ -152,6 +170,28 @@ export const addTracksToPlaylist = async (
   const validUser: IUser = await checkToken(user)
   const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
   return spotifyApi.addTracksToPlaylist(playlistId, trackUris)
+}
+
+export const removeTrackFromPlaylist = async (
+  user: IUser,
+  playlistId: string,
+  uri: string,
+  position: number
+) => {
+  const validUser: IUser = await checkToken(user)
+  const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
+
+  return spotifyApi.removeTracksFromPlaylist(playlistId, [{ uri }, position])
+}
+
+export const getAudioFeaturesForTracks = async (
+  user: IUser,
+  trackIds: string[]
+) => {
+  const validUser: IUser = await checkToken(user)
+  const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
+
+  return spotifyApi.getAudioFeaturesForTracks(trackIds)
 }
 
 export const refreshToken = async (user: IUser) => {
@@ -183,7 +223,6 @@ async function checkToken(user: IUser) {
       'Failed to refresh user token: ' + JSON.stringify(user, null, 4),
       err
     )
-    return giveUserSpotifyAppCredential(user)
   }
   return user
 }

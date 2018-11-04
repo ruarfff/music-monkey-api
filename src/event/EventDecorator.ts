@@ -33,7 +33,7 @@ export default class EventDecorator {
     )
 
     if (playlistQuery) {
-      return getPlaylist(playlistQuery.playlistId, user)
+      return getPlaylist(user, playlistQuery.playlistId)
     } else {
       return Promise.reject(new Error('Invalid Playlist Url'))
     }

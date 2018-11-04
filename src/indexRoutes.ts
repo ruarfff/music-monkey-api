@@ -65,6 +65,18 @@ import { Request, Response, Router } from 'express'
  *         type: string
  *       userId:
  *         type: string
+ *  @swagger
+ *  definition:
+ *   Playlist:
+ *     properties:
+ *       id:
+ *         type: string
+ *  @swagger
+ *  definition:
+ *    AudioFeature:
+ *      properties:
+ *        id:
+ *          type: string
  */
 const router = Router()
 
