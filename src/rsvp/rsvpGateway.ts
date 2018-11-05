@@ -44,8 +44,10 @@ export const fetchRsvpByUserIdAndInviteId = (
       .where('userId')
       .equals(userId)
       .exec((err: Error, rsvpModel: any) => {
-        if (err || rsvpModel.Count < 1) {
+        if (err) {
           reject(err)
+        } else if (rsvpModel.Count < 1) {
+          reject({ message: 'Not found', code: 404 })
         } else {
           resolve(cleanModel(rsvpModel.Items[0].attrs))
         }

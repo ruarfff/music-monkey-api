@@ -36,7 +36,9 @@ router.get(
 
       res.send(savedRsvp)
     } catch (err) {
-      res.status(400).send(err)
+      res
+        .status(err.code || 400)
+        .send(err ? err.message : 'An unexpected error occurred.')
     }
   }
 )
