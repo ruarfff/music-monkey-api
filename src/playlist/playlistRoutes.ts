@@ -33,7 +33,7 @@ router.get(
   passport.authenticate('jwt', { session: false }),
   async (req: Request, res: Response) => {
     try {
-      const { user, params } = req.body
+      const { user, params } = req
       const playlist: IPlaylist = await getPlaylistById(user, params.playlistId)
       res.send(playlist)
     } catch (err) {
