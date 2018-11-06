@@ -162,14 +162,14 @@ router.put(
  * /playlists/{playlistId}/tracks:
  *   delete:
  *     tags:
- *       - events
- *     description: Delete an event
- *     summary: Delete an event
+ *       - playlists
+ *     description: Delete a track from a playlist
+ *     summary: Delete a track from a playlist
  *     produces:
  *       - application/json
  *     responses:
  *       200:
- *         description: Event was deleted
+ *         description: Track was deleted
  */
 router.delete(
   '/:playlistId/tracks',
@@ -183,8 +183,7 @@ router.delete(
       const playlist: IPlaylist = await deleteSingleTrackFromPlaylist(
         user,
         playlistId,
-        tracks[0].uri,
-        tracks[1]
+        tracks[0]
       )
       res.send(playlist)
     } catch (err) {

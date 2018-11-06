@@ -5,6 +5,7 @@ import { logError, logInfo } from '../logging'
 import IPlaylistParams from '../playlist/IPlaylistParams'
 import IUser from '../user/model/IUser'
 import { removeCachedUser, updateUser } from '../user/userService'
+import ITrack from './ITrack'
 import { getCreds, saveCreds } from './spotifyCredsCache'
 
 axios.defaults.headers.common.Authorization = `Basic ${Buffer.from(
@@ -152,7 +153,11 @@ export const replaceTracksInPlaylist = async (
 ) => {
   const validUser: IUser = await checkToken(user)
   const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
-  return spotifyApi.replaceTracksInPlaylist(playlistId, trackUris)
+  const { body } = await spotifyApi.replaceTracksInPlaylist(
+    playlistId,
+    trackUris
+  )
+  return body
 }
 
 export const addTracksToPlaylist = async (
@@ -162,19 +167,23 @@ export const addTracksToPlaylist = async (
 ) => {
   const validUser: IUser = await checkToken(user)
   const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
-  return spotifyApi.addTracksToPlaylist(playlistId, trackUris)
+  const { body } = await spotifyApi.addTracksToPlaylist(playlistId, trackUris)
+  return body
 }
 
 export const removeTrackFromPlaylist = async (
   user: IUser,
   playlistId: string,
-  uri: string,
-  position: number
+  track: ITrack
 ) => {
   const validUser: IUser = await checkToken(user)
   const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
 
-  return spotifyApi.removeTracksFromPlaylist(playlistId, [{ uri }, position])
+  const { body } = await spotifyApi.removeTracksFromPlaylist(playlistId, [
+    track
+  ])
+
+  return body
 }
 
 export const getAudioFeaturesForTracks = async (
@@ -183,8 +192,8 @@ export const getAudioFeaturesForTracks = async (
 ) => {
   const validUser: IUser = await checkToken(user)
   const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
-
-  return spotifyApi.getAudioFeaturesForTracks(trackIds)
+  const { body } = await spotifyApi.getAudioFeaturesForTracks(trackIds)
+  return body
 }
 
 async function checkToken(user: IUser) {

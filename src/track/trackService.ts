@@ -5,5 +5,6 @@ export const getAudioFeaturesByTrackIds = async (
   user: IUser,
   trackIds: string[]
 ) => {
-  return await getAudioFeaturesForTracks(user, trackIds)
+  const result = await getAudioFeaturesForTracks(user, trackIds)
+  return result
 }

@@ -1,3 +1,4 @@
+import ITrack from '../spotify/ITrack'
 import {
   addTracksToPlaylist,
   createPlaylist,
@@ -48,8 +49,7 @@ export const replacePlaylistTracks = async (
 export const deleteSingleTrackFromPlaylist = async (
   user: IUser,
   playlistId: string,
-  uri: string,
-  position: number
+  track: ITrack
 ) => {
-  return await removeTrackFromPlaylist(user, playlistId, uri, position)
+  return await removeTrackFromPlaylist(user, playlistId, track)
 }

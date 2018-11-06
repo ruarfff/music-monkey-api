@@ -29,8 +29,11 @@ router.get(
   async (req: Request, res: Response) => {
     try {
       const { user, query } = req
-      const { trackIds } = query
-      const audioFeatures = await getAudioFeaturesByTrackIds(user, trackIds)
+      const { trackUris } = query
+      const audioFeatures = await getAudioFeaturesByTrackIds(
+        user,
+        trackUris.split(',')
+      )
       res.send(audioFeatures)
     } catch (err) {
       logError('Failed to ger audio features for tracks', err, req)
