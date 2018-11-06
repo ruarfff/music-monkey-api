@@ -179,11 +179,12 @@ router.delete(
       const { user, params, body } = req
       const { playlistId } = params
       const { tracks } = body
+
       const playlist: IPlaylist = await deleteSingleTrackFromPlaylist(
         user,
         playlistId,
         tracks[0].uri,
-        tracks[0].position
+        tracks[1]
       )
       res.send(playlist)
     } catch (err) {
