@@ -62,6 +62,7 @@ router.put(
     let errorStatus = 500
     try {
       const notification = req.body
+      console.log(req.body)
       const { userId } = req.user
       const { notificationId } = req.params
       if (notification.userId !== userId) {
@@ -87,7 +88,7 @@ router.put(
         )
       }
 
-      const updatedNotification = updateNotification({
+      const updatedNotification = await updateNotification({
         ...existingNotification,
         ...notification
       })
