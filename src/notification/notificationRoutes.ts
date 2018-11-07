@@ -91,7 +91,6 @@ router.put(
         ...existingNotification,
         ...notification
       })
-
       res.send(updatedNotification)
     } catch (e) {
       res.status(errorStatus).send(e.message)

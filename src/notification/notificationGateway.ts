@@ -34,7 +34,7 @@ export const saveNotification = async (notification: INotification) => {
 }
 
 export const modifyNotification = async (notification: INotification) => {
-  return await util.promisify(Notification.update(notification))
+  return await util.promisify(Notification.update)(notification)
 }
 
 export const fetchNotificationByIdAndUserId = async (
