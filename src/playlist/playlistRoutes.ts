@@ -95,12 +95,13 @@ router.post(
       let playlist: IPlaylist
       if (body.hasOwnProperty('trackUris')) {
         const { trackUris } = body
-        playlist = await addTracksToExistingPlaylist(
+        await addTracksToExistingPlaylist(
           user,
           playlistId,
           trackUris
         )
       }
+      playlist = await getPlaylistById(user, playlistId)
       if (!playlist) {
         res.status(400).send()
       } else {
