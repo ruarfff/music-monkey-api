@@ -25,8 +25,12 @@ router.get(
   passport.authenticate('jwt', { session: false }),
   async (req: Request, res: Response) => {
     const { user } = req
-    const events = await getAllEventsUserWasInvitedTo(user)
-    res.send(events)
+    try {
+      const events = await getAllEventsUserWasInvitedTo(user)
+      res.send(events)
+    } catch (e) {
+      res.status(500).send(e.message)
+    }
   }
 )
 
