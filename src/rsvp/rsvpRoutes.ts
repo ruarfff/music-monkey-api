@@ -3,7 +3,6 @@ import * as passport from 'passport'
 import { logDebug } from '../logging'
 import {
   createRsvp,
-  getRsvpByUserId,
   getRsvpByUserIdAndInviteId,
   updateRsvp
 } from './rsvpService'
