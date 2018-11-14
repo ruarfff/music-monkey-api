@@ -28,5 +28,3 @@ build
 .vscode
 
 dump.rdb
-
-package-lock.json
