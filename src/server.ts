@@ -8,7 +8,6 @@ process.on('uncaughtException', exception => {
 import * as debugFun from 'debug'
 import * as http from 'http'
 import app from './app'
-import graphql from './graphql'
 import { logError } from './logging'
 import { createTables } from './model'
 import * as redisGateway from './redis/redisGateway'
@@ -20,7 +19,6 @@ const debug = debugFun('music-monkey-api:server')
  */
 const port = normalizePort(process.env.PORT || '8080')
 app.set('port', port)
-graphql(app)
 
 const server = http.createServer(app)
 /**
