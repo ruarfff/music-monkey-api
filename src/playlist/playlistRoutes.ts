@@ -181,11 +181,12 @@ router.delete(
       const { playlistId } = params
       const { tracks } = body
 
-      const playlist: IPlaylist = await deleteSingleTrackFromPlaylist(
+      await deleteSingleTrackFromPlaylist(
         user,
         playlistId,
         tracks[0]
       )
+      const playlist: IPlaylist = await getPlaylistById(user, playlistId)
       res.send(playlist)
     } catch (err) {
       res.status(500).send(err ? err.message : 'An unexpected error occurred.')
