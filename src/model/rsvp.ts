@@ -24,8 +24,8 @@ export const Rsvp = dynamo.define(rsvpTableName, {
     eventId: Joi.string(),
     userId: Joi.string(),
     status: Joi.string()
-      .valid(['Going', 'Not Going', 'Maybe', 'Pending'])
-      .default('Pending')
+      .valid(['Going', 'Not Going', 'Maybe'])
+      .default('Maybe')
   }).options({ stripUnknown: true }),
 
   indexes: [
