@@ -208,8 +208,10 @@ export const uploadNewImageForPlaylist = async (
     res = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/images`, {
       method: 'PUT',
       headers: {
+        'scopes': 'ugc-image-upload granted playlist-modify-private',
         'Content-Type': 'image/jpeg',
-        'Authorization': `Bearer ${validUser.spotifyAuth.accessToken}`
+        'token_type': 'Bearer',
+        'access_token': `${validUser.spotifyAuth.accessToken}`
       },
       body: image
     })
@@ -219,11 +221,12 @@ export const uploadNewImageForPlaylist = async (
   console.log(res)
   return res
   // const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
-  // const body = await spotifyApi.uploadCustomPlaylistCoverImage(
-  //   JSON.stringify(playlistId),
-  //   JSON.stringify(image)
-  // )
-  // console.log(body)
+  // await spotifyApi.uploadCustomPlaylistCoverImage(playlistId, image)
+  //   .then(() => {
+  //      console.log('Playlsit cover image uploaded!')
+  //   }, (err: Error) => {
+  //     console.log('Something went wrong!', err)
+  //   })
 }
 
 async function checkToken(user: IUser) {
