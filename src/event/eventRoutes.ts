@@ -10,6 +10,9 @@ import {
   updateEvent
 } from './eventGateway'
 import IEvent from './model/IEvent'
+import {
+  uploadNewImageForPlaylist
+} from '../spotify/spotifyClient'
 const router = Router()
 const eventDecorator = new EventDecorator()
 
@@ -157,6 +160,18 @@ router.put(
       } else if (payload.eventId !== event.eventId) {
         res.status(400).send('Cannot update event ID')
       } else {
+        try {
+          if (event.imageUrl) {
+            await uploadNewImageForPlaylist(
+              req.user,
+              event.playlistUrl.split('/').slice(-1)[0].toString(),
+              payload.dataUrl
+            )
+          }
+        } catch (e) {
+          console.log(e.message)
+        }
+
         const updatedEvent = await updateEvent(req.body)
         res.send(updatedEvent)
       }

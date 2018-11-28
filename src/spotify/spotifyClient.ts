@@ -1,4 +1,5 @@
 import axios from 'axios'
+import fetch from 'node-fetch'
 import ISpotifyAuth from '../auth/ISpotifyAuth'
 import { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } from '../config'
 import { logError, logInfo } from '../logging'
@@ -194,6 +195,35 @@ export const getAudioFeaturesForTracks = async (
   const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
   const { body } = await spotifyApi.getAudioFeaturesForTracks(trackIds)
   return body
+}
+
+export const uploadNewImageForPlaylist = async (
+  user: IUser,
+  playlistId: string,
+  image: string
+) => {
+  const validUser: IUser = await checkToken(user)
+  let res
+  try {
+    res = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/images`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'image/jpeg',
+        'Authorization': `Bearer ${validUser.spotifyAuth.accessToken}`
+      },
+      body: image
+    })
+  } catch (e) {
+    res = e
+  }
+  console.log(res)
+  return res
+  // const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
+  // const body = await spotifyApi.uploadCustomPlaylistCoverImage(
+  //   JSON.stringify(playlistId),
+  //   JSON.stringify(image)
+  // )
+  // console.log(body)
 }
 
 async function checkToken(user: IUser) {
