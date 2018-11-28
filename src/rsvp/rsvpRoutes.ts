@@ -83,9 +83,7 @@ router.put(
   async (req: Request, res: Response) => {
     try {
       const rsvp = { ...req.body, userId: req.user.userId }
-      console.log(rsvp)
       const savedRsvp = await updateRsvp(rsvp, req.user)
-      console.log(savedRsvp, '/////savedRsvp')
       res.send(savedRsvp)
     } catch (err) {
       res.status(400).send(err)
