@@ -26,6 +26,7 @@ export const createNotification = async (notification: INotification) => {
 }
 
 export const updateNotification = async (notification: INotification) => {
+  onNotificationSaved(notification)
   return await modifyNotification(notification)
 }
 
