@@ -68,7 +68,7 @@
     "@types/helmet": "0.0.42",
     "@types/http-errors": "1.6.1",
     "@types/ioredis": "4.0.4",
-    "@types/jest": "23.3.9",
+    "@types/jest": "23.3.10",
     "@types/joi": "14.0.0",
     "@types/lodash": "4.14.118",
     "@types/morgan": "1.7.35",
