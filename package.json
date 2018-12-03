@@ -48,7 +48,7 @@
     "passport-spotify": "1.0.1",
     "pusher": "2.2.0",
     "querystring": "0.2.0",
-    "rollbar": "2.5.0",
+    "rollbar": "2.5.1",
     "serve-favicon": "2.5.0",
     "spotify-uri": "1.0.0",
     "spotify-web-api-node": "4.0.0",
