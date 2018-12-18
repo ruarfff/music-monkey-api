@@ -17,10 +17,14 @@ router.post(
           from: 'hello@musicmonkey.io',
           subject: 'You have been invited to ' + event.name,
           text: 'test',
-          html: '<a href="https://guests.musicmonkey.io/invite/' + event.inviteId + '">click here for more details</a>'
+          html: '<a href="https://guests.musicmonkey.io/invite/' + event.invites[0] + '">' +
+          'click here for more details</a>'
         }
-        const response = await sgMail.send(msg)
-        console.log(response)
+        try {
+          await sgMail.send(msg)
+        } catch (e) {
+          res.status(500).send(e.message)
+        }
       })
 
       res.status(200).send('Emails successfully sent')
