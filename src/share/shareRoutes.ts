@@ -11,16 +11,16 @@ router.post(
   (req: Request, res: Response) => {
     const { emails, event } = req.body
     try {
-      emails.map((email: string) => {
+      emails.map(async (email: string) => {
         const msg = {
           to: email,
           from: 'hello@musicmonkey.io',
-          subject: 'You have been invited',
-          text: '',
-          html: '<strong>You&#39;ve been invited to ' + event.name + '</strong>' +
-          '' + '<a href="https://guests.musicmonkey.io/invite/' + event.inviteId + '">click here for more details</a>'
+          subject: 'You have been invited to ' + event.name,
+          text: 'test',
+          html: '<a href="https://guests.musicmonkey.io/invite/' + event.inviteId + '">click here for more details</a>'
         }
-        sgMail.send(msg)
+        const response = await sgMail.send(msg)
+        console.log(response)
       })
 
       res.status(200).send('Emails successfully sent')
