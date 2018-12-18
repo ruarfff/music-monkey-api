@@ -16,8 +16,9 @@ router.post(
           to: email,
           from: 'hello@musicmonkey.io',
           subject: 'You have been invited',
-          text: '<a>' + 'https://guests.musicmonkey.io/invite/' + event.inviteId + '</a>',
-          html: '<strong>You&#39;ve been invited to ' + event.name + '</strong>'
+          text: '',
+          html: '<strong>You&#39;ve been invited to ' + event.name + '</strong>' +
+          '' + '<a href="https://guests.musicmonkey.io/invite/' + event.inviteId + '">click here for more details</a>'
         }
         sgMail.send(msg)
       })
