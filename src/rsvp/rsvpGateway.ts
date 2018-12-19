@@ -22,7 +22,10 @@ export const modifyRsvp = async (rsvp: IRsvp) => {
     if (!existingRsvp) {
       throw new Error('Could not find existing rsvp to update')
     }
-    const { attrs } = await util.promisify(Rsvp.update)({ ...rsvp })
+    const { attrs } = await util.promisify(Rsvp.update)({
+      ...existingRsvp,
+      status: rsvp.status
+    })
 
     return attrs
   } catch (err) {
