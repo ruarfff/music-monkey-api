@@ -24,15 +24,13 @@ import {
 
 export const createSuggestions = async (suggestions: ISuggestion[]) => {
   const suggestionModel = await saveSuggestions(suggestions)
-  onSuggestionSaved(suggestionModel)
-  handleAutoAcceptSuggestions(suggestions)
+  handleSavedSuggestions(suggestionModel)
   return suggestionModel
 }
 
 export const createSuggestion = async (suggestion: ISuggestion) => {
   const savedSuggestion = await saveSuggestion(suggestion)
-  onSuggestionSaved(savedSuggestion)
-  handleAutoAcceptSuggestions([suggestion])
+  handleSavedSuggestions([savedSuggestion])
   return savedSuggestion
 }
 
@@ -79,7 +77,7 @@ export const getSuggestionsByUserId = async (userId: string) => {
   return await fetchSuggestionsByUserId(userId)
 }
 
-async function handleAutoAcceptSuggestions(suggestions: ISuggestion[]) {
+async function handleSavedSuggestions(suggestions: ISuggestion[]) {
   let eventId
   try {
     const event = await getEventById(suggestions[0].eventId)
@@ -88,9 +86,11 @@ async function handleAutoAcceptSuggestions(suggestions: ISuggestion[]) {
       const user = await getUserById(event.userId)
       const playlistDetails = spotifyUri.parse(event.playlistUrl)
       const trackUris = suggestions.map(s => s.trackUri)
-      addTracksToPlaylist(user, playlistDetails.id, trackUris)
-      onAutoAcceptedSuggestion(eventId)
-      acceptSuggestions(eventId, suggestions)
+      await addTracksToPlaylist(user, playlistDetails.id, trackUris)
+      await onAutoAcceptedSuggestion(eventId)
+      await acceptSuggestions(eventId, suggestions)
+    } else {
+      await onSuggestionSaved(eventId)
     }
   } catch (err) {
     logError(

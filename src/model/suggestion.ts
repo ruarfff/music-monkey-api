@@ -19,8 +19,12 @@ export const Suggestion = dynamo.define(suggestionTableName, {
       .optional()
       .allow(''),
     trackUri: Joi.string(),
-    accepted: Joi.boolean().default(false),
-    rejected: Joi.boolean().default(false)
+    accepted: Joi.boolean()
+      .optional()
+      .default(false),
+    rejected: Joi.boolean()
+      .optional()
+      .default(false)
   }).options({ stripUnknown: true }),
 
   indexes: [

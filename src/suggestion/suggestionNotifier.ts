@@ -1,8 +1,7 @@
 import { send } from '../notification'
-import ISuggestion from './ISuggestion'
 
-export const onSuggestionSaved = (suggestion: ISuggestion) => {
-  send('mm-suggestions-' + suggestion.eventId, 'suggestion-saved', suggestion)
+export const onSuggestionSaved = (eventId: string) => {
+  send('mm-suggestions-' + eventId, 'suggestion-saved', {})
 }
 
 export const onSuggestionsAccepted = (eventId: string) => {

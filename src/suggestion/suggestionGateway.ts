@@ -84,12 +84,16 @@ export const saveSuggestion = async (suggestion: ISuggestion) => {
   return savedSuggestion
 }
 
-export const saveSuggestionsAsAccepted = (suggestions: ISuggestion[]) => {
+export const saveSuggestionsAsAccepted = async (suggestions: ISuggestion[]) => {
   const updatePromises: Array<Promise<ISuggestion>> = []
   suggestions.map(suggestion => {
-    updatePromises.push(Suggestion.update({ ...suggestion, accepted: true }))
+    updatePromises.push(
+      promisify(Suggestion.update)({ ...suggestion, accepted: true })
+    )
   })
-  return Promise.all(updatePromises)
+  const updatedSuggestions = await Promise.all(updatePromises)
+
+  return updatedSuggestions.map((s: any) => s.attrs)
 }
 
 export const saveSuggestionAsRejected = async (suggestionId: string) => {
