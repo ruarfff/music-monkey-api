@@ -31,7 +31,9 @@ export const getRsvpByUserId = async (userId: string) => {
 
 export const createRsvp = async (rsvp: IRsvp, user: IUser) => {
   const savedRsvp: IRsvp = await saveRsvp(rsvp)
-  notifyRsvpCreation(savedRsvp, user)
+  if (rsvp.status !== 'Pending') {
+    notifyRsvpCreation(savedRsvp, user)
+  }
   return savedRsvp
 }
 
