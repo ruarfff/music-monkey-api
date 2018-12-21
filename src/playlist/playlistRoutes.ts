@@ -141,7 +141,7 @@ router.put(
       } else if (body.hasOwnProperty('fromIndex')) {
         const { fromIndex, toIndex } = body
         playlist = await reOrderPlaylist(
-          user.playlistId,
+          user,
           playlistId,
           fromIndex,
           toIndex
