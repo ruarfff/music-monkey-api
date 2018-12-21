@@ -289,10 +289,10 @@
   resolved "https://registry.yarnpkg.com/@types/range-parser/-/range-parser-1.2.3.tgz#7ee330ba7caafb98090bece86a5ee44115904c2c"
   integrity sha512-ewFXqrQHlFsgc09MK5jP5iR7vumV/BYayNC6PgJO2LPe8vrnNFyjQjSppfEngITi0qvfKtzFvgKymGheFM9UOA==
 
-"@types/redis@2.8.8":
-  version "2.8.8"
-  resolved "https://registry.yarnpkg.com/@types/redis/-/redis-2.8.8.tgz#70855e79a6020080cca3cb5f1f5ee7f11b49a979"
-  integrity sha512-o/1ufNVPA92uum9HFbEiXXIHBuLywSwHQtAZoACMc1FhPXS5YftybBC1EI0zjdbUb273VVWF0Ivll/bq4g+gyw==
+"@types/redis@2.8.9":
+  version "2.8.9"
+  resolved "https://registry.yarnpkg.com/@types/redis/-/redis-2.8.9.tgz#3addfdbd81cc773c2446e34225c0911c43b960fc"
+  integrity sha512-pmKQsTy/g37+XOFrunNXGn9nDjcXpOkaL0Xm6T4eEfZOED09A9AQuJvLiSQwNeeQ7pPL42MBOrTy/4+6p9MqvA==
   dependencies:
     "@types/node" "*"
 
