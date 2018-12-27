@@ -28,6 +28,7 @@ export const handleCreateForDynamicVoting = async (eventId: string) => {
   }
   return null
 }
+
 export const handleDeleteForDynamicVoting = async (eventId: string) => {
   const event = await getEventById(eventId)
   const dvEnabled = await dynamicVotingEnabled(event)
