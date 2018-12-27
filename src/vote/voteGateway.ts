@@ -7,20 +7,24 @@ import {
 } from './dynamicVoting'
 import IVote from './IVote'
 import { onVoteCreated, onVoteDeleted } from './voteNotifier'
-const util = require('util')
+const { promisify } = require('util')
+
+const create = promisify(Vote.create)
+const get = promisify(Vote.get)
+const remove = promisify(Vote.destroy)
 
 export const getVoteByIdAndEventId = async (
   voteId: string,
   eventId: string
 ) => {
-  const { attrs } = await util.promisify(Vote.get)(voteId, eventId)
+  const { attrs } = await get(voteId, eventId)
   return cleanModel(attrs)
 }
 
 export const createVote = async (vote: IVote) => {
   try {
     const voteId = `${vote.trackId}:${vote.eventId}:${vote.userId}`
-    const { attrs } = await Vote.create({ ...vote, voteId } as IVote)
+    const { attrs } = await create({ ...vote, voteId } as IVote)
     const savedVote = cleanModel(attrs)
     await handleCreateForDynamicVoting(savedVote.eventId)
     onVoteCreated(savedVote)
@@ -35,7 +39,7 @@ export const deleteVote = async (voteId: string) => {
     const idParts: string[] = voteId.split(':')
     const eventId = idParts[idParts.length - 2]
     await handleDeleteForDynamicVoting(eventId)
-    await Vote.destroy(voteId, eventId)
+    await remove(voteId, eventId)
     onVoteDeleted(eventId)
   } catch (err) {
     logError('Failed to delete vote', err)

@@ -205,16 +205,19 @@ export const uploadNewImageForPlaylist = async (
   const validUser: IUser = await checkToken(user)
   let res
   try {
-    res = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/images`, {
-      method: 'PUT',
-      headers: {
-        'scopes': 'ugc-image-upload granted playlist-modify-private',
-        'Content-Type': 'image/jpeg',
-        'token_type': 'Bearer',
-        'access_token': `${validUser.spotifyAuth.accessToken}`
-      },
-      body: image
-    })
+    res = await fetch(
+      `https://api.spotify.com/v1/playlists/${playlistId}/images`,
+      {
+        method: 'PUT',
+        headers: {
+          "scopes": 'ugc-image-upload granted playlist-modify-private',
+          'Content-Type': 'image/jpeg',
+          "token_type": 'Bearer',
+          "access_token": `${validUser.spotifyAuth.accessToken}`
+        },
+        body: image
+      }
+    )
   } catch (e) {
     res = e
   }
@@ -269,17 +272,41 @@ async function giveUserSpotifyAppCredential(user: IUser) {
     logError('Error giving user app creds for Spotify', err)
   }
   if (!token) {
-    const { body } = await getSpotifyApi().clientCredentialsGrant()
-    const freshToken = body.access_token
-    saveCreds(freshToken)
-    userWithAppCreds = {
-      ...user,
-      spotifyAuth: {
-        accessToken: freshToken
-      }
-    } as IUser
+    try {
+      const creds = await getClientCreds()
+      const freshToken = creds.accessToken
+      saveCreds(freshToken)
+      userWithAppCreds = {
+        ...user,
+        spotifyAuth: {
+          accessToken: freshToken
+        }
+      } as IUser
+    } catch (x) {
+      console.log(x)
+    }
   }
   return userWithAppCreds
+}
+
+async function getClientCreds() {
+  const { data }: any = await axios({
+    method: 'post',
+    url: 'https://accounts.spotify.com/api/token',
+    params: {
+      grant_type: 'client_credentials'
+    }
+  })
+
+  const accessToken = data.access_token
+  const expiresAt = Date.now() + data.expires_in * 1000
+  const expiresIn = data.expires_in
+
+  return {
+    accessToken,
+    expiresAt,
+    expiresIn
+  } as ISpotifyAuth
 }
 
 async function getRefreshedToken(userRefreshToken: string) {

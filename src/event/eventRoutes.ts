@@ -1,6 +1,7 @@
 import { Request, Response, Router } from 'express'
 import * as passport from 'passport'
 import { logError } from '../logging'
+import { uploadNewImageForPlaylist } from '../spotify/spotifyClient'
 import EventDecorator from './EventDecorator'
 import {
   createEvent,
@@ -10,9 +11,6 @@ import {
   updateEvent
 } from './eventGateway'
 import IEvent from './model/IEvent'
-import {
-  uploadNewImageForPlaylist
-} from '../spotify/spotifyClient'
 const router = Router()
 const eventDecorator = new EventDecorator()
 
@@ -164,7 +162,10 @@ router.put(
           if (event.imageUrl) {
             await uploadNewImageForPlaylist(
               req.user,
-              event.playlistUrl.split('/').slice(-1)[0].toString(),
+              event.playlistUrl
+                .split('/')
+                .slice(-1)[0]
+                .toString(),
               payload.dataUrl
             )
           }
