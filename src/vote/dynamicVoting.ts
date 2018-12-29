@@ -1,11 +1,14 @@
 import { getEventById } from '../event/eventGateway'
 import IEvent from '../event/model/IEvent'
 import { logError } from '../logging'
+import {
+  getPlaylistById,
+  replacePlaylistTracks
+} from '../playlist/playlistService'
 import IPlaylist from '../spotify/IPlaylist'
 import IPlaylistItem from '../spotify/IPlaylistItem'
 import IPlaylistQuery from '../spotify/IPlaylistQuery'
 import parsePlaylistUrl from '../spotify/parsePlaylistUrl'
-import { getPlaylist, replaceTracksInPlaylist } from '../spotify/spotifyClient'
 import IUser from '../user/model/IUser'
 import { getUserById } from '../user/userService'
 import ITrackVoteStatus from './ITrackVoteStatus'
@@ -45,7 +48,7 @@ async function updateEventPlaylistBasedOnVotes(event: IEvent) {
     user.userId
   )
   const playlistQuery: IPlaylistQuery = parsePlaylistUrl(event.playlistUrl)
-  const playlist = await getPlaylist(user, playlistQuery.playlistId)
+  const playlist = await getPlaylistById(user, playlistQuery.playlistId)
 
   return sortAndUpdatePlaylist(user, playlist, votes)
 }
@@ -64,7 +67,7 @@ async function sortAndUpdatePlaylist(
   )
   let result
   try {
-    result = await replaceTracksInPlaylist(eventOwner, playlist.id, trackIUris)
+    result = await replacePlaylistTracks(eventOwner, playlist.id, trackIUris)
   } catch (err) {
     logError('Failed to update playlist order on vote', err)
   }

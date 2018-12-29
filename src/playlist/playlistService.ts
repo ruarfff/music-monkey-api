@@ -9,6 +9,7 @@ import {
 } from '../spotify/spotifyClient'
 import IUser from '../user/model/IUser'
 import IPlaylistParams from './IPlaylistParams'
+import { onPlaylistUpdated } from './playlistNotifier'
 
 export const getPlaylistById = async (user: IUser, playlistId: string) => {
   return await getPlaylist(user, playlistId)
@@ -26,7 +27,9 @@ export const addTracksToExistingPlaylist = async (
   playlistId: string,
   trackUris: string[]
 ) => {
-  return await addTracksToPlaylist(user, playlistId, trackUris)
+  const playlist = await addTracksToPlaylist(user, playlistId, trackUris)
+  onPlaylistUpdated(playlistId)
+  return playlist
 }
 
 export const reOrderPlaylist = async (
@@ -35,7 +38,14 @@ export const reOrderPlaylist = async (
   fromIndex: number,
   toIndex: number
 ) => {
-  return await reorderTracksInPlaylist(user, playlistId, fromIndex, toIndex)
+  const playlist = await reorderTracksInPlaylist(
+    user,
+    playlistId,
+    fromIndex,
+    toIndex
+  )
+  onPlaylistUpdated(playlistId)
+  return playlist
 }
 
 export const replacePlaylistTracks = async (
@@ -43,7 +53,9 @@ export const replacePlaylistTracks = async (
   playlistId: string,
   trackUris: string[]
 ) => {
-  return await replaceTracksInPlaylist(user, playlistId, trackUris)
+  const playlist = await replaceTracksInPlaylist(user, playlistId, trackUris)
+  onPlaylistUpdated(playlistId)
+  return playlist
 }
 
 export const deleteSingleTrackFromPlaylist = async (
@@ -51,5 +63,7 @@ export const deleteSingleTrackFromPlaylist = async (
   playlistId: string,
   track: ITrack
 ) => {
-  return await removeTrackFromPlaylist(user, playlistId, track)
+  const playlist = await removeTrackFromPlaylist(user, playlistId, track)
+  onPlaylistUpdated(playlistId)
+  return playlist
 }
