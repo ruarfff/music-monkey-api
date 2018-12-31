@@ -1,5 +1,4 @@
 import axios from 'axios'
-import fetch from 'node-fetch'
 import ISpotifyAuth from '../auth/ISpotifyAuth'
 import { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } from '../config'
 import { logError, logInfo } from '../logging'
@@ -172,19 +171,43 @@ export const addTracksToPlaylist = async (
   return body
 }
 
+export const removeTracksFromPlaylistByPosition = async (
+  user: IUser,
+  playlistId: string,
+  snapshotId: string,
+  positions: number[]
+) => {
+  const validUser: IUser = await checkToken(user)
+  const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
+
+  const { body } = await spotifyApi.removeTracksFromPlaylistByPosition(
+    playlistId,
+    positions,
+    snapshotId
+  )
+
+  return body
+}
+
+export const removeTracksFromPlaylist = async (
+  user: IUser,
+  playlistId: string,
+  tracks: ITrack[]
+) => {
+  const validUser: IUser = await checkToken(user)
+  const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
+
+  const { body } = await spotifyApi.removeTracksFromPlaylist(playlistId, tracks)
+
+  return body
+}
+
 export const removeTrackFromPlaylist = async (
   user: IUser,
   playlistId: string,
   track: ITrack
 ) => {
-  const validUser: IUser = await checkToken(user)
-  const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
-
-  const { body } = await spotifyApi.removeTracksFromPlaylist(playlistId, [
-    track
-  ])
-
-  return body
+  return await removeTracksFromPlaylist(user, playlistId, [track])
 }
 
 export const getAudioFeaturesForTracks = async (
@@ -195,41 +218,6 @@ export const getAudioFeaturesForTracks = async (
   const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
   const { body } = await spotifyApi.getAudioFeaturesForTracks(trackIds)
   return body
-}
-
-export const uploadNewImageForPlaylist = async (
-  user: IUser,
-  playlistId: string,
-  image: string
-) => {
-  const validUser: IUser = await checkToken(user)
-  let res
-  try {
-    res = await fetch(
-      `https://api.spotify.com/v1/playlists/${playlistId}/images`,
-      {
-        method: 'PUT',
-        headers: {
-          "scopes": 'ugc-image-upload granted playlist-modify-private',
-          'Content-Type': 'image/jpeg',
-          "token_type": 'Bearer',
-          "access_token": `${validUser.spotifyAuth.accessToken}`
-        },
-        body: image
-      }
-    )
-  } catch (e) {
-    res = e
-  }
-  console.log(res)
-  return res
-  // const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
-  // await spotifyApi.uploadCustomPlaylistCoverImage(playlistId, image)
-  //   .then(() => {
-  //      console.log('Playlsit cover image uploaded!')
-  //   }, (err: Error) => {
-  //     console.log('Something went wrong!', err)
-  //   })
 }
 
 async function checkToken(user: IUser) {

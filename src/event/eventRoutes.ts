@@ -1,7 +1,6 @@
 import { Request, Response, Router } from 'express'
 import * as passport from 'passport'
 import { logError } from '../logging'
-import { uploadNewImageForPlaylist } from '../spotify/spotifyClient'
 import EventDecorator from './EventDecorator'
 import {
   createEvent,
@@ -158,21 +157,6 @@ router.put(
       } else if (payload.eventId !== event.eventId) {
         res.status(400).send('Cannot update event ID')
       } else {
-        try {
-          if (event.imageUrl) {
-            await uploadNewImageForPlaylist(
-              req.user,
-              event.playlistUrl
-                .split('/')
-                .slice(-1)[0]
-                .toString(),
-              payload.dataUrl
-            )
-          }
-        } catch (e) {
-          console.log(e.message)
-        }
-
         const updatedEvent = await updateEvent(req.body)
         res.send(updatedEvent)
       }

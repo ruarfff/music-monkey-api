@@ -1,7 +1,7 @@
 import * as spotifyUri from 'spotify-uri'
 import { getEventById } from '../event/eventGateway'
 import { logError } from '../logging'
-import { addTracksToPlaylist } from '../spotify/spotifyClient'
+import { addTracksToExistingPlaylist } from '../playlist/playlistService'
 import { getUserById } from '../user/userService'
 import ISuggestion from './ISuggestion'
 import {
@@ -86,7 +86,7 @@ async function handleSavedSuggestions(suggestions: ISuggestion[]) {
       const user = await getUserById(event.userId)
       const playlistDetails = spotifyUri.parse(event.playlistUrl)
       const trackUris = suggestions.map(s => s.trackUri)
-      await addTracksToPlaylist(user, playlistDetails.id, trackUris)
+      await addTracksToExistingPlaylist(user, playlistDetails.id, trackUris)
       await onAutoAcceptedSuggestion(eventId)
       await acceptSuggestions(eventId, suggestions)
     } else {

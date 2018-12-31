@@ -1,8 +1,8 @@
 import { logError } from '../logging'
+import { getPlaylistById } from '../playlist/playlistService'
 import IPlaylist from '../spotify/IPlaylist'
 import IPlaylistQuery from '../spotify/IPlaylistQuery'
 import parsePlaylistUrl from '../spotify/parsePlaylistUrl'
-import { getPlaylist } from '../spotify/spotifyClient'
 import IUser from '../user/model/IUser'
 import { getEventGuests } from './eventGateway'
 import IEvent from './model/IEvent'
@@ -33,7 +33,7 @@ export default class EventDecorator {
     )
 
     if (playlistQuery) {
-      return getPlaylist(user, playlistQuery.playlistId)
+      return getPlaylistById(user, playlistQuery.playlistId)
     } else {
       return Promise.reject(new Error('Invalid Playlist Url'))
     }
