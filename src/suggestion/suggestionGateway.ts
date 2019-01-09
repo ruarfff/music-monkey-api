@@ -75,7 +75,8 @@ export const fetchSuggestionsByUserId = (userId: string) => {
 
 export const saveSuggestions = async (suggestions: ISuggestion[]) => {
   const suggestionModel = await promisify(Suggestion.create)(suggestions)
-  return suggestionModel
+  const savedSugesstions = suggestionModel.map((model: any) => model.attrs)
+  return savedSugesstions
 }
 
 export const saveSuggestion = async (suggestion: ISuggestion) => {
