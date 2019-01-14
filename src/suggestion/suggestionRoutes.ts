@@ -12,6 +12,7 @@ import {
   getSuggestionsByEventId,
   rejectSuggestion
 } from './suggestionService'
+import { getEventById } from '../event/eventGateway'
 
 const router = Router()
 const suggestionDecorator = new SuggestionDecorator()
@@ -156,9 +157,13 @@ router.post(
   async (req: Request, res: Response) => {
     try {
       let result
+      console.log(req.body)
       if (_.isArray(req.body)) {
         const suggestions = req.body
-        result = await createSuggestions(suggestions)
+        const event = await getEventById(suggestions[0].id)
+        if (event.settings.suggestingPlaylistsEnabled) {
+          result = await createSuggestions(suggestions)
+        }
       } else {
         const suggestion = req.body
         result = await createSuggestion(suggestion)
