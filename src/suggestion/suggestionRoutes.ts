@@ -1,18 +1,18 @@
 import { Request, Response, Router } from 'express'
 import * as _ from 'lodash'
 import * as passport from 'passport'
+import { getEventById } from '../event/eventGateway'
 import { logError } from '../logging'
 import SuggestionDecorator from './SuggestionDecorator'
 import {
-  acceptSuggestions,
-  createSuggestion,
-  createSuggestions,
-  deleteSuggestion,
-  getSuggestionById,
-  getSuggestionsByEventId,
-  rejectSuggestion
+acceptSuggestions,
+createSuggestion,
+createSuggestions,
+deleteSuggestion,
+getSuggestionById,
+getSuggestionsByEventId,
+rejectSuggestion
 } from './suggestionService'
-import { getEventById } from '../event/eventGateway'
 
 const router = Router()
 const suggestionDecorator = new SuggestionDecorator()
@@ -157,10 +157,9 @@ router.post(
   async (req: Request, res: Response) => {
     try {
       let result
-      console.log(req.body)
       if (_.isArray(req.body)) {
         const suggestions = req.body
-        const event = await getEventById(suggestions[0].id)
+        const event = await getEventById(suggestions[0].eventId)
         if (event.settings.suggestingPlaylistsEnabled) {
           result = await createSuggestions(suggestions)
         }
