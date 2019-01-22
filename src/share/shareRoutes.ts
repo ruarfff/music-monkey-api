@@ -28,47 +28,58 @@ router.post(
           '    <meta http-equiv="X-UA-Compatible" content="IE=edge">\n' +
           '    <meta content="telephone=no" name="format-detection">\n' +
           '    <title></title>\n' +
-          '    <!--[if (mso 16)]>\n' +
-          '    <style type="text/css">\n' +
-          '    a {text-decoration: none;}\n' +
-          '    </style>\n' +
-          '    <![endif]-->\n' +
-          '    <!--[if gte mso 9]><style>sup { font-size: 100% !important; }</style><![endif]-->\n' +
-          '    <!--[if !mso]><!-- -->\n' +
           '    <link href="https://fonts.googleapis.com/css?family=Open Sans:400,400i,700,700i" rel="stylesheet">\n' +
-          '    <!--<![endif]-->\n' +
           '</head>\n' +
           '\n' +
           '<body>\n' +
           '    <div class="es-wrapper-color">\n' +
-          '        <!--[if gte mso 9]>\n' +
-          '            <v:background xmlns:v="urn:schemas-microsoft-com:vml" fill="t">\n' +
-          '                <v:fill type="tile" color="#f6f6f6"></v:fill>\n' +
-          '            </v:background>\n' +
-          '        <![endif]-->\n' +
           '        <table class="es-wrapper" width="100%" cellspacing="0" cellpadding="0">\n' +
           '            <tbody>\n' +
           '                <tr>\n' +
           '                    <td class="esd-email-paddings" valign="top">\n' +
-          '                        <table class="es-content esd-header-popover" cellspacing="0" cellpadding="0" align="center">\n' +
+          '                        <table ' +
+          '                          class="es-content esd-header-popover" ' +
+          '                          cellspacing="0" cellpadding="0" align="center"' +
+          '                        >\n' +
           '                            <tbody>\n' +
           '                                <tr> </tr>\n' +
           '                                <tr>\n' +
-          '                                    <td class="esd-stripe" esd-custom-block-id="7964" align="center" style="background-color: #ffb000; color: white;">\n' +
-          '                                        <table class="es-content-body" style="background-color: transparent;" width="640" cellspacing="0" cellpadding="0" align="center">\n' +
+          '                                    <td ' +
+          '                                     class="esd-stripe" esd-custom-block-id="7964" align="center" ' +
+          '                                     style="background-color: #ffb000; color: white;"' +
+          '                                    >\n' +
+          '                                        <table ' +
+          '                                         class="es-content-body" style="background-color: transparent;"' +
+          '                                         width="640" cellspacing="0" cellpadding="0" align="center"' +
+          '                                        >\n' +
           '                                            <tbody>\n' +
           '                                                <tr>\n' +
-          '                                                    <td class="esd-structure es-p15t es-p15b es-p20r es-p20l" style="padding: 0 20px" align="left">\n' +
-          '                                                        <!--[if mso]><table width="600" cellpadding="0" cellspacing="0"><tr><td width="290" valign="top"><![endif]-->\n' +
-          '                                                        <table class="es-left" cellspacing="0" cellpadding="0" align="left">\n' +
+          '                                                    <td ' +
+          '                                                    class="esd-structure es-p15t es-p15b es-p20r es-p20l" ' +
+          '                                                     style="padding: 0 20px" align="left"' +
+          '                                                    >\n' +
+          '                                                        <table ' +
+          '                                                           class="es-left"cellspacing="0" cellpadding="0" ' +
+          '                                                           align="left"' +
+          '                                                         >\n' +
           '                                                            <tbody>\n' +
           '                                                                <tr>\n' +
-          '                                                                    <td class="esd-container-frame" width="290" align="left">\n' +
-          '                                                                        <table width="100%" cellspacing="0" cellpadding="0">\n' +
+          '                                                                    <td ' +
+          '                                                                     class="esd-container-frame" ' +
+          '                                                                     width="290" align="left"' +
+          '                                                                    >\n' +
+          '                                                                       <table width="100%" cellspacing="0"' +
+          '                                                                        cellpadding="0"' +
+          '                                                                       >\n' +
           '                                                                            <tbody>\n' +
           '                                                                                <tr>\n' +
-          '                                                                                    <td class="es-infoblock esd-block-text es-m-txt-c" align="left">\n' +
-          '                                                                                        <p style="font-family: arial, helvetica\\ neue, helvetica, sans-serif;">Music Monkey<br></p>\n' +
+          '                                                                                    <td ' +
+          '                                               class="es-infoblock esd-block-text es-m-txt-c" align="left"' +
+          '                                                                                    >\n' +
+          '                                                                                        <p ' +
+          '                                     style="font-family: arial, helvetica\\ neue, helvetica, sans-serif;">' +
+          '                                                                                          Music Monkey<br>' +
+          '                                                                                        </p>\n' +
           '                                                                                    </td>\n' +
           '                                                                                </tr>\n' +
           '                                                                            </tbody>\n' +
@@ -85,28 +96,75 @@ router.post(
           '                                </tr>\n' +
           '                            </tbody>\n' +
           '                        </table>\n' +
-          '                        <table class="es-content esd-footer-popover" cellspacing="0" cellpadding="0" align="center">\n' +
+          '                        <table ' +
+          '                         class="es-content esd-footer-popover" cellspacing="0" ' +
+          '                         cellpadding="0" align="center"' +
+          '                        >\n' +
           '                            <tbody>\n' +
           '                                <tr>\n' +
-          '                                    <td class="esd-stripe esd-checked" style="background-image:url(https://res.cloudinary.com/dxk0d7mmy/image/upload/v1548150130/partycover.png);background-color: rgb(61, 76, 107); background-position: left top; background-repeat: no-repeat; background-size: cover;" bgcolor="#3d4c6b" align="center">\n' +
-          '                                        <table class="es-content-body" style="background-color: rgba(0, 0, 0, 0.4);" width="640" cellspacing="0" cellpadding="0" bgcolor="#f6f6f6" align="center">\n' +
+          '                                    <td ' +
+          '                                     class="esd-stripe esd-checked" ' +
+          'style="' +
+          'background-image:url(https://res.cloudinary.com/dxk0d7mmy/image/upload/v1548150130/partycover.png);' +
+          'background-color: rgb(61, 76, 107); ' +
+          'background-position: left top; ' +
+          'background-repeat: no-repeat; ' +
+          'background-size: cover;" ' +
+          'bgcolor="#3d4c6b" align="center"' +
+          '                                   >\n' +
+          '                                        <table ' +
+          '                                         class="es-content-body" ' +
+          '                                         style="background-color: rgba(0, 0, 0, 0.4);" ' +
+          '                                         width="640" cellspacing="0" ' +
+          '                                         cellpadding="0" ' +
+          '                                         bgcolor="#f6f6f6"' +
+          '                                         align="center"' +
+          '                                        >\n' +
           '                                            <tbody>\n' +
           '                                                <tr>\n' +
-          '                                                    <td class="esd-structure es-p10t es-p20r es-p20l" align="left">\n' +
-          '                                                        <table width="100%" cellspacing="0" cellpadding="0">\n' +
+          '                                                    <td ' +
+          '                                                     class="esd-structure es-p10t es-p20r es-p20l" ' +
+          '                                                     align="left"' +
+          '                                                    >\n' +
+          '                                                        <table ' +
+          '                                                         width="100%" ' +
+          '                                                         cellspacing="0" ' +
+          '                                                         cellpadding="0"' +
+          '                                                        >\n' +
           '                                                            <tbody>\n' +
           '                                                                <tr>\n' +
-          '                                                                    <td class="esd-container-frame" width="600" valign="top" align="center">\n' +
-          '                                                                        <table width="100%" cellspacing="0" cellpadding="0">\n' +
+          '                                                                    <td ' +
+          '                                                                     class="esd-container-frame" ' +
+          '                                                                     width="600" valign="top" ' +
+          '                                                                     align="center"' +
+          '                                                                    >\n' +
+          '                                                                        <table ' +
+          '                                                                         width="100%" ' +
+          '                                                                         cellspacing="0" ' +
+          '                                                                         cellpadding="0"' +
+          '                                                                        >\n' +
           '                                                                            <tbody>\n' +
           '                                                                                <tr>\n' +
-          '                                                                                    <td class="esd-block-image es-p40t es-p25b" align="center" height="100">\n' +
-          '                                                                                        <a href="" target="_blank"><img src="https://res.cloudinary.com/dxk0d7mmy/image/upload/v1548149098/monkey_logo.png" style="display: block;" alt="Logo" title="Logo" width="100"></a>\n' +
+          '                                                                                    <td ' +
+          'class="esd-block-image es-p40t es-p25b" ' +
+          'align="center" ' +
+          'height="100"' +
+          '                                                                                    >\n' +
+          '                                                                                        <img ' +
+          'src="https://res.cloudinary.com/dxk0d7mmy/image/upload/v1548149098/monkey_logo.png" ' +
+          'style="display: block;" alt="Logo" title="Logo" width="100"' +
+          '                                                                                        >\n' +
           '                                                                                    </td>\n' +
           '                                                                                </tr>\n' +
           '                                                                                <tr>\n' +
-          '                                                                                    <td align="center" class="esd-block-text es-p25t es-p30b">\n' +
-          '                                                                                        <h1 style="color: #ffffff; font-family: arial, helvetica\\ neue, helvetica, sans-serif;">Event Invitation</h1>\n' +
+          '                                                                                    <td ' +
+          '                                                                                     align="center" ' +
+          '                                                                    class="esd-block-text es-p25t es-p30b"' +
+          '                                                                                    >\n' +
+          '                                                                                        <h1 ' +
+          '       style="color: #ffffff; font-family: arial, helvetica\\ neue, helvetica, sans-serif;">' +
+          '                                                                                         Event Invitation' +
+          '                                                                                       </h1>\n' +
           '                                                                                    </td>\n' +
           '                                                                                </tr>\n' +
           '                                                                            </tbody>\n' +
@@ -118,24 +176,48 @@ router.post(
           '                                                    </td>\n' +
           '                                                </tr>\n' +
           '                                                <tr>\n' +
-          '                                                    <td class="esd-structure es-p40r es-p40l" esd-custom-block-id="6599" align="left">\n' +
-          '                \n' +
-          '                                                        <table class="es-left" cellspacing="0" cellpadding="0" style="margin: 0 auto">\n' +
+          '                                                    <td ' +
+          '                                                     class="esd-structure es-p40r es-p40l" ' +
+          '                                                     esd-custom-block-id="6599" ' +
+          '                                                     align="left"' +
+          '                                                    >\n' +
+          '                                                        <table ' +
+          '                                                         class="es-left"' +
+          '                                                         cellspacing="0"' +
+          '                                                         cellpadding="0"' +
+          '                                                         style="margin: 0 auto"' +
+          '                                                        >\n' +
           '                                                            <tbody>\n' +
           '                                                                <tr>\n' +
-          '                                                                    <td class="esd-container-frame" width="196" align="center">\n' +
-          '                                                                        <table style="border-radius: 3px; border-collapse: separate; background-color: white;" width="100%" cellspacing="0" cellpadding="0" bgcolor="#ffffff">\n' +
+          '                                                                    <td ' +
+          '                                                                     class="esd-container-frame"' +
+          '                                                                     width="196" ' +
+          '                                                                     align="center"' +
+          '                                                                    >\n' +
+          '                                                                        <table ' +
+          'style="border-radius: 3px; border-collapse: separate; background-color: white;" width="100%" ' +
+          'cellspacing="0" cellpadding="0" bgcolor="#ffffff"' +
+          '                                                                        >\n' +
           '                                                                            <tbody>\n' +
           '                                                                                <tr>\n' +
-          '                                                                                    <td style="border-radius: 3px 3px 0 0" bgcolor="#3aabd1" align="center" class="esd-block-text es-p10t es-p5b">\n' +
-          '                                                                                        <p style="color: #ffffff; font-size: 14px; font-family: arial, helvetica\\ neue, helvetica, sans-serif;">\n' +
-          '                                                                                            J A N\n' +
+          '                                                                                    <td ' +
+          'style="border-radius: 3px 3px 0 0" bgcolor="#3aabd1" align="center" class="esd-block-text es-p10t es-p5b"' +
+          '                                                                                    >\n' +
+          '                                                                                        <p ' +
+          'style="color: #ffffff; font-size: 14px; font-family: arial, helvetica\\ neue, helvetica, sans-serif;"' +
+          '                                                                                        >\n' +
+          '                                                                                            J A N' +
           '                                                                                        </p>\n' +
           '                                                                                    </td>\n' +
           '                                                                                </tr>\n' +
           '                                                                                <tr>\n' +
-          '                                                                                    <td align="center" class="esd-block-text es-p15t es-p15b es-p15r es-p15l">\n' +
-          '                                                                                        <p style="color: #444444; font-size: 48px; line-height: 150%; font-family: arial, helvetica\\ neue, helvetica, sans-serif;">\n' +
+          '                                                                                    <td ' +
+          'align="center" class="esd-block-text es-p15t es-p15b es-p15r es-p15l"' +
+          '                                                                                    >\n' +
+          '                                                                                        <p ' +
+          'style="color: #444444; font-size: 48px; line-height: 150%; ' +
+          'font-family: arial, helvetica\\ neue, helvetica, sans-serif;"' +
+          '                                                                                        >\n' +
           '                                                                                            12\n' +
           '                                                                                        </p>\n' +
           '                                                                                    </td>\n' +
@@ -149,23 +231,53 @@ router.post(
           '                                                    </td>\n' +
           '                                                </tr>\n' +
           '                                                <tr>\n' +
-          '                                                    <td class="esd-structure es-p20t es-p15b es-p20r es-p20l" align="left">\n' +
-          '                                                        <table width="100%" cellspacing="0" cellpadding="0">\n' +
+          '                                                    <td ' +
+          '                                                     class="esd-structure es-p20t es-p15b es-p20r es-p20l"' +
+          '                                                     align="left"' +
+          '                                                    >\n' +
+          '                                                        <table width="100%" cellspacing="0" ' +
+          '                                                         cellpadding="0"' +
+          '                                                        >\n' +
           '                                                            <tbody>\n' +
           '                                                                <tr>\n' +
-          '                                                                    <td class="esd-container-frame" width="600" valign="top" align="center">\n' +
-          '                                                                        <table width="100%" cellspacing="0" cellpadding="0">\n' +
+          '                                                                    <td ' +
+          '                                                                     class="esd-container-frame"' +
+          '                                                                     width="600" ' +
+          '                                                                     valign="top"' +
+          '                                                                     align="center"' +
+          '                                                                    >\n' +
+          '                                                                        <table ' +
+          '                                                                         width="100%" ' +
+          '                                                                         cellspacing="0" ' +
+          '                                                                         cellpadding="0"' +
+          '                                                                        >\n' +
           '                                                                            <tbody>\n' +
           '                                                                                <tr>\n' +
-          '                                                                                    <td esdev-links-color="#b7bdc9" class="esd-block-text es-p15t es-p20b" align="center">\n' +
-          '                                                                                        <p style="color: #b7bdc9; font-family: \'open sans\', \'helvetica neue\', helvetica, arial, sans-serif;">Mandeville carneiro robbins goas ross kelly ragan rodriguez stig jordan hodgekiss merlin yeaman mandeville carneiro robbins goas ross kelly ragan rodriguez stig jordan hodgekiss merlin yeaman</p>\n' +
+          '                                                                                    <td ' +
+          '                                                                               esdev-links-color="#b7bdc9"' +
+          '                                                                    class="esd-block-text es-p15t es-p20b"' +
+          '                                                                                            align="center"' +
+          '                                                                                    >\n' +
+          '                                                                                        <p ' +
+          'style="color: #b7bdc9; font-family: \'open sans\', \'helvetica neue\', helvetica, arial, sans-serif;">' +
+          'Mandeville carneiro robbins goas ross kelly ragan rodriguez stig jordan hodgekiss merlin y' +
+          'eaman mandeville carneiro robbins goas ross kelly ragan rodriguez stig jordan hodgekiss merlin yeaman' +
+          '                                                                                        </p>\n' +
           '                                                                                    </td>\n' +
           '                                                                                </tr>\n' +
           '                                                                                <tr>\n' +
-          '                                                                                    <td class="esd-block-button es-p5t es-p40b" height="50px" align="center"> \n' +
-          '                                                                                        <span class="es-button-border"> \n' +
-          '                                                                                            <a href="#" class="es-button" target="_blank" style="color: white; font-family: arial, helvetica\\ neue, helvetica, sans-serif;"> \n' +
-          '                                                                                                click here for more details\n' +
+          '                                                                                    <td ' +
+          '                                      class="esd-block-button es-p5t es-p40b" height="50px" align="center"' +
+          '                                                                                    > \n' +
+          '                                                                                        <span ' +
+          '                                                                                  class="es-button-border"' +
+          '                                                                                           > \n' +
+          '                                                                                            <a ' +
+          'href="#" class="es-button" target="_blank" ' +
+          'style="color: white; font-family: arial, helvetica\\ neue, helvetica, sans-serif;"' +
+          '                                                                                            > \n' +
+          '                                                                                                click here' +
+          '                                                                                        for more details\n' +
           '                                                                                            </a> \n' +
           '                                                                                        </span> \n' +
           '                                                                                    </td>\n' +
