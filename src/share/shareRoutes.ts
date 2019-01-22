@@ -161,8 +161,8 @@ router.post(
           '                                                                                     align="center" ' +
           '                                                                    class="esd-block-text es-p25t es-p30b"' +
           '                                                                                    >\n' +
-          '                                                                                        <h1 ' +
-          '       style="color: #ffffff; font-family: arial, helvetica\\ neue, helvetica, sans-serif;">' +
+          '                                                                                        ' +
+          '                                   <h1 style="color: #ffffff; font-family: arial, helvetica, sans-serif;">' +
           '                                                                                         Event Invitation' +
           '                                                                                       </h1>\n' +
           '                                                                                    </td>\n' +
@@ -203,9 +203,7 @@ router.post(
           '                                                                                    <td ' +
           'style="border-radius: 3px 3px 0 0" bgcolor="#3aabd1" align="center" class="esd-block-text es-p10t es-p5b"' +
           '                                                                                    >\n' +
-          '                                                                                        <p ' +
-          'style="color: #ffffff; font-size: 14px; font-family: arial, helvetica\\ neue, helvetica, sans-serif;"' +
-          '                                                                                        >\n' +
+          '                 <p style="color: #ffffff; font-size: 14px; font-family: arial, helvetica, sans-serif;">\n' +
           '                                                                                            J A N' +
           '                                                                                        </p>\n' +
           '                                                                                    </td>\n' +
@@ -214,10 +212,8 @@ router.post(
           '                                                                                    <td ' +
           'align="center" class="esd-block-text es-p15t es-p15b es-p15r es-p15l"' +
           '                                                                                    >\n' +
-          '                                                                                        <p ' +
-          'style="color: #444444; font-size: 48px; line-height: 150%; ' +
-          'font-family: arial, helvetica\\ neue, helvetica, sans-serif;"' +
-          '                                                                                        >\n' +
+          '                                            <p style="color: #444444; font-size: 48px; line-height: 150%; ' +
+          '                                          font-family: arial, helvetica\\ neue, helvetica, sans-serif;">\n' +
           '                                                                                            12\n' +
           '                                                                                        </p>\n' +
           '                                                                                    </td>\n' +
@@ -259,7 +255,7 @@ router.post(
           '                                                                                            align="center"' +
           '                                                                                    >\n' +
           '                                                                                        <p ' +
-          'style="color: #b7bdc9; font-family: \'open sans\', \'helvetica neue\', helvetica, arial, sans-serif;">' +
+          'style="color: white; font-family: \'open sans\', \'helvetica neue\', helvetica, arial, sans-serif;">' +
           'Mandeville carneiro robbins goas ross kelly ragan rodriguez stig jordan hodgekiss merlin y' +
           'eaman mandeville carneiro robbins goas ross kelly ragan rodriguez stig jordan hodgekiss merlin yeaman' +
           '                                                                                        </p>\n' +
