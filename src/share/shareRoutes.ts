@@ -201,7 +201,8 @@ router.post(
           '                                                                            <tbody>\n' +
           '                                                                                <tr>\n' +
           '                                                                                    <td ' +
-          'style="border-radius: 3px 3px 0 0" bgcolor="#3aabd1" align="center" class="esd-block-text es-p10t es-p5b"' +
+          'style="border-radius: 3px 3px 0 0; min-width: 100px;"' +
+          ' bgcolor="#3aabd1" align="center" class="esd-block-text es-p10t es-p5b"' +
           '                                                                                    >\n' +
           '                 <p style="color: #ffffff; font-size: 14px; font-family: arial, helvetica, sans-serif;">\n' +
           '                                                                                            J A N' +
