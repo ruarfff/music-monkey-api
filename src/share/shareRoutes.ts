@@ -9,7 +9,11 @@ router.post(
   '/email',
   passport.authenticate('jwt', { session: false }),
   (req: Request, res: Response) => {
-    const { emails, event } = req.body
+    const { emails, event, emailText } = req.body
+
+    const eventImg = event.imageUrl ?
+      event.imageUrl :
+      'https://res.cloudinary.com/dxk0d7mmy/image/upload/v1548150130/partycover.png'
     try {
       emails.map(async (email: string) => {
         const msg = {
@@ -20,7 +24,6 @@ router.post(
           html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"' +
           ' "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\n' +
           '<html>\n' +
-          '\n' +
           '<head>\n' +
           '    <meta charset="UTF-8">\n' +
           '    <meta content="width=device-width, initial-scale=1" name="viewport">\n' +
@@ -105,7 +108,7 @@ router.post(
           '                                    <td ' +
           '                                     class="esd-stripe esd-checked" ' +
           'style="' +
-          'background-image:url(https://res.cloudinary.com/dxk0d7mmy/image/upload/v1548150130/partycover.png);' +
+          'background-image:url(' + eventImg + ');' +
           'background-color: rgb(61, 76, 107); ' +
           'background-position: left top; ' +
           'background-repeat: no-repeat; ' +
@@ -163,7 +166,7 @@ router.post(
           '                                                                                    >\n' +
           '                                                                                        ' +
           '                                   <h1 style="color: #ffffff; font-family: arial, helvetica, sans-serif;">' +
-          '                                                                                         Event Invitation' +
+          '                                                                                       Event ' + event.name +
           '                                                                                       </h1>\n' +
           '                                                                                    </td>\n' +
           '                                                                                </tr>\n' +
@@ -257,8 +260,7 @@ router.post(
           '                                                                                    >\n' +
           '                                                                                        <p ' +
           'style="color: white; font-family: \'open sans\', \'helvetica neue\', helvetica, arial, sans-serif;">' +
-          'Mandeville carneiro robbins goas ross kelly ragan rodriguez stig jordan hodgekiss merlin y' +
-          'eaman mandeville carneiro robbins goas ross kelly ragan rodriguez stig jordan hodgekiss merlin yeaman' +
+          emailText +
           '                                                                                        </p>\n' +
           '                                                                                    </td>\n' +
           '                                                                                </tr>\n' +
@@ -270,7 +272,7 @@ router.post(
           '                                                                                  class="es-button-border"' +
           '                                                                                           > \n' +
           '                                                                                            <a ' +
-          'href="#" class="es-button" target="_blank" ' +
+          'href="https://guests.musicmonkey.io/invite/' + event.invites[0] + '" class="es-button" target="_blank" ' +
           'style="color: white; font-family: arial, helvetica\\ neue, helvetica, sans-serif;"' +
           '                                                                                            > \n' +
           '                                                                                                click here' +
