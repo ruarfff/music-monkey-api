@@ -208,7 +208,7 @@ router.post(
           ' bgcolor="#3aabd1" align="center" class="esd-block-text es-p10t es-p5b"' +
           '                                                                                    >\n' +
           '                 <p style="color: #ffffff; font-size: 14px; font-family: arial, helvetica, sans-serif;">\n' +
-          '                                                                                            J A N' +
+                                                                                     event.startDateTime.format('MMM') +
           '                                                                                        </p>\n' +
           '                                                                                    </td>\n' +
           '                                                                                </tr>\n' +
@@ -218,7 +218,7 @@ router.post(
           '                                                                                    >\n' +
           '                                            <p style="color: #444444; font-size: 48px; line-height: 150%; ' +
           '                                          font-family: arial, helvetica\\ neue, helvetica, sans-serif;">\n' +
-          '                                                                                            12\n' +
+                                                                                       event.startDateTime.format('D') +
           '                                                                                        </p>\n' +
           '                                                                                    </td>\n' +
           '                                                                                </tr>\n' +
