@@ -169,7 +169,7 @@ router.post(
           '                                                                                    >\n' +
           '                                                                                        ' +
           '                                   <h1 style="color: #ffffff; font-family: arial, helvetica, sans-serif;">' +
-          '                                                                                       Event ' + event.name +
+                                                                                                    event.name +
           '                                                                                       </h1>\n' +
           '                                                                                    </td>\n' +
           '                                                                                </tr>\n' +
