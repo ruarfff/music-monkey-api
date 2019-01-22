@@ -275,8 +275,9 @@ router.post(
           '                                                                                  class="es-button-border"' +
           '                                                                                           > \n' +
           '                                                                                            <a ' +
-          'href="https://guests.musicmonkey.io/invite/' + event.invites[0] + '" class="es-button" target="_blank" ' +
-          'style="color: white; font-family: arial, helvetica\\ neue, helvetica, sans-serif;"' +
+          'href="https://guests.musicmonkey.io/invite/' + event.invites[0] + '" ' +
+          'class="es-button" target="_blank" style="color: white; font-family: arial, helvetica\\ neue,' +
+          ' helvetica, sans-serif;"' +
           '                                                                                            > \n' +
           '                                                                                                click here' +
           '                                                                                        for more details\n' +
@@ -305,9 +306,7 @@ router.post(
           '    </div>\n' +
           '</body>\n' +
           '\n' +
-          '</html>' +
-          '<a href="https://guests.musicmonkey.io/invite/' + event.invites[0] + '">' +
-          'click here for more details</a>'
+          '</html>'
         }
         try {
           await sgMail.send(msg)
