@@ -3,7 +3,7 @@ import * as cors from 'cors'
 import * as express from 'express'
 import * as helmet from 'helmet'
 import { IS_PRODUCTION } from './config'
-import { expressLogger , rollbarErrorHandler } from './logging'
+import {/* expressLogger , */rollbarErrorHandler } from './logging'
 import passport from './passport'
 import { swaggerSpec } from './swagger'
 
@@ -56,7 +56,7 @@ const corsOptions = {
   }
 }
 
-app.use(expressLogger)
+// app.use(expressLogger)
 app.use(helmet())
 app.use(cors(corsOptions))
 app.use(express.json())

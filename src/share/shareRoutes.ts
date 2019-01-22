@@ -1,6 +1,8 @@
 import sgMail = require('@sendgrid/mail')
 import { Request, Response, Router } from 'express'
+import * as moment from 'moment'
 import * as passport from 'passport'
+
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
 const router = Router()
@@ -14,6 +16,7 @@ router.post(
     const eventImg = event.imageUrl ?
       event.imageUrl :
       'https://res.cloudinary.com/dxk0d7mmy/image/upload/v1548150130/partycover.png'
+
     try {
       emails.map(async (email: string) => {
         const msg = {
@@ -208,7 +211,7 @@ router.post(
           ' bgcolor="#3aabd1" align="center" class="esd-block-text es-p10t es-p5b"' +
           '                                                                                    >\n' +
           '                 <p style="color: #ffffff; font-size: 14px; font-family: arial, helvetica, sans-serif;">\n' +
-                                                                                     event.startDateTime.format('MMM') +
+                                                                      moment(event.startDateTime).format('MMM') +
           '                                                                                        </p>\n' +
           '                                                                                    </td>\n' +
           '                                                                                </tr>\n' +
@@ -218,7 +221,7 @@ router.post(
           '                                                                                    >\n' +
           '                                            <p style="color: #444444; font-size: 48px; line-height: 150%; ' +
           '                                          font-family: arial, helvetica\\ neue, helvetica, sans-serif;">\n' +
-                                                                                       event.startDateTime.format('D') +
+                                                                        moment(event.startDateTime).format('D') +
           '                                                                                        </p>\n' +
           '                                                                                    </td>\n' +
           '                                                                                </tr>\n' +
