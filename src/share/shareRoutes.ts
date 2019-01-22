@@ -276,7 +276,7 @@ router.post(
           '                                                                                           > \n' +
           '                                                                                            <a ' +
           'href="https://guests.musicmonkey.io/invite/' + event.invites[0] + '" ' +
-          'class="es-button" target="_blank" style="style="color: white;"' +
+          'class="es-button" target="_blank" style="color: white;"' +
           '                                                                                            > \n' +
           '                                                                                                click here' +
           '                                                                                        for more details\n' +
