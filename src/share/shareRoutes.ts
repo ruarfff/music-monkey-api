@@ -84,7 +84,7 @@ router.post(
           '                                                                                    >\n' +
           '                                                                                        <p ' +
           '                                     style="font-family: arial, helvetica\\ neue, helvetica, sans-serif;">' +
-          '                                                                                          Music Monkey<br>' +
+          '                                                                                          MusicMonkey<br>' +
           '                                                                                        </p>\n' +
           '                                                                                    </td>\n' +
           '                                                                                </tr>\n' +
