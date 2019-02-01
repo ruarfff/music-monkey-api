@@ -156,32 +156,10 @@ router.post(
           'align="center" ' +
           'height="100"' +
           '                                                                                    >\n' +
-          '                                                                                            <a ' +
-          'href="https://guests.musicmonkey.io/invite/' + event.invites[0] + '" ' +
-          'class="es-button" target="_blank" style="color: white;"' +
-          '                                                                                            > \n' +
           '                                                                                        <img ' +
           'src="https://res.cloudinary.com/dxk0d7mmy/image/upload/v1548149098/monkey_logo.png" ' +
           'style="display: block;" alt="Logo" title="Logo" width="100"' +
           '                                                                                        >\n' +
-          '                                                                                            </a> \n' +
-          '                                                                                    </td>\n' +
-          '                                                                                </tr>\n' +
-          '                                                                                <tr>\n' +
-          '                                                                                    <td ' +
-          '                                      class="esd-block-button es-p5t es-p40b" height="50px" align="center"' +
-          '                                                                                    > \n' +
-          '                                                                                        <span ' +
-          '                                                                                  class="es-button-border"' +
-          '                                                                                           > \n' +
-          '                                                                                            <a ' +
-          'href="https://guests.musicmonkey.io/invite/' + event.invites[0] + '" ' +
-          'class="es-button" target="_blank" style="color: white;"' +
-          '                                                                                            > \n' +
-          '                                                                                                click here' +
-          '                                                                                        for more details\n' +
-          '                                                                                            </a> \n' +
-          '                                                                                        </span> \n' +
           '                                                                                    </td>\n' +
           '                                                                                </tr>\n' +
           '                                                                                <tr>\n' +
@@ -287,6 +265,23 @@ router.post(
           'style="color: white; font-family: \'open sans\', \'helvetica neue\', helvetica, arial, sans-serif;">' +
           emailText +
           '                                                                                        </p>\n' +
+          '                                                                                    </td>\n' +
+          '                                                                                </tr>\n' +
+          '                                                                                <tr>\n' +
+          '                                                                                    <td ' +
+          '                                      class="esd-block-button es-p5t es-p40b" height="50px" align="center"' +
+          '                                                                                    > \n' +
+          '                                                                                        <span ' +
+          '                                                                                  class="es-button-border"' +
+          '                                                                                           > \n' +
+          '                                                                                            <a ' +
+          'href="https://guests.musicmonkey.io/invite/' + event.invites[0] + '" ' +
+          'class="es-button" target="_blank" style="color: white;"' +
+          '                                                                                            > \n' +
+          '                                                                                                click here' +
+          '                                                                                        for more details\n' +
+          '                                                                                            </a> \n' +
+          '                                                                                        </span> \n' +
           '                                                                                    </td>\n' +
           '                                                                                </tr>\n' +
           '                                                                            </tbody>\n' +
