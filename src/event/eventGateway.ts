@@ -9,7 +9,6 @@ import { logError } from '../logging'
 import { IRsvp } from '../model'
 import cleanModel from '../model/cleanModel'
 import { Event } from '../model/event'
-import { Rsvp } from '../model/rsvp'
 import { getRsvpByEventId } from '../rsvp/rsvpService'
 import { getSafeUserById } from '../user/userService'
 import { onEventDeleted, onEventUpdated } from './eventNotifier'
@@ -76,12 +75,6 @@ export const deleteEvent = (eventId: string, userId: string) => {
         return reject(err)
       }
       onEventDeleted(eventId)
-      return resolve()
-    })
-    Rsvp.destroy(eventId, (err: Error) => {
-      if (err) {
-        return reject(err)
-      }
       return resolve()
     })
   })
