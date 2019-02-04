@@ -78,7 +78,7 @@ export const deleteEvent = (eventId: string, userId: string) => {
       onEventDeleted(eventId)
       return resolve()
     })
-    Rsvp.destroy(eventId, userId, (err: Error) => {
+    Rsvp.destroy(eventId, (err: Error) => {
       if (err) {
         return reject(err)
       }
