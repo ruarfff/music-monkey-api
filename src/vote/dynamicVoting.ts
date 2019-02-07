@@ -78,8 +78,6 @@ function sortPlaylistByVotesDescending(playlist: IPlaylist, votes: any) {
   const playlistItems = [...playlist.tracks.items]
   const defaultVotes = { numberOfVotes: 0 }
 
-  console.log('>>>> VOTES', votes)
-
   playlistItems.sort((a: any, b: any) => {
     const aVotes = (votes[a.track.uri] || defaultVotes).numberOfVotes
     const bVotes = (votes[b.track.uri] || defaultVotes).numberOfVotes
@@ -90,8 +88,6 @@ function sortPlaylistByVotesDescending(playlist: IPlaylist, votes: any) {
 
     return aVotes < bVotes ? 1 : -1
   })
-
-  console.log('>>>> PLAYLIST', playlistItems)
 
   return {
     ...playlist,

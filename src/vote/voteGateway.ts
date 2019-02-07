@@ -40,7 +40,6 @@ export const deleteVote = async (voteId: string) => {
     const eventId = idParts[idParts.length - 2]
     await remove(voteId, eventId)
     await handleDeleteForDynamicVoting(eventId)
-    // await remove(voteId, eventId)
     onVoteDeleted(eventId)
   } catch (err) {
     logError('Failed to delete vote', err)
