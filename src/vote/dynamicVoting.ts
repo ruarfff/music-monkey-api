@@ -76,24 +76,23 @@ async function sortAndUpdatePlaylist(
 
 function sortPlaylistByVotesDescending(playlist: IPlaylist, votes: any) {
   const playlistItems = [...playlist.tracks.items]
+  const defaultVotes = { numberOfVotes: 0 }
+
+  console.log('>>>> VOTES', votes)
+
   playlistItems.sort((a: any, b: any) => {
-    let numA = 0
-    let numB = 0
-    if (votes[a.track.uri]) {
-      numA = votes[a.track.uri]!.numberOfVotes
-    }
-    if (votes[b.track.uri]) {
-      numB = votes[b.track.uri]!.numberOfVotes
-    }
-    if (numA < numB) {
-      return 1
-    }
-    if (numA > numB) {
-      return -1
+    const aVotes = (votes[a.track.uri] || defaultVotes).numberOfVotes
+    const bVotes = (votes[b.track.uri] || defaultVotes).numberOfVotes
+
+    if (aVotes === bVotes) {
+      return 0
     }
 
-    return 0
+    return aVotes < bVotes ? 1 : -1
   })
+
+  console.log('>>>> PLAYLIST', playlistItems)
+
   return {
     ...playlist,
     tracks: { ...playlist.tracks, items: playlistItems }
