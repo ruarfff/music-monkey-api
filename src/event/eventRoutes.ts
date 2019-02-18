@@ -10,6 +10,7 @@ import {
   updateEvent
 } from './eventGateway'
 import IEvent from './model/IEvent'
+import { replaceTracksInPlaylist } from '../spotify/spotifyClient'
 const router = Router()
 const eventDecorator = new EventDecorator()
 
@@ -156,6 +157,11 @@ router.put(
         res.status(400).send('Cannot update event belonging to another user')
       } else if (payload.eventId !== event.eventId) {
         res.status(400).send('Cannot update event ID')
+      } else if (payload.settings.dynamicVotingEnabled) {
+        const user = req.user
+        const playlistId = event.playlist.playlistId
+        const trackUris = event.playlist.tracks.items.map((item: any) => item.track.uri)
+        await replaceTracksInPlaylist(user, playlistId, trackUris)
       } else {
         const updatedEvent = await updateEvent(req.body)
         res.send(updatedEvent)
