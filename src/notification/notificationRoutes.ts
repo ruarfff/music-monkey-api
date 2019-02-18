@@ -38,15 +38,15 @@ router.get(
   passport.authenticate('jwt', { session: false }),
   async (req: Request, res: Response) => {
     try {
-      // const { userId } = req.params
-      // if (req.user.userId !== userId) {
-      //   res
-      //     .status(401)
-      //     .send(
-      //       'You do not have permission to view another users notifications'
-      //     )
-      //   return
-      // }
+      const { userId } = req.params
+      if (req.user.userId !== userId) {
+        res
+          .status(401)
+          .send(
+            'You do not have permission to view another users notifications'
+          )
+        return
+      }
       const userNotifications = await getUsersNotifications(req.params.userId)
       res.send(userNotifications)
     } catch (e) {

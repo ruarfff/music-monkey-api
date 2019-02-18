@@ -41,7 +41,7 @@ async function notifyRsvpCreation(rsvp: IRsvp, user: IUser) {
   try {
     const event: IEvent = await getEventById(rsvp.eventId)
     onRsvpCreated(rsvp)
-    createNotification({
+    await createNotification({
       userId: event.userId,
       context: 'event',
       type: 'rsvp',
@@ -64,7 +64,7 @@ async function notifyRsvpUpdated(rsvp: IRsvp, user: IUser) {
   try {
     const event: IEvent = await getEventById(rsvp.eventId)
     onRsvpUpdated(rsvp)
-    createNotification({
+    await createNotification({
       userId: event.userId,
       context: 'event',
       type: 'rsvp',
