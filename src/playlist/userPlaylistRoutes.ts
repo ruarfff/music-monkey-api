@@ -27,13 +27,14 @@ router.get(
   '/:userId/playlists',
   passport.authenticate('jwt', { session: false }),
   (req: Request, res: Response) => {
-    const { user } = req
+    const { user, query } = req
+    const { limit, offset } = query
     const userData: IUser = user
 
     if (req.params.userId !== userData.userId) {
       res.status(401).send('Wrong User')
     } else if (userData.spotifyId) {
-      getUserPlaylists(userData)
+      getUserPlaylists(userData, { limit, offset })
         .then((playlists: any) => {
           res.send(playlists)
         })

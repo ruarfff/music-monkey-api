@@ -102,11 +102,14 @@ export const getPlaylist = async (user: IUser, playlistId: string) => {
   return body
 }
 
-export const getUserPlaylists = async (user: IUser) => {
+export const getUserPlaylists = async (user: IUser, options: any) => {
   const validUser: IUser = await checkToken(user)
   const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
 
-  const response = await spotifyApi.getUserPlaylists(validUser.spotifyId)
+  const response = await spotifyApi.getUserPlaylists(
+    validUser.spotifyId,
+    options
+  )
 
   const playlists = response.body.items.filter(
     (playlist: any) => playlist.owner.id === user.spotifyId
