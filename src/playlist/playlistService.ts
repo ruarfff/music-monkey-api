@@ -4,7 +4,7 @@ import IPlaylist from '../spotify/IPlaylist'
 import ITrack from '../spotify/ITrack'
 import {
   addTracksToPlaylist,
-  createPlaylist,
+  createPlaylist, editPlaylistDetails,
   getPlaylist,
   removeTrackFromPlaylist,
   removeTracksFromPlaylist,
@@ -60,6 +60,22 @@ export const reOrderPlaylist = async (
     playlistId,
     fromIndex,
     toIndex
+  )
+  onPlaylistUpdated(playlistId)
+  return playlist
+}
+
+export const changePlaylistDetails = async (
+  user: IUser,
+  playlistId: string,
+  name: string,
+  description: string
+) => {
+  const playlist = await editPlaylistDetails(
+    user,
+    playlistId,
+    name,
+    description
   )
   onPlaylistUpdated(playlistId)
   return playlist

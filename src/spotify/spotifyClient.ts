@@ -149,6 +149,18 @@ export const reorderTracksInPlaylist = async (
   )
 }
 
+export const editPlaylistDetails = async (
+  user: IUser,
+  playlistId: string,
+  name: string,
+  description: string
+) => {
+  const validUser: IUser = await checkToken(user)
+  const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
+  const { body } = await spotifyApi.changePlaylistDetails(playlistId, {name, description})
+  return body
+}
+
 export const replaceTracksInPlaylist = async (
   user: IUser,
   playlistId: string,

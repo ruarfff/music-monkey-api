@@ -3,7 +3,7 @@ import * as passport from 'passport'
 import IPlaylist from '../spotify/IPlaylist'
 import IPlaylistParams from './IPlaylistParams'
 import {
-  addTracksToExistingPlaylist,
+  addTracksToExistingPlaylist, changePlaylistDetails,
   createNewPlaylist,
   deleteSingleTrackFromPlaylist,
   getPlaylistById,
@@ -152,6 +152,38 @@ router.put(
       } else {
         res.send(playlist)
       }
+    } catch (err) {
+      res.status(500).send(err ? err.message : 'An unexpected error occurred.')
+    }
+  }
+)
+
+/**
+ * @swagger
+ * /playlists/{playlistId}:
+ *   put:
+ *     tags:
+ *       - playlists
+ *     description: Edit playlist details
+ *     summary: Edit playlist details of an existing playlist
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: Edit playlist details changed
+ */
+router.put(
+  '/:playlistId',
+  passport.authenticate('jwt', { session: false }),
+  async (req: Request, res: Response) => {
+    try {
+      const { user, body, params } = req
+      const playlistId = params.playlistId
+      const { name, description } = body
+      let playlist: IPlaylist
+      playlist = await changePlaylistDetails(user, playlistId, name, description)
+
+      res.send(playlist)
     } catch (err) {
       res.status(500).send(err ? err.message : 'An unexpected error occurred.')
     }
