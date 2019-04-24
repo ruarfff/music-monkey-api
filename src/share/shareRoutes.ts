@@ -113,7 +113,7 @@ router.post(
           'style="' +
           'background-image:url(' + eventImg + ');' +
           'background-color: rgb(61, 76, 107); ' +
-          'background-position: left top; ' +
+          'background-position: center center; ' +
           'background-repeat: no-repeat; ' +
           'background-size: cover;" ' +
           'bgcolor="#3d4c6b" align="center"' +
