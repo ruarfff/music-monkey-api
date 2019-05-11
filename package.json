@@ -17,7 +17,9 @@
     "test": "jest --forceExit --coverage --verbose --detectOpenHandles",
     "watch-test": "npm run test -- --watchAll",
     "security-check": "snyk test",
-    "copy-to-build": "node copyToBuild.js"
+    "copy-to-build": "node copyToBuild.js",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "dependencies": {
     "@sendgrid/mail": "6.3.1",
@@ -55,7 +57,8 @@
     "spotify-web-api-node": "4.0.0",
     "uuid": "3.3.2",
     "winston": "3.2.1",
-    "winston-loggly-bulk": "2.0.3"
+    "winston-loggly-bulk": "2.0.3",
+    "snyk": "^1.163.3"
   },
   "devDependencies": {
     "@types/bcrypt": "3.0.0",
@@ -91,7 +94,6 @@
     "npm-run-all": "4.1.5",
     "rimraf": "2.6.3",
     "sinon": "7.2.2",
-    "snyk": "1.136.3",
     "supertest": "3.3.0",
     "swagger-jsdoc": "3.2.9",
     "ts-jest": "24.0.0",
@@ -104,5 +106,6 @@
     "url": ""
   },
   "license": "UNLICENSED",
-  "description": "music-monkey-api"
+  "description": "music-monkey-api",
+  "snyk": true
 }
