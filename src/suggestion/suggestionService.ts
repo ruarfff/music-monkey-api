@@ -23,9 +23,9 @@ import {
 } from './suggestionNotifier'
 
 export const createSuggestions = async (suggestions: ISuggestion[]) => {
-  const suggestionModel = await saveSuggestions(suggestions)
-  handleSavedSuggestions(suggestionModel)
-  return suggestionModel
+  const savedSuggestions = await saveSuggestions(suggestions)
+  handleSavedSuggestions(savedSuggestions)
+  return savedSuggestions
 }
 
 export const createSuggestion = async (suggestion: ISuggestion) => {
