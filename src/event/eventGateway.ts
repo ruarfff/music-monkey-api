@@ -99,7 +99,7 @@ export const getEventById = async (eventId: string) => {
 export const getEventByInviteId = async (inviteId: string) => {
   const { eventId }: IInvite = await getInviteById(inviteId)
 
-  return this.getEventById(eventId)
+  return getEventById(eventId)
 }
 
 export const getEventsByUserId = (userId: string) => {
