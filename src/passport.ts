@@ -1,4 +1,4 @@
-import * as bcrypt from 'bcrypt'
+import * as bcrypt from 'bcryptjs'
 import * as passport from 'passport'
 import * as passportJWT from 'passport-jwt'
 import { jwtCookieKey } from './auth/authConstants'

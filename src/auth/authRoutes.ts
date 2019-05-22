@@ -1,4 +1,4 @@
-import * as bcrypt from 'bcrypt'
+import * as bcrypt from 'bcryptjs'
 import { Request, Response, Router } from 'express'
 import { isEmpty } from 'lodash'
 import * as passport from 'passport'
