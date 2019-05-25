@@ -1,6 +1,7 @@
 import { Request, Response, Router } from 'express'
 import * as passport from 'passport'
 import { getAllEventsUserWasInvitedTo } from './userEventService'
+import { logError } from '../logging'
 
 const router = Router()
 
@@ -28,8 +29,9 @@ router.get(
     try {
       const events = await getAllEventsUserWasInvitedTo(user)
       res.send(events)
-    } catch (e) {
-      res.status(500).send(e.message)
+    } catch (err) {
+      logError('Error getting events user was invited to', err, req)
+      res.status(500).send(err.message)
     }
   }
 )

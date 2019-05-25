@@ -1,10 +1,9 @@
 import { Request, Response, Router } from 'express'
 import * as passport from 'passport'
-import EventDecorator from './EventDecorator'
-import { getEventByInviteId } from './eventGateway'
+import { getEventByInvite } from './eventService'
 import IEvent from './model/IEvent'
+import { logError } from '../logging'
 const router = Router()
-const eventDecorator = new EventDecorator()
 
 /**
  * @swagger
@@ -26,20 +25,14 @@ router.get(
   '/:inviteId/event',
   passport.authenticate('jwt', { session: false }),
   async (req: Request, res: Response) => {
-    const { user } = req
+    const { user, params } = req
+    const { inviteId } = params
     try {
-      if (req.params.inviteId) {
-        const event: IEvent = await getEventByInviteId(req.params.inviteId)
-        const decoratedEvent = await eventDecorator.decorateSingleEvent(
-          event,
-          user
-        )
-        res.send(decoratedEvent)
-      } else {
-        res.status(404).send()
-      }
+      const event: IEvent = await getEventByInvite(inviteId, user)
+      res.send(event)
     } catch (err) {
-      res.status(404).send()
+      logError('Could not get event by invite', err, req)
+      res.status(404).send(err.message)
     }
   }
 )

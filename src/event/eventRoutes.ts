@@ -1,17 +1,15 @@
 import { Request, Response, Router } from 'express'
 import * as passport from 'passport'
 import { logError } from '../logging'
-import EventDecorator from './EventDecorator'
 import {
-  createEvent,
-  deleteEvent,
-  getEventById,
-  getEventsByUserId,
-  updateEvent
-} from './eventGateway'
+  getEventsForUser,
+  getEvent,
+  saveEvent,
+  updateEvent,
+  deleteEvent
+} from './eventService'
 import IEvent from './model/IEvent'
 const router = Router()
-const eventDecorator = new EventDecorator()
 
 /**
  * @swagger
@@ -38,9 +36,8 @@ router.get(
   async (req: Request, res: Response) => {
     try {
       const { user } = req
-      const events: IEvent[] = await getEventsByUserId(user.userId)
-      const decoratedEvents = await eventDecorator.decorateEvents(events, user)
-      res.send(decoratedEvents)
+      const events: IEvent[] = await getEventsForUser(user)
+      res.send(events)
     } catch (err) {
       logError('Error getting events', err, req)
       res.send([])
@@ -70,13 +67,8 @@ router.get(
   async (req: Request, res: Response) => {
     try {
       const { user } = req
-      const event: IEvent = await getEventById(req.params.eventId)
-      const decoratedEvent = await eventDecorator.decorateSingleEvent(
-        event,
-        user
-      )
-
-      res.send(decoratedEvent)
+      const event: IEvent = await getEvent(req.params.eventId, user)
+      res.send(event)
     } catch (err) {
       logError('Error getting event by IDs', err, req)
       res.status(404).send(err)
@@ -109,16 +101,15 @@ router.get(
 router.post(
   '/',
   passport.authenticate('jwt', { session: false }),
-  (req: Request, res: Response) => {
-    const event = req.body
-
-    createEvent(event)
-      .then(savedEvent => {
-        res.send(savedEvent)
-      })
-      .catch(err => {
-        res.status(400).send(err)
-      })
+  async (req: Request, res: Response) => {
+    const event: IEvent = req.body
+    try {
+      const savedEvent = await saveEvent(event)
+      res.send(savedEvent)
+    } catch (err) {
+      logError('Error creating event', err, req)
+      res.status(400).send(err)
+    }
   }
 )
 
@@ -149,18 +140,15 @@ router.put(
   passport.authenticate('jwt', { session: false }),
   async (req: Request, res: Response) => {
     try {
-      const userId = req.user.userId
       const payload = req.body
-      const event = await getEventById(req.params.eventId)
-      if (userId !== event.userId) {
-        res.status(400).send('Cannot update event belonging to another user')
-      } else if (payload.eventId !== event.eventId) {
+      if (payload.eventId !== req.params.eventId) {
         res.status(400).send('Cannot update event ID')
-      } else {
-        const updatedEvent = await updateEvent(req.body)
-        res.send(updatedEvent)
+        return
       }
+      const updatedEvent = await updateEvent(req.body, req.user)
+      res.send(updatedEvent)
     } catch (err) {
+      logError('Error updating event', err, req)
       res.status(404).send(err)
     }
   }
@@ -183,14 +171,15 @@ router.put(
 router.delete(
   '/:eventId',
   passport.authenticate('jwt', { session: false }),
-  (req: Request, res: Response) => {
+  async (req: Request, res: Response) => {
     const userId = req.user.userId
-
-    deleteEvent(req.params.eventId, userId)
-      .then(event => {
-        res.send(event)
-      })
-      .catch(err => res.status(404).send(err))
+    try {
+      const deletedEvent = await deleteEvent(req.params.eventId, userId)
+      res.send(deletedEvent)
+    } catch (err) {
+      logError('Error deleting event', err, req)
+      res.status(404).send(err)
+    }
   }
 )
 

@@ -55,7 +55,7 @@ export const createEvent = (event: IEvent) => {
   })
 }
 
-export const updateEvent = (event: IEvent) => {
+export const modifyEvent = (event: IEvent) => {
   return new Promise((resolve, reject) => {
     Event.update(event, (err: Error, { attrs }: any) => {
       if (err) {
@@ -68,7 +68,7 @@ export const updateEvent = (event: IEvent) => {
   })
 }
 
-export const deleteEvent = (eventId: string, userId: string) => {
+export const removeEvent = (eventId: string, userId: string) => {
   return new Promise((resolve, reject) => {
     Event.destroy(eventId, userId, (err: Error) => {
       if (err) {
