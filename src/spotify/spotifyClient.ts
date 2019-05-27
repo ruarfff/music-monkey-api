@@ -7,6 +7,17 @@ import IUser from '../user/model/IUser'
 import { removeCachedUser, updateUser } from '../user/userService'
 import ITrack from './ITrack'
 import { getCreds, saveCreds } from './spotifyCredsCache'
+import {
+  getCachedNewReleases,
+  cacheNewReleases,
+  getCachedRecommendations,
+  cacheRecommendations,
+  getCachedUserTopTracks,
+  cacheUserTopTracks,
+  getCachedPlaylist,
+  cachePlaylist,
+  clearCachedPlaylist
+} from './spotifyClientCache'
 
 axios.defaults.headers.common.Authorization = `Basic ${Buffer.from(
   SPOTIFY_CLIENT_ID + ':' + SPOTIFY_CLIENT_SECRET
@@ -22,32 +33,50 @@ export const getUserProfile = async (user: IUser) => {
 }
 
 export const getNewReleases = async (country: string, user: IUser) => {
-  const validUser: IUser = await checkToken(user)
-
-  return getSpotifyApi(validUser.spotifyAuth.accessToken).getNewReleases({
-    limit: 10,
-    offset: 0,
-    country
-  })
+  let newReleases = await getCachedNewReleases(country)
+  console.log('Getting NR')
+  if (newReleases) {
+    console.log('Got cached new releases')
+    return newReleases
+  }
+  try {
+    const validUser: IUser = await checkToken(user)
+    newReleases = await getSpotifyApi(
+      validUser.spotifyAuth.accessToken
+    ).getNewReleases({
+      limit: 10,
+      offset: 0,
+      country
+    })
+    console.log('Caching NR', newReleases)
+    cacheNewReleases(country, newReleases)
+  } catch (err) {
+    logError('Error getting new releases from Spotify', err)
+  }
+  return newReleases
 }
 
 export const getRecommendations = async (user: IUser) => {
+  let recommendations = await getCachedRecommendations(user.userId)
+  console.log('RECOMMENDATIONS', recommendations)
+  if (recommendations) {
+    return recommendations
+  }
   const seeds = ['alt_rock', 'blues', 'dance', 'hard_rock', 'hip_hop']
   const validUser: IUser = await checkToken(user)
 
-  try {
-    const { body } = await getSpotifyApi(
-      validUser.spotifyAuth.accessToken
-    ).getRecommendations({
-      min_energy: 0.5,
-      min_popularity: 50,
-      seed_genres: seeds
-    })
+  const { body } = await getSpotifyApi(
+    validUser.spotifyAuth.accessToken
+  ).getRecommendations({
+    min_energy: 0.5,
+    min_popularity: 50,
+    seed_genres: seeds
+  })
 
-    return body.tracks
-  } catch (err) {
-    logError('Error getting recommendations', err)
-  }
+  recommendations = body.tracks
+  cacheRecommendations(user.userId, recommendations)
+
+  return recommendations
 }
 
 export const searchTracks = async (searchTerm: string, user: IUser) => {
@@ -59,13 +88,22 @@ export const searchTracks = async (searchTerm: string, user: IUser) => {
 }
 
 export const getUserTopTracks = async (user: IUser) => {
+  let topTracks = await getCachedUserTopTracks(user.userId)
+
+  if (topTracks) {
+    return topTracks
+  }
+
   const validUser: IUser = await checkToken(user)
 
   const { body } = await getSpotifyApi(
     validUser.spotifyAuth.accessToken
   ).getMyTopTracks()
 
-  return body.items
+  topTracks = body.items
+  cacheUserTopTracks(user.userId, topTracks)
+
+  return topTracks
 }
 
 export const getMultipleTracks = async (trackIds: string[], user: IUser) => {
@@ -74,6 +112,16 @@ export const getMultipleTracks = async (trackIds: string[], user: IUser) => {
     validUser.spotifyAuth.accessToken
   ).getTracks(trackIds)
 
+  return body
+}
+
+export const getAudioFeaturesForTracks = async (
+  user: IUser,
+  trackIds: string[]
+) => {
+  const validUser: IUser = await checkToken(user)
+  const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
+  const { body } = await spotifyApi.getAudioFeaturesForTracks(trackIds)
   return body
 }
 
@@ -94,12 +142,19 @@ export const createPlaylist = async (
 }
 
 export const getPlaylist = async (user: IUser, playlistId: string) => {
+  let playlist = await getCachedPlaylist(user.userId, playlistId)
+  if (playlist) {
+    return playlist
+  }
   const validUser: IUser = await checkToken(user)
   const { body } = await getSpotifyApi(
     validUser.spotifyAuth.accessToken
   ).getPlaylist(playlistId)
 
-  return body
+  playlist = body
+  cachePlaylist(user.userId, playlistId, playlist)
+
+  return playlist
 }
 
 export const getUserPlaylists = async (user: IUser, options: any) => {
@@ -136,17 +191,20 @@ export const reorderTracksInPlaylist = async (
   fromIndex: number,
   toIndex: number
 ) => {
+  clearCachedPlaylist(user.userId, playlistId)
   const validUser: IUser = await checkToken(user)
   const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
   let insertBefore = toIndex
   if (fromIndex < toIndex) {
     insertBefore++
   }
-  return await spotifyApi.reorderTracksInPlaylist(
+  const playlist = await spotifyApi.reorderTracksInPlaylist(
     playlistId,
     fromIndex,
     insertBefore
   )
+
+  return playlist
 }
 
 export const editPlaylistDetails = async (
@@ -155,9 +213,13 @@ export const editPlaylistDetails = async (
   name: string,
   description: string
 ) => {
+  clearCachedPlaylist(user.userId, playlistId)
   const validUser: IUser = await checkToken(user)
   const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
-  const { body } = await spotifyApi.changePlaylistDetails(playlistId, {name, description})
+  const { body } = await spotifyApi.changePlaylistDetails(playlistId, {
+    name,
+    description
+  })
   return body
 }
 
@@ -166,6 +228,7 @@ export const replaceTracksInPlaylist = async (
   playlistId: string,
   trackUris: string[]
 ) => {
+  clearCachedPlaylist(user.userId, playlistId)
   const validUser: IUser = await checkToken(user)
   const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
   const { body } = await spotifyApi.replaceTracksInPlaylist(
@@ -180,6 +243,7 @@ export const addTracksToPlaylist = async (
   playlistId: string,
   trackUris: string[]
 ) => {
+  clearCachedPlaylist(user.userId, playlistId)
   const validUser: IUser = await checkToken(user)
   const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
   const { body } = await spotifyApi.addTracksToPlaylist(playlistId, trackUris)
@@ -192,6 +256,7 @@ export const removeTracksFromPlaylistByPosition = async (
   snapshotId: string,
   positions: number[]
 ) => {
+  clearCachedPlaylist(user.userId, playlistId)
   const validUser: IUser = await checkToken(user)
   const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
 
@@ -209,6 +274,7 @@ export const removeTracksFromPlaylist = async (
   playlistId: string,
   tracks: ITrack[]
 ) => {
+  clearCachedPlaylist(user.userId, playlistId)
   const validUser: IUser = await checkToken(user)
   const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
 
@@ -223,16 +289,6 @@ export const removeTrackFromPlaylist = async (
   track: ITrack
 ) => {
   return await removeTracksFromPlaylist(user, playlistId, [track])
-}
-
-export const getAudioFeaturesForTracks = async (
-  user: IUser,
-  trackIds: string[]
-) => {
-  const validUser: IUser = await checkToken(user)
-  const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
-  const { body } = await spotifyApi.getAudioFeaturesForTracks(trackIds)
-  return body
 }
 
 async function checkToken(user: IUser) {

@@ -9,19 +9,11 @@ import {
   modifyEvent,
   getEventByInviteId
 } from './eventGateway'
-import * as cache from '../cache'
-
-const cachedEventTTL = 600
 const eventDecorator = new EventDecorator()
 
 export const getEvent = async (eventId: string, user: IUser) => {
-  let event: IEvent = await cache.getObject(eventId)
-  if (!event) {
-    event = await getEventById(eventId)
-    event = await eventDecorator.decorateEvent(event, user)
-    cache.setObject(event.eventId, event, cachedEventTTL)
-  }
-
+  let event = await getEventById(eventId)
+  event = await eventDecorator.decorateEvent(event, user)
   return event
 }
 
