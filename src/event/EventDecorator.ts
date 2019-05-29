@@ -5,6 +5,7 @@ import IPlaylistQuery from '../spotify/IPlaylistQuery'
 import parsePlaylistUrl from '../spotify/parsePlaylistUrl'
 import IUser from '../user/model/IUser'
 import { getEventGuests } from './eventGateway'
+import {getSafeUserById} from '../user/userService'
 import IEvent from './model/IEvent'
 
 const defaultEventImage = '/img/partycover-sm.png'
@@ -20,6 +21,7 @@ export default class EventDecorator {
       user
     )
     decoratedEvent = await this.decorateEventWithGuests(decoratedEvent)
+    decoratedEvent = await this.decorateEventWithHost(decoratedEvent)
     return decoratedEvent
   }
 
@@ -73,6 +75,16 @@ export default class EventDecorator {
     } catch (err) {
       logError('Error decorating event with guests', err)
     }
-    return { ...event }
+    return event
+  }
+
+  private decorateEventWithHost = async(event: IEvent) => {
+    try {
+      const hostData = await getSafeUserById(event.userId)
+      return {...event, hostData}as IEvent
+    } catch (err) {
+      logError('Error decorating event with host', err)
+    }
+    return event
   }
 }

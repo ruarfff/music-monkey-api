@@ -2,6 +2,7 @@ import IPlaylist from '../../spotify/IPlaylist'
 import IEventGuest from './IEventGuest'
 import IEventLocation from './IEventLocation'
 import IEventSettings from './IEventSettings'
+import IUser from '../../user/model/IUser';
 
 export default interface IEvent {
   eventId: string
@@ -21,4 +22,5 @@ export default interface IEvent {
   invites: string[]
   guests: IEventGuest[]
   settings: IEventSettings
+  hostData: IUser
 }
