@@ -141,11 +141,16 @@ router.put(
   async (req: Request, res: Response) => {
     try {
       const payload = req.body
+      const {user} = req
+      if(!payload) {
+        res.status(400).send('Cannot update event with no payload')
+        return
+      }
       if (payload.eventId !== req.params.eventId) {
         res.status(400).send('Cannot update event ID')
         return
       }
-      const updatedEvent = await updateEvent(req.body, req.user)
+      const updatedEvent = await updateEvent(payload, user.userId)
       res.send(updatedEvent)
     } catch (err) {
       logError('Error updating event', err, req)
