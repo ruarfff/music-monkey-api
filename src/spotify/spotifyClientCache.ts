@@ -66,13 +66,12 @@ export const getCachedUserTopTracks = async (userId: string) => {
 }
 
 export const cachePlaylist = (
-  userId: string,
   playlistId: string,
   playlist: any
 ) => {
   try {
     cache.setObject(
-      `${playlistKey}-${userId}-${playlistId}`,
+      `${playlistKey}-${playlistId}`,
       playlist,
       defaultCacheTTL
     )
@@ -81,19 +80,19 @@ export const cachePlaylist = (
   }
 }
 
-export const getCachedPlaylist = async (userId: string, playlistId: string) => {
+export const getCachedPlaylist = async (playlistId: string) => {
   let playlist
   try {
-    playlist = await cache.getObject(`${playlistKey}-${userId}-${playlistId}`)
+    playlist = await cache.getObject(`${playlistKey}-${playlistId}`)
   } catch (err) {
     logError('Error getting cached playlist ', err)
   }
   return playlist
 }
 
-export const clearCachedPlaylist = (userId: string, playlistId: string) => {
+export const clearCachedPlaylist = (playlistId: string) => {
   try {
-    cache.del(`${playlistKey}-${userId}-${playlistId}`)
+    cache.del(`${playlistKey}-${playlistId}`)
   } catch (err) {
     logError('Error deleting playlist from cache', err)
   }

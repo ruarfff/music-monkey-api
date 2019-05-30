@@ -142,7 +142,7 @@ export const createPlaylist = async (
 }
 
 export const getPlaylist = async (user: IUser, playlistId: string) => {
-  let playlist = await getCachedPlaylist(user.userId, playlistId)
+  let playlist = await getCachedPlaylist(playlistId)
   if (playlist) {
     return playlist
   }
@@ -152,7 +152,7 @@ export const getPlaylist = async (user: IUser, playlistId: string) => {
   ).getPlaylist(playlistId)
 
   playlist = body
-  cachePlaylist(user.userId, playlistId, playlist)
+  cachePlaylist(playlistId, playlist)
 
   return playlist
 }
@@ -191,7 +191,7 @@ export const reorderTracksInPlaylist = async (
   fromIndex: number,
   toIndex: number
 ) => {
-  clearCachedPlaylist(user.userId, playlistId)
+  clearCachedPlaylist(playlistId)
   const validUser: IUser = await checkToken(user)
   const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
   let insertBefore = toIndex
@@ -213,7 +213,7 @@ export const editPlaylistDetails = async (
   name: string,
   description: string
 ) => {
-  clearCachedPlaylist(user.userId, playlistId)
+  clearCachedPlaylist(playlistId)
   const validUser: IUser = await checkToken(user)
   const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
   const { body } = await spotifyApi.changePlaylistDetails(playlistId, {
@@ -228,7 +228,7 @@ export const replaceTracksInPlaylist = async (
   playlistId: string,
   trackUris: string[]
 ) => {
-  clearCachedPlaylist(user.userId, playlistId)
+  clearCachedPlaylist(playlistId)
   const validUser: IUser = await checkToken(user)
   const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
   const { body } = await spotifyApi.replaceTracksInPlaylist(
@@ -243,7 +243,7 @@ export const addTracksToPlaylist = async (
   playlistId: string,
   trackUris: string[]
 ) => {
-  clearCachedPlaylist(user.userId, playlistId)
+  clearCachedPlaylist(playlistId)
   const validUser: IUser = await checkToken(user)
   const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
   const { body } = await spotifyApi.addTracksToPlaylist(playlistId, trackUris)
@@ -256,7 +256,7 @@ export const removeTracksFromPlaylistByPosition = async (
   snapshotId: string,
   positions: number[]
 ) => {
-  clearCachedPlaylist(user.userId, playlistId)
+  clearCachedPlaylist(playlistId)
   const validUser: IUser = await checkToken(user)
   const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
 
@@ -274,7 +274,7 @@ export const removeTracksFromPlaylist = async (
   playlistId: string,
   tracks: ITrack[]
 ) => {
-  clearCachedPlaylist(user.userId, playlistId)
+  clearCachedPlaylist(playlistId)
   const validUser: IUser = await checkToken(user)
   const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
 
