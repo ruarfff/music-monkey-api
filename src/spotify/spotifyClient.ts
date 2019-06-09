@@ -82,9 +82,11 @@ export const getRecommendations = async (user: IUser) => {
 export const searchTracks = async (searchTerm: string, user: IUser) => {
   const validUser: IUser = await checkToken(user)
 
-  return getSpotifyApi(validUser.spotifyAuth.accessToken).searchTracks(
-    searchTerm
-  )
+  const { body } = getSpotifyApi(
+    validUser.spotifyAuth.accessToken
+  ).searchTracks(searchTerm)
+
+  return body
 }
 
 export const getUserTopTracks = async (user: IUser) => {
@@ -134,11 +136,13 @@ export const createPlaylist = async (
   const validUser: IUser = await checkToken(user)
   const api = getSpotifyApi(validUser.spotifyAuth.accessToken)
 
-  try {
-    return await api.createPlaylist(user.spotifyId, name, playlistParams)
-  } catch (err) {
-    throw err
-  }
+  const { body } = await api.createPlaylist(
+    user.spotifyId,
+    name,
+    playlistParams
+  )
+
+  return body
 }
 
 export const getPlaylist = async (user: IUser, playlistId: string) => {
