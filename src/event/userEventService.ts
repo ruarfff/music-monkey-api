@@ -8,8 +8,14 @@ export const getAllEventsUserWasInvitedTo = async (user: IUser) => {
   const eventIds = rsvps.map((rsvp: IRsvp) => rsvp.eventId)
   const events = await Promise.all(
     eventIds.map(async eventId => {
-      return await getEvent(eventId, user)
+      let event = null
+      try {
+        event = await getEvent(eventId, user)
+      } catch (err) {
+        console.log('Failed to get event', err)
+      }
+      return event
     })
   )
-  return events
+  return events.filter(elem => elem !== null)
 }

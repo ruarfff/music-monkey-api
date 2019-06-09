@@ -13,6 +13,9 @@ const eventDecorator = new EventDecorator()
 
 export const getEvent = async (eventId: string, user: IUser) => {
   let event = await getEventById(eventId)
+  if (!event) {
+    throw new Error('Could not find event with ID ' + eventId)
+  }
   event = await eventDecorator.decorateEvent(event, user)
   return event
 }
