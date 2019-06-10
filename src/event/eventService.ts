@@ -1,14 +1,14 @@
 import IUser from '../user/model/IUser'
 import EventDecorator from './EventDecorator'
-import IEvent from './model/IEvent'
 import {
   createEvent,
-  removeEvent,
   getEventById,
+  getEventByInviteId,
   getEventsByUserId,
   modifyEvent,
-  getEventByInviteId
+  removeEvent
 } from './eventGateway'
+import IEvent from './model/IEvent'
 const eventDecorator = new EventDecorator()
 
 export const getEvent = async (eventId: string, user: IUser) => {

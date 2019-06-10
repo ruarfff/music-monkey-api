@@ -1,8 +1,8 @@
 import { Request, Response, Router } from 'express'
 import * as passport from 'passport'
+import { logError } from '../logging'
 import { getEventByInvite } from './eventService'
 import IEvent from './model/IEvent'
-import { logError } from '../logging'
 const router = Router()
 
 /**

@@ -2,11 +2,11 @@ import { Request, Response, Router } from 'express'
 import * as passport from 'passport'
 import { logError } from '../logging'
 import {
-  getEventsForUser,
+  deleteEvent,
   getEvent,
+  getEventsForUser,
   saveEvent,
-  updateEvent,
-  deleteEvent
+  updateEvent
 } from './eventService'
 import IEvent from './model/IEvent'
 const router = Router()
@@ -142,7 +142,7 @@ router.put(
     try {
       const payload = req.body
       const {user} = req
-      if(!payload) {
+      if (!payload) {
         res.status(400).send('Cannot update event with no payload')
         return
       }

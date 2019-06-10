@@ -1,7 +1,7 @@
 import { Request, Response, Router } from 'express'
 import * as passport from 'passport'
-import { getAllEventsUserWasInvitedTo } from './userEventService'
 import { logError } from '../logging'
+import { getAllEventsUserWasInvitedTo } from './userEventService'
 
 const router = Router()
 
