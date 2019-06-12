@@ -59,9 +59,11 @@ export const logError = (
     fullMessage += ' : ' + err.message
   }
   err.message = fullMessage
-  if (request) {
-    rollbar.error(err, request)
-  } else {
-    rollbar.error(err)
+  if (isProduction) {
+    if (request) {
+      rollbar.error(err, request)
+    } else {
+      rollbar.error(err)
+    }
   }
 }

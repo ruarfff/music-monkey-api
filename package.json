@@ -15,7 +15,7 @@
     "clean": "rimraf build/*",
     "posttest": "npm run lint",
     "test": "jest --forceExit --coverage --verbose --detectOpenHandles",
-    "watch-test": "npm run test -- --watchAll",
+    "test:watch": "npm run test -- --watchAll",
     "security-check": "snyk test",
     "copy-to-build": "node copyToBuild.js"
   },
