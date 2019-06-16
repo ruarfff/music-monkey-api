@@ -22,10 +22,11 @@ import { getCreds, saveCreds } from './spotifyCredsCache'
 axios.defaults.headers.common.Authorization = `Basic ${Buffer.from(
   SPOTIFY_CLIENT_ID + ':' + SPOTIFY_CLIENT_SECRET
 ).toString('base64')}`
-const SpotifyWebApi = require('spotify-web-api-node')
+import SpotifyWebApi from 'spotify-web-api-node'
 
 export const getUserProfile = async (user: IUser) => {
   const validUser: IUser = await checkToken(user)
+  console.log(validUser)
   const { body } = await getSpotifyApi(
     validUser.spotifyAuth.accessToken
   ).getMe()
@@ -41,13 +42,14 @@ export const getNewReleases = async (country: string, user: IUser) => {
   }
   try {
     const validUser: IUser = await checkToken(user)
-    newReleases = await getSpotifyApi(
+    const { body } = await getSpotifyApi(
       validUser.spotifyAuth.accessToken
     ).getNewReleases({
       limit: 10,
       offset: 0,
       country
     })
+    newReleases = body
     console.log('Caching NR', newReleases)
     cacheNewReleases(country, newReleases)
   } catch (err) {
@@ -58,7 +60,6 @@ export const getNewReleases = async (country: string, user: IUser) => {
 
 export const getRecommendations = async (user: IUser) => {
   let recommendations = await getCachedRecommendations(user.userId)
-  console.log('RECOMMENDATIONS', recommendations)
   if (recommendations) {
     return recommendations
   }
@@ -81,8 +82,8 @@ export const getRecommendations = async (user: IUser) => {
 
 export const searchTracks = async (searchTerm: string, user: IUser) => {
   const validUser: IUser = await checkToken(user)
-
-  const { body } = getSpotifyApi(
+  console.log(searchTerm)
+  const { body } = await getSpotifyApi(
     validUser.spotifyAuth.accessToken
   ).searchTracks(searchTerm)
 
