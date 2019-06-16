@@ -30,6 +30,17 @@ export const getRsvpByUserId = async (userId: string) => {
 }
 
 export const createRsvp = async (rsvp: IRsvp, user: IUser) => {
+  try {
+    const existingRsvp = await getRsvpByUserIdAndInviteId(
+      rsvp.userId,
+      rsvp.inviteId
+    )
+    if (existingRsvp) {
+      return existingRsvp
+    }
+  } catch (err) {
+    console.log(err)
+  }
   const savedRsvp: IRsvp = await saveRsvp(rsvp)
   if (rsvp.status !== 'Pending') {
     notifyRsvpCreation(savedRsvp, user)

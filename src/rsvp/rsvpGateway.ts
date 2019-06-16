@@ -2,6 +2,7 @@ import util = require('util')
 import { logError } from '../logging'
 import { IRsvp, Rsvp } from '../model'
 import cleanModel from '../model/cleanModel'
+import { uniqBy } from 'lodash'
 
 export const saveRsvp = async (rsvp: IRsvp) => {
   try {
@@ -63,7 +64,12 @@ export const fetchRsvpByEventId = (eventId: string) => {
         if (err) {
           reject(err)
         } else {
-          resolve(rsvpModel.Items.map((item: any) => cleanModel(item.attrs)))
+          resolve(
+            uniqBy(
+              rsvpModel.Items.map((item: any) => cleanModel(item.attrs)),
+              'userId'
+            )
+          )
         }
       })
   })
@@ -77,7 +83,12 @@ export const fetchRsvpByUserId = (userId: string) => {
         if (err) {
           reject(err)
         } else {
-          resolve(rsvpModel.Items.map((item: any) => cleanModel(item.attrs)))
+          resolve(
+            uniqBy(
+              rsvpModel.Items.map((item: any) => cleanModel(item.attrs)),
+              'userId'
+            )
+          )
         }
       })
   })

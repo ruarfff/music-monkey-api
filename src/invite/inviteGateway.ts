@@ -2,6 +2,7 @@ import { promisify } from 'util'
 import { Invite } from '../model'
 import cleanModel from '../model/cleanModel'
 import { IInvite } from './model/IInvite'
+import { uniqBy } from 'lodash'
 
 const create = promisify(Invite.create)
 const destroy = promisify(Invite.destroy)
@@ -30,8 +31,9 @@ export const getInvitesByEventId = (eventId: string) => {
         if (err || inviteModel.Items.length < 1) {
           reject(err)
         } else {
-          const inviteList = inviteModel.Items.map((item: any) =>
-            cleanModel(item.attrs)
+          const inviteList = uniqBy(
+            inviteModel.Items.map((item: any) => cleanModel(item.attrs)),
+            'userId'
           )
           resolve(inviteList)
         }
