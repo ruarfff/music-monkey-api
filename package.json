@@ -54,7 +54,7 @@
     "spotify-web-api-node": "4.0.0",
     "uuid": "3.3.2",
     "winston": "3.2.1",
-    "winston-loggly-bulk": "2.0.3"
+    "winston-loggly-bulk": "3.0.1"
   },
   "devDependencies": {
     "@types/bcrypt": "3.0.0",
