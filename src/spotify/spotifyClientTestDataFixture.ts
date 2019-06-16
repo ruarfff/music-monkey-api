@@ -1,3 +1,4 @@
+/* tslint:disable */
 import IPlaylist from './IPlaylist'
 import ITrack from './ITrack'
 

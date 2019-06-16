@@ -6,16 +6,16 @@ import {
   cacheNewReleases,
   cachePlaylist,
   cacheRecommendations,
+  cacheSearch,
+  cacheUsersPlaylists,
   cacheUserTopTracks,
   clearCachedPlaylist,
   getCachedNewReleases,
   getCachedPlaylist,
   getCachedRecommendations,
-  getCachedUserTopTracks,
   getCachedSearch,
-  cacheSearch,
   getCachedUsersPlaylists,
-  cacheUsersPlaylists
+  getCachedUserTopTracks
 } from './spotifyClientCache'
 
 export const getUserProfile = async (user: IUser) => {
@@ -123,7 +123,8 @@ export const reorderTracksInPlaylist = async (
   toIndex: number
 ) => {
   clearCachedPlaylist(playlistId)
-  return await api.reorderTracksInPlaylist(user, playlistId, fromIndex, toIndex)
+  await api.reorderTracksInPlaylist(user, playlistId, fromIndex, toIndex)
+  return await getPlaylist(user, playlistId)
 }
 
 export const editPlaylistDetails = async (
@@ -133,7 +134,8 @@ export const editPlaylistDetails = async (
   description: string
 ) => {
   clearCachedPlaylist(playlistId)
-  return await api.editPlaylistDetails(user, playlistId, name, description)
+  await api.editPlaylistDetails(user, playlistId, name, description)
+  return await getPlaylist(user, playlistId)
 }
 
 export const replaceTracksInPlaylist = async (
@@ -142,7 +144,8 @@ export const replaceTracksInPlaylist = async (
   trackUris: string[]
 ) => {
   clearCachedPlaylist(playlistId)
-  return await api.replaceTracksInPlaylist(user, playlistId, trackUris)
+  await api.replaceTracksInPlaylist(user, playlistId, trackUris)
+  return await getPlaylist(user, playlistId)
 }
 
 export const addTracksToPlaylist = async (
@@ -151,7 +154,8 @@ export const addTracksToPlaylist = async (
   trackUris: string[]
 ) => {
   clearCachedPlaylist(playlistId)
-  return await api.addTracksToPlaylist(user, playlistId, trackUris)
+  await api.addTracksToPlaylist(user, playlistId, trackUris)
+  return await getPlaylist(user, playlistId)
 }
 
 export const removeTracksFromPlaylistByPosition = async (
@@ -161,13 +165,13 @@ export const removeTracksFromPlaylistByPosition = async (
   positions: number[]
 ) => {
   clearCachedPlaylist(playlistId)
-
-  return await api.removeTracksFromPlaylistByPosition(
+  await api.removeTracksFromPlaylistByPosition(
     user,
     playlistId,
     snapshotId,
     positions
   )
+  return await getPlaylist(user, playlistId)
 }
 
 export const removeTracksFromPlaylist = async (
@@ -176,8 +180,8 @@ export const removeTracksFromPlaylist = async (
   tracks: ITrack[]
 ) => {
   clearCachedPlaylist(playlistId)
-
-  return await api.removeTracksFromPlaylist(user, playlistId, tracks)
+  await api.removeTracksFromPlaylist(user, playlistId, tracks)
+  return await getPlaylist(user, playlistId)
 }
 
 export const removeTrackFromPlaylist = async (

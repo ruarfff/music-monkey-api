@@ -1,12 +1,12 @@
 const expressWinston = require('express-winston')
 import { Request } from 'express'
+import winston from 'winston'
 import {
+  IS_PRODUCTION,
   LOGGLY_SUB_DOMAIN,
   LOGGLY_TOKEN,
-  ROLLBAR_ACCESS_TOKEN,
-  IS_PRODUCTION
+  ROLLBAR_ACCESS_TOKEN
 } from '../config'
-import winston from 'winston'
 const { Loggly } = require('winston-loggly-bulk')
 import Rollbar from 'rollbar'
 let rollbar = {} as any
@@ -40,7 +40,7 @@ export const expressLogger = expressWinston.logger({
 
 export const rollbarErrorHandler = IS_PRODUCTION
   ? rollbar.errorHandler()
-  : () => {}
+  : () => ({})
 
 export const logInfo = (message: string) => {
   logger.log('info', message)

@@ -1,3 +1,4 @@
+/* tslint:disable */
 import sgMail = require('@sendgrid/mail')
 import { Request, Response, Router } from 'express'
 import moment from 'moment'

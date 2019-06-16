@@ -1,8 +1,8 @@
+import { uniqWith } from 'lodash'
 import util = require('util')
 import { logError } from '../logging'
 import { IRsvp, Rsvp } from '../model'
 import cleanModel from '../model/cleanModel'
-import { uniqWith } from 'lodash'
 
 export const saveRsvp = async (rsvp: IRsvp) => {
   try {
