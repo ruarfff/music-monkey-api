@@ -6,6 +6,7 @@ const newReleaseKey = 'new-releases'
 const recommendationKey = 'recommendations'
 const userTopTrackKey = 'user-top-tracks'
 const playlistKey = 'playlist'
+const searchKey = 'search'
 
 export const cacheNewReleases = (country: string, newReleases: any) => {
   try {
@@ -89,4 +90,22 @@ export const clearCachedPlaylist = (playlistId: string) => {
   } catch (err) {
     logError('Error deleting playlist from cache', err)
   }
+}
+
+export const cacheSearch = (searchTerm: string, tracks: any) => {
+  try {
+    cache.setObject(`${searchKey}-${searchTerm}`, tracks, defaultCacheTTL)
+  } catch (err) {
+    logError('Error setting cached search', err)
+  }
+}
+
+export const getCachedSearch = async (searchTerm: string) => {
+  let searchTracks
+  try {
+    searchTracks = await cache.getObject(`${searchKey}-${searchTerm}`)
+  } catch (err) {
+    logError('Error getting cached search for  ' + searchTerm, err)
+  }
+  return searchTracks
 }

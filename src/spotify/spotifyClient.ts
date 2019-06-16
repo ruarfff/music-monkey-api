@@ -11,7 +11,9 @@ import {
   getCachedNewReleases,
   getCachedPlaylist,
   getCachedRecommendations,
-  getCachedUserTopTracks
+  getCachedUserTopTracks,
+  getCachedSearch,
+  cacheSearch
 } from './spotifyClientCache'
 
 export const getUserProfile = async (user: IUser) => {
@@ -50,7 +52,13 @@ export const getRecommendations = async (user: IUser) => {
 }
 
 export const searchTracks = async (searchTerm: string, user: IUser) => {
-  return await api.searchTracks(user, searchTerm)
+  let tracks = await getCachedSearch(searchTerm)
+  if (tracks) {
+    return tracks
+  }
+  tracks = await api.searchTracks(user, searchTerm)
+  cacheSearch(searchTerm, tracks)
+  return tracks
 }
 
 export const getUserTopTracks = async (user: IUser) => {
