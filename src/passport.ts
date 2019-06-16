@@ -1,6 +1,6 @@
-import * as bcrypt from 'bcryptjs'
-import * as passport from 'passport'
-import * as passportJWT from 'passport-jwt'
+import bcrypt from 'bcryptjs'
+import passport from 'passport'
+import passportJWT from 'passport-jwt'
 import { jwtCookieKey } from './auth/authConstants'
 import {
   FACEBOOK_APP_ID,

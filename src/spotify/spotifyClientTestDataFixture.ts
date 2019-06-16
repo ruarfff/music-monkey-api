@@ -1,3 +1,6 @@
+import IPlaylist from './IPlaylist'
+import ITrack from './ITrack'
+
 export const reOrderPlaylistResult = {
   snapshot_id: 'NCw0NDIwMWU5YzgwZmMwZDZhYTMwNGRlMjMxMzZmNjI4ZDM2OGUzYjIx'
 }
@@ -4286,7 +4289,7 @@ export const playlist = {
   },
   type: 'playlist',
   uri: 'spotify:playlist:52PrRf8VFCsJr3oIl6FOaY'
-}
+} as IPlaylist
 
 export const audioFeatures = {
   audio_features: [
@@ -8655,10 +8658,10 @@ export const searchResults = {
     next:
       'https://api.spotify.com/v1/search?query=any&type=track&offset=20&limit=20',
     offset: 0,
-    previous: null,
     total: 28298
   }
 }
+
 export const newReleases = {
   albums: {
     href:
@@ -9934,7 +9937,6 @@ export const newReleases = {
     next:
       'https://api.spotify.com/v1/browse/new-releases?country=IE&offset=10&limit=10',
     offset: 0,
-    previous: null,
     total: 100
   }
 }
@@ -14572,4 +14574,4 @@ export const recommendations = [
     type: 'track',
     uri: 'spotify:track:22mek4IiqubGD9ctzxc69s'
   }
-]
+] as ITrack[]

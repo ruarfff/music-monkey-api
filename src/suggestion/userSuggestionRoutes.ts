@@ -1,6 +1,5 @@
 import { Request, Response, Router } from 'express'
-// import * as _ from 'lodash'
-import * as passport from 'passport'
+import passport from 'passport'
 import { logError } from '../logging'
 import ISuggestion from './ISuggestion'
 import SuggestionDecorator from './SuggestionDecorator'

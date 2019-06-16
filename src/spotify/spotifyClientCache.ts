@@ -1,4 +1,4 @@
-import * as cache from '../cache'
+import cache from '../cache'
 import { logError } from '../logging'
 
 const defaultCacheTTL = 600 * 24
@@ -65,16 +65,9 @@ export const getCachedUserTopTracks = async (userId: string) => {
   return topTracks
 }
 
-export const cachePlaylist = (
-  playlistId: string,
-  playlist: any
-) => {
+export const cachePlaylist = (playlistId: string, playlist: any) => {
   try {
-    cache.setObject(
-      `${playlistKey}-${playlistId}`,
-      playlist,
-      defaultCacheTTL
-    )
+    cache.setObject(`${playlistKey}-${playlistId}`, playlist, defaultCacheTTL)
   } catch (err) {
     logError('Error setting cached top tracks', err)
   }

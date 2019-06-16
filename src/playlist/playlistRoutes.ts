@@ -1,9 +1,10 @@
 import { Request, Response, Router } from 'express'
-import * as passport from 'passport'
+import passport from 'passport'
 import IPlaylist from '../spotify/IPlaylist'
 import IPlaylistParams from './IPlaylistParams'
 import {
-  addTracksToExistingPlaylist, changePlaylistDetails,
+  addTracksToExistingPlaylist,
+  changePlaylistDetails,
   createNewPlaylist,
   deleteSingleTrackFromPlaylist,
   getPlaylistById,
@@ -95,11 +96,7 @@ router.post(
       let playlist: IPlaylist
       if (body.hasOwnProperty('trackUris')) {
         const { trackUris } = body
-        await addTracksToExistingPlaylist(
-          user,
-          playlistId,
-          trackUris
-        )
+        await addTracksToExistingPlaylist(user, playlistId, trackUris)
       }
       playlist = await getPlaylistById(user, playlistId)
       if (!playlist) {
@@ -140,12 +137,7 @@ router.put(
         playlist = await replacePlaylistTracks(user, playlistId, trackUris)
       } else if (body.hasOwnProperty('fromIndex')) {
         const { fromIndex, toIndex } = body
-        playlist = await reOrderPlaylist(
-          user,
-          playlistId,
-          fromIndex,
-          toIndex
-        )
+        playlist = await reOrderPlaylist(user, playlistId, fromIndex, toIndex)
       }
       if (!playlist) {
         res.status(400).send()
@@ -181,7 +173,12 @@ router.put(
       const playlistId = params.playlistId
       const { name, description } = body
       let playlist: IPlaylist
-      playlist = await changePlaylistDetails(user, playlistId, name, description)
+      playlist = await changePlaylistDetails(
+        user,
+        playlistId,
+        name,
+        description
+      )
 
       res.send(playlist)
     } catch (err) {
@@ -213,11 +210,7 @@ router.delete(
       const { playlistId } = params
       const { tracks } = body
 
-      await deleteSingleTrackFromPlaylist(
-        user,
-        playlistId,
-        tracks[0]
-      )
+      await deleteSingleTrackFromPlaylist(user, playlistId, tracks[0])
       const playlist: IPlaylist = await getPlaylistById(user, playlistId)
       res.send(playlist)
     } catch (err) {

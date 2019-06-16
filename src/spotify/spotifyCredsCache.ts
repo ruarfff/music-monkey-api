@@ -1,4 +1,4 @@
-import * as cache from '../cache'
+import cache from '../cache'
 import { logError } from '../logging'
 
 const cacheKey = 'cred-cache-key'

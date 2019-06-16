@@ -1,5 +1,5 @@
 import { Request, Response, Router } from 'express'
-import * as passport from 'passport'
+import passport from 'passport'
 import IUser from './model/IUser'
 import { getSafeUserById, updateUser } from './userService'
 
@@ -63,7 +63,7 @@ router.get(
 
 router.put(
   '/:userId',
-  passport.authenticate('jwt', {  session: false}),
+  passport.authenticate('jwt', { session: false }),
   async (req: Request, res: Response) => {
     try {
       const userId = req.body.userId
@@ -71,7 +71,9 @@ router.put(
       const user = await getSafeUserById(userId)
 
       if (userId !== user.userId) {
-        res.status(400).send('Cannot update user details belonging to another user')
+        res
+          .status(400)
+          .send('Cannot update user details belonging to another user')
       } else if (payload.userId !== user.userId) {
         res.status(400).send('Cannot update user ID')
       } else {

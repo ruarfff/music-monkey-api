@@ -1,4 +1,4 @@
-import * as cache from '../cache'
+import cache from '../cache'
 import { logError } from '../logging'
 import ISafeUser from './model/ISafeUser'
 import IUser from './model/IUser'

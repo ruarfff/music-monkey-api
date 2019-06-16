@@ -1,5 +1,5 @@
 import { Request, Response, Router } from 'express'
-import * as passport from 'passport'
+import passport from 'passport'
 import IUser from '../user/model/IUser'
 import { createGuest } from '../user/userService'
 import { spotifyScopes } from './authConstants'

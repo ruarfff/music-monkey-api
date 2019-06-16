@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import * as jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
 import { jwtCookieKey } from './authConstants'
 const isProduction = process.env.NODE_ENV === 'production'
 const devCookieOpts = {}

@@ -1,17 +1,17 @@
 import { Request, Response, Router } from 'express'
-import * as _ from 'lodash'
-import * as passport from 'passport'
+import _ from 'lodash'
+import passport from 'passport'
 import { getEventById } from '../event/eventGateway'
 import { logError } from '../logging'
 import SuggestionDecorator from './SuggestionDecorator'
 import {
-acceptSuggestions,
-createSuggestion,
-createSuggestions,
-deleteSuggestion,
-getSuggestionById,
-getSuggestionsByEventId,
-rejectSuggestion
+  acceptSuggestions,
+  createSuggestion,
+  createSuggestions,
+  deleteSuggestion,
+  getSuggestionById,
+  getSuggestionsByEventId,
+  rejectSuggestion
 } from './suggestionService'
 
 const router = Router()

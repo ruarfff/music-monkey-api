@@ -1,7 +1,7 @@
 // tslint:disable-next-line:no-var-requires
 const dynamo = require('dynamodb')
 
-import * as Joi from 'joi'
+import Joi from 'joi'
 import { userTableName } from './modelConstants'
 
 export const User = dynamo.define(userTableName, {

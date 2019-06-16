@@ -5,8 +5,8 @@ process.on('uncaughtException', exception => {
 /**
  * Module dependencies.
  */
-import * as debugFun from 'debug'
-import * as http from 'http'
+import debugFun from 'debug'
+import http from 'http'
 import app from './app'
 import { logError } from './logging'
 import { createTables } from './model'

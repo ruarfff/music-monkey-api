@@ -1,5 +1,5 @@
 import { Request, Response, Router } from 'express'
-import * as passport from 'passport'
+import passport from 'passport'
 import { logError } from '../logging'
 import {
   deleteEvent,
@@ -141,7 +141,7 @@ router.put(
   async (req: Request, res: Response) => {
     try {
       const payload = req.body
-      const {user} = req
+      const { user } = req
       if (!payload) {
         res.status(400).send('Cannot update event with no payload')
         return

@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import * as passport from 'passport'
+import passport from 'passport'
 import { spotifyScopes } from './authConstants'
 import { handleCallback } from './authRequestLib'
 

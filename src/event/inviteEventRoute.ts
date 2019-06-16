@@ -1,5 +1,5 @@
 import { Request, Response, Router } from 'express'
-import * as passport from 'passport'
+import passport from 'passport'
 import { logError } from '../logging'
 import { getEventByInvite } from './eventService'
 import IEvent from './model/IEvent'

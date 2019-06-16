@@ -3,21 +3,21 @@ import { Request } from 'express'
 import {
   LOGGLY_SUB_DOMAIN,
   LOGGLY_TOKEN,
-  ROLLBAR_ACCESS_TOKEN
+  ROLLBAR_ACCESS_TOKEN,
+  IS_PRODUCTION
 } from '../config'
-const winston = require('winston')
+import winston from 'winston'
 const { Loggly } = require('winston-loggly-bulk')
-const Rollbar = require('rollbar')
-const rollbar = new Rollbar({
-  accessToken: ROLLBAR_ACCESS_TOKEN,
-  captureUncaught: true,
-  captureUnhandledRejections: true
-})
+import Rollbar from 'rollbar'
+let rollbar = {} as any
 const logger = winston.createLogger()
 
-const isProduction = process.env.NODE_ENV === 'production'
-
-if (isProduction) {
+if (IS_PRODUCTION) {
+  rollbar = new Rollbar({
+    accessToken: ROLLBAR_ACCESS_TOKEN,
+    captureUncaught: true,
+    captureUnhandledRejections: true
+  })
   const logglyTransport = {
     token: LOGGLY_TOKEN,
     subdomain: LOGGLY_SUB_DOMAIN,
@@ -38,7 +38,9 @@ export const expressLogger = expressWinston.logger({
   ignoredRoutes: ['/ping']
 })
 
-export const rollbarErrorHandler = rollbar.errorHandler()
+export const rollbarErrorHandler = IS_PRODUCTION
+  ? rollbar.errorHandler()
+  : () => {}
 
 export const logInfo = (message: string) => {
   logger.log('info', message)
@@ -59,7 +61,7 @@ export const logError = (
     fullMessage += ' : ' + err.message
   }
   err.message = fullMessage
-  if (isProduction) {
+  if (IS_PRODUCTION) {
     if (request) {
       rollbar.error(err, request)
     } else {

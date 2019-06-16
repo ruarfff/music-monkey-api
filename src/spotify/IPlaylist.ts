@@ -1,6 +1,6 @@
 import IExternalUrls from './IExternalUrls'
 import IFollowers from './IFollowers'
-import IPlaylistImage from './IPlaylistImage'
+import IImage from './IImage'
 import IPlaylistOwner from './IPlaylistOwner'
 import IPlaylistTracks from './IPlaylistTracks'
 
@@ -9,7 +9,7 @@ export default interface IPlaylist {
   external_urls: IExternalUrls
   href: string
   id: string
-  images: IPlaylistImage[]
+  images: IImage[]
   name: string
   owner: IPlaylistOwner
   primary_color?: string

@@ -1,8 +1,12 @@
 import { expect } from 'chai'
+import { mocked } from 'ts-jest/utils'
 import IUser from '../user/model/IUser'
+import * as spotifyApiGateway from './spotifyApiGateway'
+import * as cache from './spotifyClientCache'
+jest.mock('./spotifyApiGateway')
+jest.mock('./spotifyClientCache')
 import * as spotifyClient from './spotifyClient'
-import SpotifyWebApi from 'spotify-web-api-node'
-jest.mock('spotify-web-api-node')
+import * as testData from './spotifyClientTestDataFixture'
 
 const user = {
   displayName: 'test-user',
@@ -11,71 +15,65 @@ const user = {
   isGuest: true
 } as IUser
 
-beforeAll(() => {
-  SpotifyWebApi.mockImplementation(() => ({}))
-})
-it('should get user profile', async () => {})
-
 it('should get new releases', async () => {
-  // const newReleases = await spotifyClient.getNewReleases('IE', user)
-  // console.log(JSON.stringify(newReleases))
-  // expect(newReleases).to.be.undefined
+  mocked(spotifyApiGateway.getNewReleases).mockResolvedValue(
+    testData.newReleases
+  )
+  mocked(cache.getCachedNewReleases).mockResolvedValue(null)
+
+  const newReleases = await spotifyClient.getNewReleases('IE', user)
+  expect(newReleases).to.eql(testData.newReleases)
 })
 
 it('should get recommendations', async () => {
-  // const recommendations = await spotifyClient.getRecommendations(user)
-  // console.log(JSON.stringify(recommendations))
-  // expect(recommendations).to.be.undefined
+  mocked(spotifyApiGateway.getRecommendations).mockResolvedValue(
+    testData.recommendations
+  )
+  mocked(cache.getCachedRecommendations).mockResolvedValue(null)
+
+  const recommendations = await spotifyClient.getRecommendations(user)
+  expect(recommendations).to.eql(testData.recommendations)
 })
 
 it('should search tracks', async () => {
-  // const tracks = await spotifyClient.searchTracks('any', user)
-  // console.log(JSON.stringify(tracks))
-  // expect(tracks).to.exist
-})
+  mocked(spotifyApiGateway.searchTracks).mockResolvedValue(
+    testData.searchResults
+  )
+  const searchResults = await spotifyClient.searchTracks('any', user)
 
-it('should get users top tracks', async () => {
-  // const tracks = await spotifyClient.getUserTopTracks(user)
-  // console.log(JSON.stringify(tracks))
-  // expect(tracks).to.exist
+  expect(searchResults).to.eql(testData.searchResults)
 })
 
 it('should get multiple tracks', async () => {
-  // const tracks = await spotifyClient.getMultipleTracks(
-  //   ['4T5Z4mbTe7kuGqgLpaRtTh', '2DyHhPyCZgZzNXn1IrtsTu'],
-  //   user
-  // )
-  // console.log(JSON.stringify(tracks))
-  // expect(tracks).to.exist
+  mocked(spotifyApiGateway.getMultipleTracks).mockResolvedValue(
+    testData.multipleTracks
+  )
+  const tracks = await spotifyClient.getMultipleTracks(
+    ['4T5Z4mbTe7kuGqgLpaRtTh', '2DyHhPyCZgZzNXn1IrtsTu'],
+    user
+  )
+
+  expect(tracks).to.eql(testData.multipleTracks)
 })
 
 it('should get audio features for a track', async () => {
-  // const res = await spotifyClient.getAudioFeaturesForTracks(user, [
-  //   '4T5Z4mbTe7kuGqgLpaRtTh',
-  //   '2DyHhPyCZgZzNXn1IrtsTu'
-  // ])
-  // console.log(res)
-  // expect(res).to.exist
+  mocked(spotifyApiGateway.getAudioFeaturesForTracks).mockResolvedValue(
+    testData.audioFeatures
+  )
+  const audioFeatures = await spotifyClient.getAudioFeaturesForTracks(user, [
+    '4T5Z4mbTe7kuGqgLpaRtTh',
+    '2DyHhPyCZgZzNXn1IrtsTu'
+  ])
+
+  expect(audioFeatures).to.eql(testData.audioFeatures)
 })
 
 it('should get a playlist by id', async () => {
-  /** const res = await spotifyClient.getPlaylist(user, '52PrRf8VFCsJr3oIl6FOaY')
-  console.log(JSON.stringify(res))
-  expect(res).to.exist
-  */
+  mocked(spotifyApiGateway.getPlaylist).mockResolvedValue(testData.playlist)
+  const playlist = await spotifyClient.getPlaylist(
+    user,
+    '52PrRf8VFCsJr3oIl6FOaY'
+  )
+
+  expect(playlist).to.eql(testData.playlist)
 })
-
-it('should get users playlists', async () => {
-  // const res = await spotifyClient.getUserPlaylists(user, {
-  //   limit: 1,
-  //   offset: 0
-  // })
-  // console.log(JSON.stringify(res))
-  // expect(res).to.exist
-})
-
-it('should get a playlist with tracks', async () => {})
-
-it('should reorder tracks in playlist', async () => {})
-
-it('should edit playlist details', async () => {})

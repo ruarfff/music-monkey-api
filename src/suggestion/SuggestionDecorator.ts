@@ -1,5 +1,5 @@
 import { flatten, groupBy, reduce } from 'lodash'
-import * as spotifyUri from 'spotify-uri'
+import spotifyUri from 'spotify-uri'
 import { logError } from '../logging'
 import ITrack from '../spotify/ITrack'
 import { getMultipleTracks } from '../spotify/spotifyClient'

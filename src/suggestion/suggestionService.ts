@@ -1,4 +1,4 @@
-import * as spotifyUri from 'spotify-uri'
+import spotifyUri from 'spotify-uri'
 import { getEventById } from '../event/eventGateway'
 import { logError } from '../logging'
 import { addTracksToExistingPlaylist } from '../playlist/playlistService'
