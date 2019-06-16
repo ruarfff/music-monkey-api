@@ -7,6 +7,7 @@ const recommendationKey = 'recommendations'
 const userTopTrackKey = 'user-top-tracks'
 const playlistKey = 'playlist'
 const searchKey = 'search'
+const userPlaylistsKey = 'user-playlists'
 
 export const cacheNewReleases = (country: string, newReleases: any) => {
   try {
@@ -70,7 +71,7 @@ export const cachePlaylist = (playlistId: string, playlist: any) => {
   try {
     cache.setObject(`${playlistKey}-${playlistId}`, playlist, defaultCacheTTL)
   } catch (err) {
-    logError('Error setting cached top tracks', err)
+    logError('Error setting cached playlist', err)
   }
 }
 
@@ -89,6 +90,32 @@ export const clearCachedPlaylist = (playlistId: string) => {
     cache.del(`${playlistKey}-${playlistId}`)
   } catch (err) {
     logError('Error deleting playlist from cache', err)
+  }
+}
+
+export const cacheUsersPlaylists = (userId: string, playlists: any) => {
+  try {
+    cache.setObject(`${userPlaylistsKey}-${userId}`, playlists, defaultCacheTTL)
+  } catch (err) {
+    logError('Error  caching users playlist', err)
+  }
+}
+
+export const getCachedUsersPlaylists = async (userId: string) => {
+  let playlists
+  try {
+    playlists = await cache.getObject(`${userPlaylistsKey}-${userId}`)
+  } catch (err) {
+    logError('Error getting cached users playlists ', err)
+  }
+  return playlists
+}
+
+export const clearCachedUsersPlaylist = (userId: string) => {
+  try {
+    cache.del(`${userPlaylistsKey}-${userId}`)
+  } catch (err) {
+    logError('Error deleting users playlists from cache', err)
   }
 }
 
