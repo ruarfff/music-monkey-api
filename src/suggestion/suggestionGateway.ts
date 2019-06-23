@@ -99,11 +99,12 @@ export const saveSuggestionsAsAccepted = async (suggestions: ISuggestion[]) => {
 
 export const saveSuggestionAsRejected = async (suggestionId: string) => {
   const suggestion = await fetchSuggestionById(suggestionId)
-  return await promisify(Suggestion.update)({
+  const { attrs } = await promisify(Suggestion.update)({
     ...suggestion,
     accepted: false,
     rejected: true
   })
+  return attrs
 }
 
 export const destroySuggestion = async (
