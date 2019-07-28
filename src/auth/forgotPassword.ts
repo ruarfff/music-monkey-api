@@ -3,7 +3,6 @@ import { SENDGRID_API_KEY } from '../config'
 const sgMail = require('@sendgrid/mail')
 
 export default function forgotPassword(email: string) {
-  console.log(email)
   sgMail.setApiKey(SENDGRID_API_KEY)
 
   const msg = {

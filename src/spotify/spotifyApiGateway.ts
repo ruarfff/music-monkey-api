@@ -133,7 +133,6 @@ async function refreshToken(user: IUser) {
 
 export const getUserProfile = async (user: IUser) => {
   const validUser: IUser = await checkToken(user)
-  console.log(validUser)
   const { body } = await getSpotifyApi(
     validUser.spotifyAuth.accessToken
   ).getMe()

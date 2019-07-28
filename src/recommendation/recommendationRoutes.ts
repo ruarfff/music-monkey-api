@@ -1,7 +1,9 @@
 import { Request, Response, Router } from 'express'
+import { isEmpty } from 'lodash'
 import passport from 'passport'
 import { getRecommendations, getUserTopTracks } from '../spotify/spotifyClient'
 import IUser from '../user/model/IUser'
+import { logError } from '../logging'
 const router = Router()
 
 /**
@@ -26,28 +28,24 @@ const router = Router()
 router.get(
   '/',
   passport.authenticate('jwt', { session: false }),
-  (req: Request, res: Response) => {
-    const { user } = req
-    const userData: IUser = user
-    let recommendationRequest
-    if (userData.spotifyId) {
-      recommendationRequest = getUserTopTracks(userData)
-    } else {
-      recommendationRequest = getRecommendations(userData)
-    }
+  async (req: Request, res: Response) => {
+    try {
+      const { user } = req
+      const userData: IUser = user
+      let recommendations = []
+      if (userData.spotifyId) {
+        recommendations = await getUserTopTracks(userData)
+      }
 
-    recommendationRequest
-      .then((tracks: any) => {
-        if (tracks) {
-          res.send(tracks)
-        } else {
-          res.send([])
-        }
-      })
-      .catch((err: any) => {
-        const code = err.statusCode || 400
-        res.status(code).send(err.message)
-      })
+      if (isEmpty(recommendations)) {
+        recommendations = await getRecommendations(userData)
+      }
+
+      res.send(recommendations)
+    } catch (err) {
+      logError('Failed to get recommendations', err, req)
+      res.send([])
+    }
   }
 )
 
