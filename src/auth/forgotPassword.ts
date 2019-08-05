@@ -6,7 +6,7 @@ export default function forgotPassword(email: string) {
   sgMail.setApiKey(SENDGRID_API_KEY)
 
   const msg = {
-    to: 'ruairitobrien@gmail.com',
+    to: email,
     from: 'noreply@musicmonkey.io',
     subject: 'Sending with SendGrid is Fun',
     text: 'and easy to do anywhere, even with Node.js',
