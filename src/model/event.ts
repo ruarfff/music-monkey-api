@@ -12,7 +12,8 @@ export const Event = dynamo.define(eventTableName, {
   schema: Joi.object({
     description: Joi.string()
       .allow('')
-      .optional(),
+      .optional()
+      .default(''),
     endDateTime: Joi.string(),
     eventCode: Joi.string()
       .allow('')
@@ -40,7 +41,9 @@ export const Event = dynamo.define(eventTableName, {
       .allow('')
       .optional(),
     settings: {
-      dynamicVotingEnabled: Joi.bool().default(false)
+      dynamicVotingEnabled: Joi.bool().default(false),
+      autoAcceptSuggestionsEnabled: Joi.bool().default(false),
+      suggestingPlaylistsEnabled: Joi.bool().default(false)
     }
   }).options({ stripUnknown: true }),
 
