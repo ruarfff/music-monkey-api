@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken'
 import { jwtCookieKey } from './authConstants'
 const isProduction = process.env.NODE_ENV === 'production'
 const devCookieOpts = {}
-const prodCookieOpts = { httpOnly: true, secure: true }
+const prodCookieOpts = { httpOnly: true, secure: true, sameSite: true }
 
 export const setJwtCookie = (res: Response, userId: string) => {
   const token = jwt.sign({ id: userId }, jwtCookieKey)
