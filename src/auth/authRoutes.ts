@@ -9,9 +9,7 @@ import { checkUserProfile } from '../user/profileCheck'
 import { createNewUser } from '../user/userService'
 import { setJwtCookie } from './authRequestLib'
 import forgotPassword from './forgotPassword'
-
-const devCookieOpts = {}
-const prodCookieOpts = { httpOnly: true, secure: true }
+import { devCookieOpts, prodCookieOpts } from './authConstants'
 
 const router = Router()
 
