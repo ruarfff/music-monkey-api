@@ -9,5 +9,6 @@ export const spotifyScopes = [
   'user-read-birthdate',
   'playlist-modify-public',
   'playlist-modify-private',
-  'user-top-read'
+  'user-top-read',
+  'user-library-read'
 ]

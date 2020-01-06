@@ -75,7 +75,7 @@ async function giveUserSpotifyAppCredential(user: IUser) {
         }
       } as IUser
     } catch (x) {
-      console.log(x)
+      console.error(x)
     }
   }
   return userWithAppCreds
@@ -226,6 +226,19 @@ export const getUserPlaylists = async (user: IUser, options: any) => {
   const validUser: IUser = await checkToken(user)
   const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
 
+  let savedTracks: any = {
+    images: [],
+    name: 'Liked Songs',
+    tracks: { items: [], total: 0 }
+  }
+  try {
+    const { body } = await spotifyApi.getMySavedTracks({ limit: 50 })
+    savedTracks.tracks.items = body.items
+    savedTracks.tracks.total = body.items.length
+  } catch (e) {
+    console.error(e)
+  }
+
   const response = await spotifyApi.getUserPlaylists(
     validUser.spotifyId,
     options
@@ -247,7 +260,7 @@ export const getUserPlaylists = async (user: IUser, options: any) => {
     })
   )
 
-  return playlistsWithTracks
+  return [savedTracks, ...playlistsWithTracks]
 }
 
 export const reorderTracksInPlaylist = async (

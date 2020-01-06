@@ -56,12 +56,16 @@ export const createEvent = (event: IEvent) => {
 }
 
 export const modifyEvent = (event: IEvent) => {
+  console.log('MODIFYING')
+
+  console.log(JSON.stringify(event, null, 4))
+
   return new Promise((resolve, reject) => {
-    Event.update(event, (err: Error, { attrs }: any) => {
-      if (err) {
+    Event.update(event, (err: Error, event: any) => {
+      if (err || !event) {
         return reject(err)
       }
-      const updatedEvent = cleanModel(attrs)
+      const updatedEvent = cleanModel(event.attrs)
       onEventUpdated(updatedEvent)
       return resolve(updatedEvent)
     })
@@ -87,6 +91,7 @@ export const getEventsByMultipleIds = async (eventIds: string[]) => {
 }
 
 export const getEventById = async (eventId: string) => {
+  console.log('Getting ' + eventId)
   const { attrs } = await promisify(Event.get)(eventId)
   const event = attrs
   const invites: IInvite[] = await getInvitesByEventId(event.eventId)
