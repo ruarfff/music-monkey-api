@@ -7,9 +7,9 @@ import { logError } from '../logging'
 import IUser from '../user/model/IUser'
 import { checkUserProfile } from '../user/profileCheck'
 import { createNewUser } from '../user/userService'
+import { devCookieOpts, prodCookieOpts } from './authConstants'
 import { setJwtCookie } from './authRequestLib'
 import forgotPassword from './forgotPassword'
-import { devCookieOpts, prodCookieOpts } from './authConstants'
 
 const router = Router()
 

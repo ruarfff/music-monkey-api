@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
-import { jwtCookieKey, prodCookieOpts, devCookieOpts } from './authConstants'
+import { devCookieOpts, jwtCookieKey, prodCookieOpts } from './authConstants'
 const isProduction = process.env.NODE_ENV === 'production'
 
 export const setJwtCookie = (res: Response, userId: string) => {

@@ -226,7 +226,7 @@ export const getUserPlaylists = async (user: IUser, options: any) => {
   const validUser: IUser = await checkToken(user)
   const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
 
-  let savedTracks: any = {
+  const savedTracks: any = {
     images: [],
     name: 'Liked Songs',
     tracks: { items: [], total: 0 }
