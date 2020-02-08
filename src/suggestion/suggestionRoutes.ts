@@ -5,14 +5,14 @@ import { getEventById } from '../event/eventGateway'
 import { logError } from '../logging'
 import SuggestionDecorator from './SuggestionDecorator'
 import {
+  acceptSuggestion,
   acceptSuggestions,
   createSuggestion,
   createSuggestions,
   deleteSuggestion,
   getSuggestionById,
   getSuggestionsByEventId,
-  rejectSuggestion,
-  acceptSuggestion
+  rejectSuggestion
 } from './suggestionService'
 
 const router = Router()

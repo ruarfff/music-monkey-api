@@ -5,6 +5,7 @@ import {
   addTracksToExistingPlaylist,
   deleteSingleTrackFromPlaylist
 } from '../playlist/playlistService'
+import ITrack from '../spotify/ITrack'
 import { getUserById } from '../user/userService'
 import ISuggestion from './ISuggestion'
 import {
@@ -14,10 +15,10 @@ import {
   fetchSuggestionsByUserId,
   fetchSuggestionsByUserIdAndEventId,
   saveSuggestion,
+  saveSuggestionAsAccepted,
   saveSuggestionAsRejected,
   saveSuggestions,
-  saveSuggestionsAsAccepted,
-  saveSuggestionAsAccepted
+  saveSuggestionsAsAccepted
 } from './suggestionGateway'
 import {
   onAutoAcceptedSuggestion,
@@ -25,8 +26,6 @@ import {
   onSuggestionSaved,
   onSuggestionsRejected
 } from './suggestionNotifier'
-import { getMultipleTracks } from '../spotify/spotifyApiGateway'
-import ITrack from '../spotify/ITrack'
 
 export const createSuggestions = async (suggestions: ISuggestion[]) => {
   const savedSuggestions = await saveSuggestions(suggestions)
