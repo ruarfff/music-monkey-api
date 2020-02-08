@@ -11,7 +11,8 @@ import {
   deleteSuggestion,
   getSuggestionById,
   getSuggestionsByEventId,
-  rejectSuggestion
+  rejectSuggestion,
+  acceptSuggestion
 } from './suggestionService'
 
 const router = Router()
@@ -178,12 +179,12 @@ router.post(
 
 /**
  * @swagger
- * /suggestions/{eventId}/accept:
+ * /suggestions/event/{eventId}/accept:
  *   post:
  *     tags:
  *       - suggestions
- *     description: Accept one or more than one suggestion
- *     summary: Accept one or more than one suggestion
+ *     description: Accept one or more than one suggestion for an event
+ *     summary: Accept one or more than one suggestion for an event
  *     produces:
  *       - application/json
  *     requestBody:
@@ -199,7 +200,7 @@ router.post(
  *           $ref: '#/definitions/Suggestion'
  */
 router.post(
-  '/:eventId/accept',
+  '/event/:eventId/accept',
   passport.authenticate('jwt', { session: false }),
   async (req: Request, res: Response) => {
     try {
@@ -220,12 +221,49 @@ router.post(
 
 /**
  * @swagger
- * /suggestions/{eventId}/reject:
+ * /suggestions/{suggestionId}/accept:
  *   post:
  *     tags:
  *       - suggestions
- *     description: Reject one or more than one suggestion
- *     summary: Reject one or more than one suggestion
+ *     description: Accept one or more than one suggestion
+ *     summary: Accept one or more than one suggestion
+ *     produces:
+ *       - application/json
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/definitions/Suggestion'
+ *     responses:
+ *       200:
+ *         description: A suggestion
+ *         schema:
+ *           $ref: '#/definitions/Suggestion'
+ */
+router.post(
+  '/:suggestionId/accept',
+  passport.authenticate('jwt', { session: false }),
+  async (req: Request, res: Response) => {
+    try {
+      const suggestionId = req.params.suggestionId
+      const savedSuggestion = await acceptSuggestion(suggestionId)
+      res.send(savedSuggestion)
+    } catch (err) {
+      logError('Failed to accept suggestion', err, req)
+      res.status(400).send(err)
+    }
+  }
+)
+
+/**
+ * @swagger
+ * /suggestions/{suggestionId}/reject:
+ *   post:
+ *     tags:
+ *       - suggestions
+ *     description: Reject one suggestion
+ *     summary: Reject one suggestion
  *     produces:
  *       - application/json
  *     requestBody:

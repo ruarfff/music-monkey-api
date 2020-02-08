@@ -89,7 +89,11 @@ export const saveSuggestionsAsAccepted = async (suggestions: ISuggestion[]) => {
   const updatePromises: Array<Promise<ISuggestion>> = []
   suggestions.map(suggestion => {
     updatePromises.push(
-      promisify(Suggestion.update)({ ...suggestion, accepted: true })
+      promisify(Suggestion.update)({
+        ...suggestion,
+        accepted: true,
+        rejected: false
+      })
     )
   })
   const updatedSuggestions = await Promise.all(updatePromises)
@@ -97,8 +101,27 @@ export const saveSuggestionsAsAccepted = async (suggestions: ISuggestion[]) => {
   return updatedSuggestions.map((s: any) => s.attrs)
 }
 
-export const saveSuggestionAsRejected = async (suggestionId: string) => {
+export const saveSuggestionAsAccepted = async (suggestionId: string) => {
   const suggestion = await fetchSuggestionById(suggestionId)
+  const { attrs } = await promisify(Suggestion.update)({
+    ...suggestion,
+    accepted: true,
+    rejected: false
+  })
+  return attrs
+}
+
+export const saveSuggestionAsRejectedById = async (suggestionId: string) => {
+  const suggestion = await fetchSuggestionById(suggestionId)
+  const { attrs } = await promisify(Suggestion.update)({
+    ...suggestion,
+    accepted: false,
+    rejected: true
+  })
+  return attrs
+}
+
+export const saveSuggestionAsRejected = async (suggestion: ISuggestion) => {
   const { attrs } = await promisify(Suggestion.update)({
     ...suggestion,
     accepted: false,

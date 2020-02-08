@@ -1,7 +1,10 @@
 import spotifyUri from 'spotify-uri'
 import { getEventById } from '../event/eventGateway'
 import { logError } from '../logging'
-import { addTracksToExistingPlaylist } from '../playlist/playlistService'
+import {
+  addTracksToExistingPlaylist,
+  deleteSingleTrackFromPlaylist
+} from '../playlist/playlistService'
 import { getUserById } from '../user/userService'
 import ISuggestion from './ISuggestion'
 import {
@@ -13,7 +16,8 @@ import {
   saveSuggestion,
   saveSuggestionAsRejected,
   saveSuggestions,
-  saveSuggestionsAsAccepted
+  saveSuggestionsAsAccepted,
+  saveSuggestionAsAccepted
 } from './suggestionGateway'
 import {
   onAutoAcceptedSuggestion,
@@ -21,6 +25,8 @@ import {
   onSuggestionSaved,
   onSuggestionsRejected
 } from './suggestionNotifier'
+import { getMultipleTracks } from '../spotify/spotifyApiGateway'
+import ITrack from '../spotify/ITrack'
 
 export const createSuggestions = async (suggestions: ISuggestion[]) => {
   const savedSuggestions = await saveSuggestions(suggestions)
@@ -41,14 +47,62 @@ export const acceptSuggestions = async (
   const acceptedSuggestions: ISuggestion[] = await saveSuggestionsAsAccepted(
     suggestions
   )
+  await addManySuggestionToPlaylist(suggestions)
   onSuggestionsAccepted(eventId)
   return acceptedSuggestions
 }
 
+async function addManySuggestionToPlaylist(suggestions: ISuggestion[]) {
+  const event = await getEventById(suggestions[0].eventId)
+  const user = await getUserById(event.userId)
+  const playlistDetails = spotifyUri.parse(event.playlistUrl)
+  return await addTracksToExistingPlaylist(
+    user,
+    playlistDetails.id,
+    suggestions.map(s => s.trackUri)
+  )
+}
+
+export const acceptSuggestion = async (suggestionId: string) => {
+  const acceptedSuggestion: ISuggestion = await saveSuggestionAsAccepted(
+    suggestionId
+  )
+  await addSuggestionToPlaylist(acceptedSuggestion)
+  onSuggestionsAccepted(acceptedSuggestion.eventId)
+  return acceptedSuggestion
+}
+
+async function addSuggestionToPlaylist(suggestion: ISuggestion) {
+  const event = await getEventById(suggestion.eventId)
+  const user = await getUserById(event.userId)
+  const playlistDetails = spotifyUri.parse(event.playlistUrl)
+  return await addTracksToExistingPlaylist(user, playlistDetails.id, [
+    suggestion.trackUri
+  ])
+}
+
 export const rejectSuggestion = async (suggestionId: string) => {
-  const suggestion = await saveSuggestionAsRejected(suggestionId)
-  onSuggestionsRejected(suggestion.eventId)
-  return suggestion
+  const suggestion = await fetchSuggestionById(suggestionId)
+  if (suggestion.accepted) {
+    await deleteSuggestionFromPlaylist(suggestion)
+  }
+  const rejectedSuggestion = await saveSuggestionAsRejected(suggestion)
+  onSuggestionsRejected(rejectedSuggestion.eventId)
+  return rejectedSuggestion
+}
+
+async function deleteSuggestionFromPlaylist(suggestion: ISuggestion) {
+  try {
+    const event = await getEventById(suggestion.eventId)
+    const user = await getUserById(event.userId)
+    const playlistDetails = spotifyUri.parse(event.playlistUrl)
+
+    await deleteSingleTrackFromPlaylist(user, playlistDetails.id, {
+      uri: suggestion.trackUri
+    } as ITrack)
+  } catch (err) {
+    console.error(err)
+  }
 }
 
 export const deleteSuggestion = async (
