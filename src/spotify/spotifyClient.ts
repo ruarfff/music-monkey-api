@@ -76,7 +76,10 @@ export const getUserTopTracks = async (user: IUser) => {
   return topTracks
 }
 
-export const getMultipleTracks = async (trackIds: string[], user: IUser) => {
+export const getMultipleTracks = async (
+  trackIds: string[],
+  user: IUser
+): Promise<{ tracks: ITrack[] }> => {
   return await api.getMultipleTracks(user, trackIds)
 }
 

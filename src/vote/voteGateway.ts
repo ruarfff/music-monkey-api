@@ -62,3 +62,19 @@ export const getVotesByEventId = (eventId: string) => {
       })
   })
 }
+
+export const getVotesByUserId = (userId: string) => {
+  return new Promise<IVote[]>((resolve, reject) => {
+    Vote.query(userId)
+      .usingIndex('UserIdIndex')
+      .exec((err: any, votesModel: any) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(
+            votesModel.Items.map((x: any) => cleanModel(x.attrs) as IVote)
+          )
+        }
+      })
+  })
+}

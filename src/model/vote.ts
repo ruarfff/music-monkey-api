@@ -29,6 +29,11 @@ export const Vote = dynamo.define(voteTableName, {
       rangeKey: 'trackId',
       type: 'global',
       name: 'UserIdTrackIdIndex'
+    },
+    {
+      hashKey: 'userId',
+      name: 'UserIdIndex',
+      type: 'global'
     }
   ]
 })
