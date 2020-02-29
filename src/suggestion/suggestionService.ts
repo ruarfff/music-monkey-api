@@ -21,7 +21,6 @@ import {
   saveSuggestionsAsAccepted
 } from './suggestionGateway'
 import {
-  onAutoAcceptedSuggestion,
   onSuggestionsAccepted,
   onSuggestionSaved,
   onSuggestionsRejected

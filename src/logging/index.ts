@@ -1,8 +1,8 @@
 const expressWinston = require('express-winston')
 import { Request } from 'express'
+import Rollbar from 'rollbar'
 import winston from 'winston'
 import { IS_PRODUCTION, ROLLBAR_ACCESS_TOKEN } from '../config'
-import Rollbar from 'rollbar'
 let rollbar = {} as any
 const logger = winston.createLogger()
 

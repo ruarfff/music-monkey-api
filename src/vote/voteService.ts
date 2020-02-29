@@ -1,8 +1,8 @@
-import IVote from './IVote'
-import { getVotesByEventId, getVotesByUserId } from './voteGateway'
+import ITrack from '../spotify/ITrack'
 import { getMultipleTracks } from '../spotify/spotifyClient'
 import IUser from '../user/model/IUser'
-import ITrack from '../spotify/ITrack'
+import IVote from './IVote'
+import { getVotesByEventId, getVotesByUserId } from './voteGateway'
 
 export const getVotesWithStatus = async (eventId: string, userId: string) => {
   const votes: IVote[] = await getVotesByEventId(eventId)
