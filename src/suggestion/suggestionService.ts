@@ -136,11 +136,7 @@ async function handleSavedSuggestions(suggestions: ISuggestion[]) {
     const event = await getEventById(suggestions[0].eventId)
     eventId = event.eventId
     if (event.settings && event.settings.autoAcceptSuggestionsEnabled) {
-      const user = await getUserById(event.userId)
-      const playlistDetails = spotifyUri.parse(event.playlistUrl)
-      const trackUris = suggestions.map(s => s.trackUri)
-      await addTracksToExistingPlaylist(user, playlistDetails.id, trackUris)
-      await onAutoAcceptedSuggestion(eventId)
+      console.log('Auto Accepting suggestion')
       await acceptSuggestions(eventId, suggestions)
     } else {
       await onSuggestionSaved(eventId)

@@ -1,4 +1,3 @@
-import { logDebug } from '../logging'
 import { IRsvp } from '../model'
 import {
   fetchRsvpByEventId,
