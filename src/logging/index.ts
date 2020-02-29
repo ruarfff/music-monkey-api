@@ -1,13 +1,7 @@
 const expressWinston = require('express-winston')
 import { Request } from 'express'
 import winston from 'winston'
-import {
-  IS_PRODUCTION,
-  LOGGLY_SUB_DOMAIN,
-  LOGGLY_TOKEN,
-  ROLLBAR_ACCESS_TOKEN
-} from '../config'
-const { Loggly } = require('winston-loggly-bulk')
+import { IS_PRODUCTION, ROLLBAR_ACCESS_TOKEN } from '../config'
 import Rollbar from 'rollbar'
 let rollbar = {} as any
 const logger = winston.createLogger()
@@ -18,13 +12,6 @@ if (IS_PRODUCTION) {
     captureUncaught: true,
     captureUnhandledRejections: true
   })
-  const logglyTransport = {
-    token: LOGGLY_TOKEN,
-    subdomain: LOGGLY_SUB_DOMAIN,
-    tags: ['music-monkey-api'],
-    json: true
-  }
-  logger.add(new Loggly(logglyTransport))
 } else {
   logger.add(
     new winston.transports.Console({
@@ -35,7 +22,11 @@ if (IS_PRODUCTION) {
 
 export const expressLogger = expressWinston.logger({
   winstonInstance: logger,
-  ignoredRoutes: ['/ping']
+  ignoredRoutes: ['/ping'],
+  format: winston.format.combine(
+    winston.format.colorize(),
+    winston.format.json()
+  )
 })
 
 export const rollbarErrorHandler = IS_PRODUCTION

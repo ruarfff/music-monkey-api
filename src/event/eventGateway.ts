@@ -56,10 +56,6 @@ export const createEvent = (event: IEvent) => {
 }
 
 export const modifyEvent = (event: IEvent) => {
-  console.log('MODIFYING')
-
-  console.log(JSON.stringify(event, null, 4))
-
   return new Promise((resolve, reject) => {
     Event.update(event, (err: Error, modifiedEvent: any) => {
       if (err || !modifiedEvent) {

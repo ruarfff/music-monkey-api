@@ -46,7 +46,7 @@ router.post(
         logDebug(ignore)
       }
       if (!responseRsvp) {
-        responseRsvp = await createRsvp(rsvp, req.user)
+        responseRsvp = await createRsvp(rsvp)
       }
       res.send(responseRsvp)
     } catch (err) {
@@ -83,7 +83,7 @@ router.put(
   async (req: Request, res: Response) => {
     try {
       const rsvp = { ...req.body, userId: req.user.userId }
-      const savedRsvp = await updateRsvp(rsvp, req.user)
+      const savedRsvp = await updateRsvp(rsvp)
       res.send(savedRsvp)
     } catch (err) {
       res.status(400).send(err)

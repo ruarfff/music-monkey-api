@@ -3,7 +3,7 @@ import cors from 'cors'
 import express from 'express'
 import helmet from 'helmet'
 import { IS_PRODUCTION } from './config'
-import { expressLogger, rollbarErrorHandler } from './logging'
+//import { expressLogger, rollbarErrorHandler } from './logging'
 import passport from './passport'
 import { swaggerSpec } from './swagger'
 
@@ -58,7 +58,7 @@ const corsOptions = {
   }
 }
 
-app.use(expressLogger)
+//app.use(expressLogger)
 app.use(helmet())
 app.use(cors(corsOptions))
 app.use(express.json())
@@ -99,7 +99,7 @@ app.get('/swagger.json', (_req, res) => {
 app.use(express.static('public'))
 
 if (IS_PRODUCTION) {
-  app.use(rollbarErrorHandler)
+  //app.use(rollbarErrorHandler)
 }
 // error handler
 app.use((err: any, _req: any, res: any, next: any) => {

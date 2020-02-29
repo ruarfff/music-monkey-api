@@ -1,10 +1,5 @@
-import { getEventById } from '../event/eventGateway'
-import IEvent from '../event/model/IEvent'
-import { logError } from '../logging'
+import { logDebug } from '../logging'
 import { IRsvp } from '../model'
-import { createNotification } from '../notification'
-import INotification from '../notification/INotification'
-import IUser from '../user/model/IUser'
 import {
   fetchRsvpByEventId,
   fetchRsvpByUserId,
@@ -29,8 +24,9 @@ export const getRsvpByUserId = async (userId: string) => {
   return await fetchRsvpByUserId(userId)
 }
 
-export const createRsvp = async (rsvp: IRsvp, user: IUser) => {
+export const createRsvp = async (rsvp: IRsvp) => {
   try {
+    console.log('Creating RSVP: ' + JSON.stringify(rsvp))
     const existingRsvp = await getRsvpByUserIdAndInviteId(
       rsvp.userId,
       rsvp.inviteId
@@ -39,52 +35,16 @@ export const createRsvp = async (rsvp: IRsvp, user: IUser) => {
       return existingRsvp
     }
   } catch (err) {
-    console.log(err)
+    console.error(err)
   }
   const savedRsvp: IRsvp = await saveRsvp(rsvp)
-  if (rsvp.status !== 'Pending') {
-    notifyRsvpCreation(savedRsvp, user)
-  }
+  onRsvpCreated(savedRsvp)
   return savedRsvp
 }
 
-async function notifyRsvpCreation(rsvp: IRsvp, user: IUser) {
-  try {
-    const event: IEvent = await getEventById(rsvp.eventId)
-    onRsvpCreated(rsvp)
-    await createNotification({
-      userId: event.userId,
-      context: 'event',
-      type: 'rsvp',
-      contextId: event.eventId,
-      content: `${user.displayName ||
-        user.email} had opened their invite for the event: ${event.name}`
-    } as INotification)
-  } catch (err) {
-    logError('Could not send rsvp notification', err)
-  }
-}
-
-export const updateRsvp = async (rsvp: IRsvp, user: IUser) => {
+export const updateRsvp = async (rsvp: IRsvp) => {
+  console.log('Updating RSVP: ' + JSON.stringify(rsvp))
   const updatedRsvp = await modifyRsvp(rsvp)
-  notifyRsvpUpdated(updatedRsvp, user)
+  onRsvpUpdated(updatedRsvp)
   return updatedRsvp
-}
-
-async function notifyRsvpUpdated(rsvp: IRsvp, user: IUser) {
-  try {
-    const event: IEvent = await getEventById(rsvp.eventId)
-    onRsvpUpdated(rsvp)
-    await createNotification({
-      userId: event.userId,
-      context: 'event',
-      type: 'rsvp',
-      contextId: event.eventId,
-      content: `${user.displayName || user.email} responded with ${
-        rsvp.status
-      } to the event: ${event.name}`
-    } as INotification)
-  } catch (err) {
-    logError('Could not send rsvp notification', err)
-  }
 }

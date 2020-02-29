@@ -16,7 +16,7 @@ export const saveRsvp = async (rsvp: IRsvp) => {
 
 export const modifyRsvp = async (rsvp: IRsvp) => {
   try {
-    const existingRsvp = await fetchRsvpByUserIdAndInviteId(
+    const existingRsvp: IRsvp = await fetchRsvpByUserIdAndInviteId(
       rsvp.userId,
       rsvp.inviteId
     )
@@ -39,7 +39,7 @@ export const fetchRsvpByUserIdAndInviteId = (
   userId: string,
   inviteId: string
 ) => {
-  return new Promise((resolve: any, reject: any) => {
+  return new Promise<IRsvp>((resolve: any, reject: any) => {
     Rsvp.query(inviteId)
       .usingIndex('InviteIdUserIdIndex')
       .where('userId')
