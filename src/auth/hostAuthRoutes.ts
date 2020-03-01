@@ -5,7 +5,7 @@ import { handleCallback } from './authRequestLib'
 
 const router = Router()
 const hostsUrl = 'https://musicmonkey.io'
-const devUrl = 'http://localhost:3001'
+const devUrl = 'https://localhost:3001'
 
 router.get(
   '/spotify-host',

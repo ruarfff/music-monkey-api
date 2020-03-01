@@ -86,7 +86,4 @@ function onListening() {
   debug('Listening on ' + bind)
   createTables()
   redisGateway.connect()
-  if (process.env.NODE_ENV === 'development') {
-    redisGateway.enableMonitoring()
-  }
 }
