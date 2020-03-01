@@ -1,6 +1,6 @@
 export const jwtCookieKey = 'super-super-secret-mm'
 
-export const devCookieOpts = { httpOnly: true, secure: true, sameSite: 'none' }
+export const devCookieOpts = {}
 export const prodCookieOpts = { httpOnly: true, secure: true, sameSite: 'none' }
 
 export const spotifyScopes = [

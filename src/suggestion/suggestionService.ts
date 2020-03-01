@@ -46,7 +46,7 @@ export const acceptSuggestions = async (
     suggestions
   )
   await addManySuggestionToPlaylist(suggestions)
-  onSuggestionsAccepted(eventId)
+  onSuggestionsAccepted(eventId, acceptedSuggestions)
   return acceptedSuggestions
 }
 
@@ -66,7 +66,7 @@ export const acceptSuggestion = async (suggestionId: string) => {
     suggestionId
   )
   await addSuggestionToPlaylist(acceptedSuggestion)
-  onSuggestionsAccepted(acceptedSuggestion.eventId)
+  onSuggestionsAccepted(acceptedSuggestion.eventId, [acceptedSuggestion])
   return acceptedSuggestion
 }
 
