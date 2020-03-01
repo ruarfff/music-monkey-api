@@ -7,7 +7,7 @@ import { handleCallback, setJwtCookie } from './authRequestLib'
 
 const router = Router()
 const guestsUrl = 'https://guests.musicmonkey.io'
-const devUrl = 'http://localhost:3002'
+const devUrl = 'https://localhost:3002'
 
 router.get(
   '/spotify-guest',

@@ -12,7 +12,7 @@ export const getAllEventsUserWasInvitedTo = async (user: IUser) => {
       try {
         event = await getEvent(eventId, user)
       } catch (err) {
-        console.log('Failed to get event', err)
+        console.error('Failed to get event', err)
       }
       return event
     })

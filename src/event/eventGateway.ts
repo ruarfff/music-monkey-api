@@ -87,7 +87,6 @@ export const getEventsByMultipleIds = async (eventIds: string[]) => {
 }
 
 export const getEventById = async (eventId: string) => {
-  console.log('Getting ' + eventId)
   const { attrs } = await promisify(Event.get)(eventId)
   const event = attrs
   const invites: IInvite[] = await getInvitesByEventId(event.eventId)

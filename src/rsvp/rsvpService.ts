@@ -25,7 +25,6 @@ export const getRsvpByUserId = async (userId: string) => {
 
 export const createRsvp = async (rsvp: IRsvp) => {
   try {
-    console.log('Creating RSVP: ' + JSON.stringify(rsvp))
     const existingRsvp = await getRsvpByUserIdAndInviteId(
       rsvp.userId,
       rsvp.inviteId
@@ -42,7 +41,6 @@ export const createRsvp = async (rsvp: IRsvp) => {
 }
 
 export const updateRsvp = async (rsvp: IRsvp) => {
-  console.log('Updating RSVP: ' + JSON.stringify(rsvp))
   const updatedRsvp = await modifyRsvp(rsvp)
   onRsvpUpdated(updatedRsvp)
   return updatedRsvp
