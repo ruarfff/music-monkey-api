@@ -137,7 +137,7 @@ async function handleSavedSuggestions(suggestions: ISuggestion[]) {
     if (event.settings && event.settings.autoAcceptSuggestionsEnabled) {
       await acceptSuggestions(eventId, suggestions)
     } else {
-      await onSuggestionSaved(eventId)
+      await onSuggestionSaved(eventId, suggestions)
     }
   } catch (err) {
     logError(
