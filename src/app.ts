@@ -1,8 +1,13 @@
+import { IS_PRODUCTION, HONEYCOMB_KEY } from './config'
+require('honeycomb-beeline')({
+  writeKey: HONEYCOMB_KEY,
+  dataset: 'music-monkey-api'
+})
+
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'
 import helmet from 'helmet'
-import { IS_PRODUCTION } from './config'
 //import { expressLogger, rollbarErrorHandler } from './logging'
 import passport from './passport'
 import { swaggerSpec } from './swagger'

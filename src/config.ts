@@ -21,6 +21,8 @@ const pusherCluster = process.env.PUSHER_CLUSTER
 
 const sendGridApiKey = process.env.SENDGRID_API_KEY
 
+const honeyCombKey = process.env.HONEYCOMB_KEY
+
 export const IS_PRODUCTION = isProduction
 
 export const SPOTIFY_CLIENT_ID = spotifyClientId
@@ -43,3 +45,5 @@ export const PUSHER_SECRET = pusherSecret
 export const PUSHER_CLUSTER = pusherCluster
 
 export const SENDGRID_API_KEY = sendGridApiKey
+
+export const HONEYCOMB_KEY = honeyCombKey
