@@ -15,6 +15,9 @@ export const onSuggestionsAccepted = (
   send('mm-suggestions-' + eventId, 'suggestions-accepted', suggestions)
 }
 
-export const onSuggestionsRejected = (eventId: string) => {
-  send('mm-suggestions-' + eventId, 'suggestions-rejected', {})
+export const onSuggestionsRejected = (
+  eventId: string,
+  suggestion: ISuggestion
+) => {
+  send('mm-suggestions-' + eventId, 'suggestions-rejected', [suggestion])
 }

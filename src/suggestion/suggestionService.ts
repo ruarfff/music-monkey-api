@@ -85,7 +85,7 @@ export const rejectSuggestion = async (suggestionId: string) => {
     await deleteSuggestionFromPlaylist(suggestion)
   }
   const rejectedSuggestion = await saveSuggestionAsRejected(suggestion)
-  onSuggestionsRejected(rejectedSuggestion.eventId)
+  onSuggestionsRejected(rejectedSuggestion.eventId, rejectedSuggestion)
   return rejectedSuggestion
 }
 
