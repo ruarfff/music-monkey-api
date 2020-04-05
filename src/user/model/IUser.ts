@@ -11,6 +11,7 @@ export default interface IUser {
   facebookId: string
   instagramId: string
   twitterId: string
+  twitchId: string
   image: string
   passwordHash: string
   spotifyAuth: ISpotifyAuth
