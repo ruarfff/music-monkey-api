@@ -5,4 +5,5 @@ export default interface ISafeUser {
   image: string
   userId: string
   isGuest: boolean
+  twitchId: string
 }

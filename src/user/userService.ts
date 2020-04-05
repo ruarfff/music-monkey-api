@@ -74,7 +74,8 @@ export const getSafeUserById = async (userId: string) => {
         displayName: user.displayName,
         image: user.image,
         userId: user.userId,
-        isGuest: user.isGuest
+        isGuest: user.isGuest,
+        twitchId: user.twitchId
       } as ISafeUser)
     : user
 }
