@@ -1,3 +1,4 @@
+import isEqual from 'lodash/isEqual'
 import { getEventById } from '../event/eventGateway'
 import IEvent from '../event/model/IEvent'
 import { logError } from '../logging'
@@ -14,7 +15,7 @@ import { getUserById } from '../user/userService'
 import ITrackVoteStatus from './ITrackVoteStatus'
 import { getVotesWithStatus } from './voteService'
 
-const dynamicVotingEnabled = async (event: IEvent) => {
+const dynamicVotingEnabled = (event: IEvent) => {
   try {
     return event.settings && event.settings.dynamicVotingEnabled
   } catch (err) {
@@ -25,7 +26,7 @@ const dynamicVotingEnabled = async (event: IEvent) => {
 
 export const handleCreateForDynamicVoting = async (eventId: string) => {
   const event = await getEventById(eventId)
-  const dvEnabled = await dynamicVotingEnabled(event)
+  const dvEnabled = dynamicVotingEnabled(event)
   if (dvEnabled) {
     return updateEventPlaylistBasedOnVotes(event)
   }
@@ -34,7 +35,7 @@ export const handleCreateForDynamicVoting = async (eventId: string) => {
 
 export const handleDeleteForDynamicVoting = async (eventId: string) => {
   const event = await getEventById(eventId)
-  const dvEnabled = await dynamicVotingEnabled(event)
+  const dvEnabled = dynamicVotingEnabled(event)
   if (dvEnabled) {
     return updateEventPlaylistBasedOnVotes(event)
   }
@@ -67,7 +68,14 @@ async function sortAndUpdatePlaylist(
   )
   let result
   try {
-    result = await replacePlaylistTracks(eventOwner, playlist.id, trackIUris)
+    if (
+      !isEqual(
+        trackIUris,
+        playlist.tracks.items.map((p: IPlaylistItem) => p.track.uri)
+      )
+    ) {
+      result = await replacePlaylistTracks(eventOwner, playlist.id, trackIUris)
+    }
   } catch (err) {
     logError('Failed to update playlist order on vote', err)
   }

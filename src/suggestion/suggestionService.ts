@@ -25,6 +25,8 @@ import {
   onSuggestionSaved,
   onSuggestionsRejected
 } from './suggestionNotifier'
+import IVote from '../vote/IVote'
+import { createVote } from '../vote/voteGateway'
 
 export const createSuggestions = async (suggestions: ISuggestion[]) => {
   const savedSuggestions = await saveSuggestions(suggestions)
@@ -57,7 +59,7 @@ async function addManySuggestionToPlaylist(suggestions: ISuggestion[]) {
   return await addTracksToExistingPlaylist(
     user,
     playlistDetails.id,
-    suggestions.map(s => s.trackUri)
+    suggestions.map((s) => s.trackUri)
   )
 }
 
@@ -130,15 +132,23 @@ export const getSuggestionsByUserId = async (userId: string) => {
 }
 
 async function handleSavedSuggestions(suggestions: ISuggestion[]) {
-  let eventId
+  let eventId: string = ''
   try {
     const event = await getEventById(suggestions[0].eventId)
     eventId = event.eventId
     if (event.settings && event.settings.autoAcceptSuggestionsEnabled) {
       await acceptSuggestions(eventId, suggestions)
     } else {
-      await onSuggestionSaved(eventId, suggestions)
+      onSuggestionSaved(eventId, suggestions)
     }
+    suggestions.map((s) => {
+      const vote: IVote = {
+        eventId,
+        trackId: s.trackUri,
+        userId: s.userId
+      }
+      createVote(vote)
+    })
   } catch (err) {
     logError(
       'An error ocurred during auto accept flow for event: ' + eventId,

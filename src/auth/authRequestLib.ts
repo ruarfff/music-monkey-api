@@ -8,8 +8,6 @@ export const setJwtCookie = (res: Response, userId: string) => {
   if (isProduction) {
     res.cookie('jwt', token, prodCookieOpts)
   } else {
-    console.log('Setting cookie')
-    console.log(devCookieOpts)
     res.cookie('jwt', token, devCookieOpts)
   }
 }

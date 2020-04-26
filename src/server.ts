@@ -1,5 +1,5 @@
-process.on('uncaughtException', exception => {
-  console.log(exception)
+process.on('uncaughtException', (exception) => {
+  console.error(exception)
 })
 
 /**

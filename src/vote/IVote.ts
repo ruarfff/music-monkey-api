@@ -1,5 +1,5 @@
 export default interface IVote {
-  voteId: string
+  voteId?: string
   eventId: string
   trackId: string
   userId: string
