@@ -8,8 +8,8 @@
     "outDir": "build/server",
     "sourceMap": true,
     "noImplicitAny": true,
-    "lib": ["esnext", "dom"]
+    "lib": ["esnext", "dom"],
   },
-  "include": ["src/**/*"],
+  "include": ["src"],
   "exclude": ["src/**/*.test.ts", "node_modules"]
 }

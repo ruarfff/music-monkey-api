@@ -9,6 +9,7 @@ import {
   modifyUser,
   saveUser
 } from './userGateway'
+import { checkUserProfile } from './profileCheck'
 
 const cachedUserTTL = 600
 
@@ -67,7 +68,13 @@ export const getUserById = async (userId: string) => {
 }
 
 export const getSafeUserById = async (userId: string) => {
-  const user = await getUserById(userId)
+  let user = await getUserById(userId)
+  try {
+    user = await checkUserProfile(user)
+  } catch (err) {
+    logError('Failed to check user profile', err)
+  }
+
   return !!user
     ? ({
         country: user.country,

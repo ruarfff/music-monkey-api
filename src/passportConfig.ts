@@ -42,7 +42,7 @@ passport.deserializeUser((obj, done) => {
 passport.use(
   new JWTStrategy(
     {
-      jwtFromRequest: req => req.cookies.jwt,
+      jwtFromRequest: (req) => req.cookies.jwt,
       secretOrKey: jwtCookieKey
     },
     async (jwtPayload, done) => {
@@ -207,10 +207,10 @@ function handleFacebookLogin(
   )
 
   getOrCreateUser(user, 'facebook')
-    .then(validUser => {
+    .then((validUser) => {
       done(null, validUser)
     })
-    .catch(err => {
+    .catch((err) => {
       return done(err, user)
     })
 }
@@ -228,10 +228,10 @@ function handleSpotifyLogin(
     profile
   )
   getOrCreateUser(user, 'spotify')
-    .then(validUser => {
+    .then((validUser) => {
       done(null, validUser)
     })
-    .catch(err => {
+    .catch((err) => {
       return done(err, user)
     })
 }

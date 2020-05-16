@@ -9,7 +9,7 @@ import cors from 'cors'
 import express from 'express'
 import helmet from 'helmet'
 //import { expressLogger, rollbarErrorHandler } from './logging'
-import passport from './passport'
+import passport from './passportConfig'
 import { swaggerSpec } from './swagger'
 
 import authRouter from './auth/authRoutes'
