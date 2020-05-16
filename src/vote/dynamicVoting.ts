@@ -42,7 +42,7 @@ export const handleDeleteForDynamicVoting = async (eventId: string) => {
   return null
 }
 
-async function updateEventPlaylistBasedOnVotes(event: IEvent) {
+export async function updateEventPlaylistBasedOnVotes(event: IEvent) {
   const user = await getUserById(event.userId)
   const votes: Map<string, ITrackVoteStatus> = await getVotesWithStatus(
     event.eventId,

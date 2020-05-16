@@ -9,6 +9,8 @@ import {
   removeEvent
 } from './eventGateway'
 import IEvent from './model/IEvent'
+import { logError } from '../logging'
+import { updateEventPlaylistBasedOnVotes } from '../vote/dynamicVoting'
 const eventDecorator = new EventDecorator()
 
 export const getEvent = async (eventId: string, user: IUser) => {
@@ -41,7 +43,20 @@ export const updateEvent = async (event: IEvent, userId: string) => {
   if (existingEvent.userId !== userId) {
     throw new Error('Cannot update event belonging to another user')
   }
+
   const updatedEvent = await modifyEvent(event)
+
+  try {
+    // Sort the playlist if dynamic voting turned on
+    if (
+      !existingEvent.settings.dynamicVotingEnabled &&
+      event.settings.dynamicVotingEnabled
+    ) {
+      updateEventPlaylistBasedOnVotes(event)
+    }
+  } catch (err) {
+    logError('Error running dynamic vote on settings update')
+  }
   return updatedEvent
 }
 
