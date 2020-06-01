@@ -109,13 +109,17 @@ export const getPlaylist = async (user: IUser, playlistId: string) => {
   return playlist
 }
 
-export const getUserPlaylists = async (user: IUser, options: any) => {
-  let playlists = await getCachedUsersPlaylists(user.userId)
+export const getUserPlaylists = async (
+  user: IUser,
+  { limit = 0, offset = 0 }: any
+) => {
+  const key = `${user.userId}-${limit}-${offset}`
+  let playlists = await getCachedUsersPlaylists(key)
   if (playlists) {
     return playlists
   }
-  playlists = await api.getUserPlaylists(user, options)
-  cacheUsersPlaylists(user.userId, playlists)
+  playlists = await api.getUserPlaylists(user, { limit, offset })
+  cacheUsersPlaylists(key, playlists)
   return playlists
 }
 

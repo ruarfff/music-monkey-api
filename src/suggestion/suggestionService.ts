@@ -7,6 +7,8 @@ import {
 } from '../playlist/playlistService'
 import ITrack from '../spotify/ITrack'
 import { getUserById } from '../user/userService'
+import IVote from '../vote/IVote'
+import { createVote } from '../vote/voteGateway'
 import ISuggestion from './ISuggestion'
 import {
   destroySuggestion,
@@ -25,8 +27,6 @@ import {
   onSuggestionSaved,
   onSuggestionsRejected
 } from './suggestionNotifier'
-import IVote from '../vote/IVote'
-import { createVote } from '../vote/voteGateway'
 
 export const createSuggestions = async (suggestions: ISuggestion[]) => {
   const savedSuggestions = await saveSuggestions(suggestions)
@@ -59,7 +59,7 @@ async function addManySuggestionToPlaylist(suggestions: ISuggestion[]) {
   return await addTracksToExistingPlaylist(
     user,
     playlistDetails.id,
-    suggestions.map((s) => s.trackUri)
+    suggestions.map(s => s.trackUri)
   )
 }
 
@@ -141,7 +141,7 @@ async function handleSavedSuggestions(suggestions: ISuggestion[]) {
     } else {
       onSuggestionSaved(eventId, suggestions)
     }
-    suggestions.map((s) => {
+    suggestions.map(s => {
       const vote: IVote = {
         eventId,
         trackId: s.trackUri,

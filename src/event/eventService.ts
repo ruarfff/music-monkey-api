@@ -1,4 +1,6 @@
+import { logError } from '../logging'
 import IUser from '../user/model/IUser'
+import { updateEventPlaylistBasedOnVotes } from '../vote/dynamicVoting'
 import EventDecorator from './EventDecorator'
 import {
   createEvent,
@@ -9,8 +11,6 @@ import {
   removeEvent
 } from './eventGateway'
 import IEvent from './model/IEvent'
-import { logError } from '../logging'
-import { updateEventPlaylistBasedOnVotes } from '../vote/dynamicVoting'
 const eventDecorator = new EventDecorator()
 
 export const getEvent = async (eventId: string, user: IUser) => {

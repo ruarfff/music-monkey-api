@@ -3,9 +3,11 @@ import SpotifyWebApi from 'spotify-web-api-node'
 import ISpotifyAuth from '../auth/ISpotifyAuth'
 import { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } from '../config'
 import { logError, logInfo } from '../logging'
+import IPageObject from '../page/PageObject'
 import IPlaylistParams from '../playlist/IPlaylistParams'
 import IUser from '../user/model/IUser'
 import { removeCachedUser, updateUser } from '../user/userService'
+import IPlaylist from './IPlaylist'
 import ITrack from './ITrack'
 import { getCreds, saveCreds } from './spotifyCredsCache'
 
@@ -222,21 +224,28 @@ export const getPlaylist = async (user: IUser, playlistId: string) => {
   return body
 }
 
-export const getUserPlaylists = async (user: IUser, options: any) => {
+export const getUserPlaylists = async (
+  user: IUser,
+  options: any
+): Promise<IPageObject<IPlaylist>> => {
   const validUser: IUser = await checkToken(user)
   const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
 
-  const savedTracks: any = {
-    images: [],
-    name: 'Liked Songs',
-    tracks: { items: [], total: 0 }
-  }
-  try {
-    const { body } = await spotifyApi.getMySavedTracks({ limit: 50 })
-    savedTracks.tracks.items = body.items
-    savedTracks.tracks.total = body.items.length
-  } catch (e) {
-    console.error(e)
+  let initialPlaylists: any = []
+  if (options.offset === 0) {
+    const savedTracks: any = {
+      images: [],
+      name: 'Liked Songs',
+      tracks: { items: [], total: 0 }
+    }
+    try {
+      const { body } = await spotifyApi.getMySavedTracks({ limit: 50 })
+      savedTracks.tracks.items = body.items
+      savedTracks.tracks.total = body.items.length
+    } catch (e) {
+      console.error(e)
+    }
+    initialPlaylists = [savedTracks]
   }
 
   const response = await spotifyApi.getUserPlaylists(
@@ -247,6 +256,7 @@ export const getUserPlaylists = async (user: IUser, options: any) => {
   const playlists = response.body.items.filter(
     (playlist: any) => playlist.owner.id === user.spotifyId
   )
+  const page: IPageObject<IPlaylist> = response.body
 
   const playlistsWithTracks = await Promise.all(
     playlists.map(async (playlist: any) => {
@@ -260,7 +270,7 @@ export const getUserPlaylists = async (user: IUser, options: any) => {
     })
   )
 
-  return [savedTracks, ...playlistsWithTracks]
+  return { ...page, items: [...initialPlaylists, ...playlistsWithTracks] }
 }
 
 export const reorderTracksInPlaylist = async (

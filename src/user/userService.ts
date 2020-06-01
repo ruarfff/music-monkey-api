@@ -2,6 +2,7 @@ import cache from '../cache'
 import { logError } from '../logging'
 import ISafeUser from './model/ISafeUser'
 import IUser from './model/IUser'
+import { checkUserProfile } from './profileCheck'
 import {
   fetchOrCreateUser,
   fetchUserByEmail,
@@ -9,7 +10,6 @@ import {
   modifyUser,
   saveUser
 } from './userGateway'
-import { checkUserProfile } from './profileCheck'
 
 const cachedUserTTL = 600
 
