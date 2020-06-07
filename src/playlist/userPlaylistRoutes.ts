@@ -1,8 +1,8 @@
 import { Request, Response, Router } from 'express'
 import passport from 'passport'
+import { logError } from '../logging'
 import { getUserPlaylists } from '../spotify/spotifyClient'
 import IUser from '../user/model/IUser'
-import { logError } from '../logging'
 const router = Router()
 
 /**

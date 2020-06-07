@@ -7,7 +7,7 @@ export const getAllEventsUserWasInvitedTo = async (user: IUser) => {
   const rsvps = await getRsvpByUserId(user.userId)
   const eventIds = rsvps.map((rsvp: IRsvp) => rsvp.eventId)
   const events = await Promise.all(
-    eventIds.map(async (eventId) => {
+    eventIds.map(async eventId => {
       let event = null
       try {
         event = await getUndecoratedEvent(eventId)
@@ -17,5 +17,5 @@ export const getAllEventsUserWasInvitedTo = async (user: IUser) => {
       return event
     })
   )
-  return events.filter((elem) => elem !== null)
+  return events.filter(elem => elem !== null)
 }

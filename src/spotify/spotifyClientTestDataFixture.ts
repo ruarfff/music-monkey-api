@@ -6,7 +6,7 @@ export const reOrderPlaylistResult = {
   snapshot_id: 'NCw0NDIwMWU5YzgwZmMwZDZhYTMwNGRlMjMxMzZmNjI4ZDM2OGUzYjIx'
 }
 
-export const playlist = {
+export const playlist: IPlaylist = {
   collaborative: false,
   description: 'Testing on june 7th',
   external_urls: {
@@ -4339,56 +4339,10 @@ export const audioFeatures = {
   ]
 }
 
-export const multipleTracks = {
-  tracks: [
-    {
-      album: {
-        album_type: 'album',
-        artists: [
-          {
-            external_urls: {
-              spotify: 'https://open.spotify.com/artist/3FfvYsEGaIb52QPXhg4DcH'
-            },
-            href: 'https://api.spotify.com/v1/artists/3FfvYsEGaIb52QPXhg4DcH',
-            id: '3FfvYsEGaIb52QPXhg4DcH',
-            name: 'Jason Aldean',
-            type: 'artist',
-            uri: 'spotify:artist:3FfvYsEGaIb52QPXhg4DcH'
-          }
-        ],
-        available_markets: ['CA', 'US'],
-        external_urls: {
-          spotify: 'https://open.spotify.com/album/64IFfMf7W67CLvXaYeRNB6'
-        },
-        href: 'https://api.spotify.com/v1/albums/64IFfMf7W67CLvXaYeRNB6',
-        id: '64IFfMf7W67CLvXaYeRNB6',
-        images: [
-          {
-            height: 640,
-            url:
-              'https://i.scdn.co/image/31a914c11b2e5fb71dbec0a5634bfcfdbbbddb67',
-            width: 640
-          },
-          {
-            height: 300,
-            url:
-              'https://i.scdn.co/image/0ee0b6a4aaeb5ec1b81fbe9b2f9578e5904b60d5',
-            width: 300
-          },
-          {
-            height: 64,
-            url:
-              'https://i.scdn.co/image/ddb42bc1f60cb4387f1c20fcf9aa4eaf57e16d28',
-            width: 64
-          }
-        ],
-        name: "They Don't Know",
-        release_date: '2016-09-09',
-        release_date_precision: 'day',
-        total_tracks: 15,
-        type: 'album',
-        uri: 'spotify:album:64IFfMf7W67CLvXaYeRNB6'
-      },
+export const multipleTracks = [
+  {
+    album: {
+      album_type: 'album',
       artists: [
         {
           external_urls: {
@@ -4402,26 +4356,70 @@ export const multipleTracks = {
         }
       ],
       available_markets: ['CA', 'US'],
-      disc_number: 1,
-      duration_ms: 203293,
-      explicit: false,
-      external_ids: { isrc: 'US58E1600568' },
       external_urls: {
-        spotify: 'https://open.spotify.com/track/4T5Z4mbTe7kuGqgLpaRtTh'
+        spotify: 'https://open.spotify.com/album/64IFfMf7W67CLvXaYeRNB6'
       },
-      href: 'https://api.spotify.com/v1/tracks/4T5Z4mbTe7kuGqgLpaRtTh',
-      id: '4T5Z4mbTe7kuGqgLpaRtTh',
-      is_local: false,
-      name: "Any Ol' Barstool",
-      popularity: 68,
-      preview_url:
-        'https://p.scdn.co/mp3-preview/551f994084946608176ab9ff8d15cfbc04efb2f1?cid=474bacd54a47453bb1752372e9307410',
-      track_number: 12,
-      type: 'track',
-      uri: 'spotify:track:4T5Z4mbTe7kuGqgLpaRtTh'
-    }
-  ]
-}
+      href: 'https://api.spotify.com/v1/albums/64IFfMf7W67CLvXaYeRNB6',
+      id: '64IFfMf7W67CLvXaYeRNB6',
+      images: [
+        {
+          height: 640,
+          url:
+            'https://i.scdn.co/image/31a914c11b2e5fb71dbec0a5634bfcfdbbbddb67',
+          width: 640
+        },
+        {
+          height: 300,
+          url:
+            'https://i.scdn.co/image/0ee0b6a4aaeb5ec1b81fbe9b2f9578e5904b60d5',
+          width: 300
+        },
+        {
+          height: 64,
+          url:
+            'https://i.scdn.co/image/ddb42bc1f60cb4387f1c20fcf9aa4eaf57e16d28',
+          width: 64
+        }
+      ],
+      name: "They Don't Know",
+      release_date: '2016-09-09',
+      release_date_precision: 'day',
+      total_tracks: 15,
+      type: 'album',
+      uri: 'spotify:album:64IFfMf7W67CLvXaYeRNB6'
+    },
+    artists: [
+      {
+        external_urls: {
+          spotify: 'https://open.spotify.com/artist/3FfvYsEGaIb52QPXhg4DcH'
+        },
+        href: 'https://api.spotify.com/v1/artists/3FfvYsEGaIb52QPXhg4DcH',
+        id: '3FfvYsEGaIb52QPXhg4DcH',
+        name: 'Jason Aldean',
+        type: 'artist',
+        uri: 'spotify:artist:3FfvYsEGaIb52QPXhg4DcH'
+      }
+    ],
+    available_markets: ['CA', 'US'],
+    disc_number: 1,
+    duration_ms: 203293,
+    explicit: false,
+    external_ids: { isrc: 'US58E1600568' },
+    external_urls: {
+      spotify: 'https://open.spotify.com/track/4T5Z4mbTe7kuGqgLpaRtTh'
+    },
+    href: 'https://api.spotify.com/v1/tracks/4T5Z4mbTe7kuGqgLpaRtTh',
+    id: '4T5Z4mbTe7kuGqgLpaRtTh',
+    is_local: false,
+    name: "Any Ol' Barstool",
+    popularity: 68,
+    preview_url:
+      'https://p.scdn.co/mp3-preview/551f994084946608176ab9ff8d15cfbc04efb2f1?cid=474bacd54a47453bb1752372e9307410',
+    track_number: 12,
+    type: 'track',
+    uri: 'spotify:track:4T5Z4mbTe7kuGqgLpaRtTh'
+  }
+]
 
 export const searchResults = {
   tracks: {

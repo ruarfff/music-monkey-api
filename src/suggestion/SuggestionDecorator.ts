@@ -66,7 +66,7 @@ export default class SuggestionDecorator {
           }
           return null
         })
-        .filter((x) => x !== null)
+        .filter(x => x !== null)
       if (trackIds.length <= 50) {
         const tracks = await getMultipleTracks(trackIds, user)
         allTracks = tracks

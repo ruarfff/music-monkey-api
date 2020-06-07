@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { isEmpty } from 'lodash'
 import SpotifyWebApi from 'spotify-web-api-node'
 import ISpotifyAuth from '../auth/ISpotifyAuth'
 import { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } from '../config'
@@ -10,8 +11,7 @@ import { removeCachedUser, updateUser } from '../user/userService'
 import IPlaylist from './IPlaylist'
 import ITrack from './ITrack'
 import { getCreds, saveCreds } from './spotifyCredsCache'
-import { getCachedTrack, cacheTrack } from './trackCache'
-import { isEmpty } from 'lodash'
+import { cacheTrack, getCachedTrack } from './trackCache'
 
 axios.defaults.headers.common.Authorization = `Basic ${Buffer.from(
   SPOTIFY_CLIENT_ID + ':' + SPOTIFY_CLIENT_SECRET
@@ -181,8 +181,8 @@ export const getUserTopTracks = async (user: IUser) => {
 export const getMultipleTracks = async (user: IUser, trackIds: string[]) => {
   const validUser: IUser = await checkToken(user)
   let tracks: ITrack[] = []
-  let cachedTracks: ITrack[] = []
-  let uncachedTrackIds: string[] = []
+  const cachedTracks: ITrack[] = []
+  const uncachedTrackIds: string[] = []
 
   for (const trackId of trackIds) {
     const track = await getCachedTrack(trackId)
@@ -197,7 +197,7 @@ export const getMultipleTracks = async (user: IUser, trackIds: string[]) => {
       validUser.spotifyAuth.accessToken
     ).getTracks(trackIds)
     tracks = body.tracks.map(processTrack)
-    tracks.forEach((track) => {
+    tracks.forEach(track => {
       cacheTrack(track)
     })
   }
@@ -249,7 +249,7 @@ export const getUserPlaylists = async (
   const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
 
   let initialPlaylists: any = []
-  if (options.offset == 0) {
+  if (`${options.offset}` === '0') {
     const savedTracks: any = {
       images: [],
       name: 'Liked Songs',

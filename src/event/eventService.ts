@@ -23,7 +23,7 @@ export const getEvent = async (eventId: string, user: IUser) => {
 }
 
 export const getUndecoratedEvent = async (eventId: string) => {
-  let event = await getEventById(eventId)
+  const event = await getEventById(eventId)
   if (!event) {
     throw new Error('Could not find event with ID ' + eventId)
   }

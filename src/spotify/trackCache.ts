@@ -18,6 +18,8 @@ export const getCachedTrack = async (trackId: string) => {
   let track
   try {
     track = await cache.getObject(`${trackKey}-${trackId}`)
-  } catch (ignore) {}
+  } catch (ignore) {
+    console.log('Track cache miss')
+  }
   return track
 }
