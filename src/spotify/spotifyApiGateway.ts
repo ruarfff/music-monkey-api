@@ -41,10 +41,7 @@ async function checkToken(user: IUser) {
       return updatedUser
     }
   } catch (err) {
-    logError(
-      'Failed to refresh user token: ' + JSON.stringify(user, null, 4),
-      err
-    )
+    logError('Failed to refresh user token: ' + user.userId, err)
   }
   return user
 }

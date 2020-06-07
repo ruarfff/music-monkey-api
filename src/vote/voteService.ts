@@ -1,4 +1,5 @@
 import ITrack from '../spotify/ITrack'
+import uniq from 'lodash/uniq'
 import { getMultipleTracks } from '../spotify/spotifyClient'
 import IUser from '../user/model/IUser'
 import IVote from './IVote'
@@ -23,8 +24,8 @@ export const getVotesWithStatus = async (eventId: string, userId: string) => {
 export const getVotesByUserWithTracks = async (user: IUser) => {
   const votes = await getVotesByUserId(user.userId)
   let allTracks: ITrack[] = []
-  let trackIds = votes.map(v => v.trackId.split(':')[2])
-  trackIds = trackIds.filter((item, i) => trackIds.indexOf(item) === i)
+  let trackIds = votes.map((v) => v.trackId.split(':')[2])
+  trackIds = uniq(trackIds)
   if (trackIds.length <= 50) {
     const { tracks } = await getMultipleTracks(trackIds, user)
     allTracks = tracks
@@ -40,10 +41,10 @@ export const getVotesByUserWithTracks = async (user: IUser) => {
     }
   }
   const trackMap = new Map<string, ITrack>()
-  allTracks.forEach(t => {
+  allTracks.forEach((t) => {
     trackMap.set(t.id, t)
   })
-  return votes.map(v => ({
+  return votes.map((v) => ({
     ...v,
     track: trackMap.get(v.trackId.split(':')[2])
   }))

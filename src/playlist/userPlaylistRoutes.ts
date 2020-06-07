@@ -2,6 +2,7 @@ import { Request, Response, Router } from 'express'
 import passport from 'passport'
 import { getUserPlaylists } from '../spotify/spotifyClient'
 import IUser from '../user/model/IUser'
+import { logError } from '../logging'
 const router = Router()
 
 /**
@@ -31,21 +32,15 @@ router.get(
     const { limit, offset } = query
     const userData: IUser = user
 
-    console.log('USER PLAYLISTS')
-    console.log(limit)
-    console.log(offset)
-
     if (req.params.userId !== userData.userId) {
       res.status(401).send('Wrong User')
     } else if (userData.spotifyId) {
       getUserPlaylists(userData, { limit, offset })
         .then((playlists: any) => {
-          console.log('Sending playlists')
-          console.log(playlists)
           res.send(playlists)
         })
         .catch((err: any) => {
-          console.log(err)
+          logError(err)
           const code = err.statusCode || 400
           res.status(code).send(err.message)
         })
