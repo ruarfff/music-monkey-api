@@ -180,8 +180,7 @@ export const getMultipleTracks = async (user: IUser, trackIds: string[]) => {
   const { body } = await getSpotifyApi(
     validUser.spotifyAuth.accessToken
   ).getTracks(trackIds)
-
-  return body
+  return body.tracks.map(processTrack)
 }
 
 export const getAudioFeaturesForTracks = async (
@@ -229,7 +228,7 @@ export const getUserPlaylists = async (
   const spotifyApi = getSpotifyApi(validUser.spotifyAuth.accessToken)
 
   let initialPlaylists: any = []
-  if (options.offset === 0) {
+  if (options.offset == 0) {
     const savedTracks: any = {
       images: [],
       name: 'Liked Songs',
@@ -237,10 +236,13 @@ export const getUserPlaylists = async (
     }
     try {
       const { body } = await spotifyApi.getMySavedTracks({ limit: 50 })
-      savedTracks.tracks.items = body.items
+      savedTracks.tracks.items = body.items.map((item: any) => {
+        return { ...item, track: processTrack(item.track) }
+      })
       savedTracks.tracks.total = body.items.length
     } catch (e) {
-      console.error(e)
+      console.log(e)
+      logError(e)
     }
     initialPlaylists = [savedTracks]
   }
@@ -258,7 +260,9 @@ export const getUserPlaylists = async (
   const playlistsWithTracks = await Promise.all(
     playlists.map(async (playlist: any) => {
       const { body } = await spotifyApi.getPlaylistTracks(playlist.id)
-      const tracks = body.items
+      const tracks = body.items.map((item: any) => {
+        return { ...item, track: processTrack(item.track) }
+      })
 
       return {
         ...playlist,
@@ -356,4 +360,18 @@ export const removeTrackFromPlaylist = async (
   track: ITrack
 ) => {
   return await removeTracksFromPlaylist(user, playlistId, [track])
+}
+
+function processTrack(track: ITrack) {
+  return {
+    id: track.id,
+    album: { images: track.album.images },
+    duration_ms: track.duration_ms,
+    explicit: track.explicit,
+    name: track.name,
+    popularity: track.popularity,
+    preview_url: track.preview_url,
+    uri: track.uri,
+    artists: track.artists
+  }
 }

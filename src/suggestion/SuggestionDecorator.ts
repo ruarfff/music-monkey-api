@@ -66,9 +66,9 @@ export default class SuggestionDecorator {
           }
           return null
         })
-        .filter(x => x !== null)
+        .filter((x) => x !== null)
       if (trackIds.length <= 50) {
-        const { tracks } = await getMultipleTracks(trackIds, user)
+        const tracks = await getMultipleTracks(trackIds, user)
         allTracks = tracks
       } else {
         const chunk = 50
@@ -77,7 +77,7 @@ export default class SuggestionDecorator {
         let chunkedTrackIds
         for (i = 0, j = trackIds.length; i < j; i += chunk) {
           chunkedTrackIds = trackIds.slice(i, i + chunk)
-          const { tracks } = await getMultipleTracks(chunkedTrackIds, user)
+          const tracks = await getMultipleTracks(chunkedTrackIds, user)
           allTracks = [...allTracks, ...tracks]
         }
       }

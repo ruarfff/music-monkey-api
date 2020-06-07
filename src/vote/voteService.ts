@@ -27,7 +27,7 @@ export const getVotesByUserWithTracks = async (user: IUser) => {
   let trackIds = votes.map((v) => v.trackId.split(':')[2])
   trackIds = uniq(trackIds)
   if (trackIds.length <= 50) {
-    const { tracks } = await getMultipleTracks(trackIds, user)
+    const tracks = await getMultipleTracks(trackIds, user)
     allTracks = tracks
   } else {
     const chunk = 50
@@ -36,7 +36,7 @@ export const getVotesByUserWithTracks = async (user: IUser) => {
     let chunkedTrackIds
     for (i = 0, j = trackIds.length; i < j; i += chunk) {
       chunkedTrackIds = trackIds.slice(i, i + chunk)
-      const { tracks } = await getMultipleTracks(chunkedTrackIds, user)
+      const tracks = await getMultipleTracks(chunkedTrackIds, user)
       allTracks = [...allTracks, ...tracks]
     }
   }
