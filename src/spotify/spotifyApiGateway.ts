@@ -153,7 +153,7 @@ export const getRecommendations = async (user: IUser, options: any) => {
     validUser.spotifyAuth.accessToken
   ).getRecommendations(options)
 
-  return body.tracks
+  return body.tracks.map(processTrack)
 }
 
 export const searchTracks = async (user: IUser, searchTerm: string) => {
@@ -161,7 +161,9 @@ export const searchTracks = async (user: IUser, searchTerm: string) => {
   const { body } = await getSpotifyApi(
     validUser.spotifyAuth.accessToken
   ).searchTracks(searchTerm)
-
+  if (body.tracks && body.tracks.items) {
+    body.tracks.items = body.tracks.items.map(processTrack)
+  }
   return body
 }
 
@@ -171,8 +173,7 @@ export const getUserTopTracks = async (user: IUser) => {
   const { body } = await getSpotifyApi(
     validUser.spotifyAuth.accessToken
   ).getMyTopTracks()
-
-  return body.items
+  return body.items.map(processTrack)
 }
 
 export const getMultipleTracks = async (user: IUser, trackIds: string[]) => {
@@ -241,7 +242,6 @@ export const getUserPlaylists = async (
       })
       savedTracks.tracks.total = body.items.length
     } catch (e) {
-      console.log(e)
       logError(e)
     }
     initialPlaylists = [savedTracks]
