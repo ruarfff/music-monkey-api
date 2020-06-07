@@ -22,6 +22,14 @@ export const getEvent = async (eventId: string, user: IUser) => {
   return event
 }
 
+export const getUndecoratedEvent = async (eventId: string) => {
+  let event = await getEventById(eventId)
+  if (!event) {
+    throw new Error('Could not find event with ID ' + eventId)
+  }
+  return event
+}
+
 export const getEventByInvite = async (inviteId: string, user: IUser) => {
   const event: IEvent = await getEventByInviteId(inviteId)
   const decoratedEvent = await eventDecorator.decorateEvent(event, user)
@@ -29,8 +37,7 @@ export const getEventByInvite = async (inviteId: string, user: IUser) => {
 }
 
 export const getEventsForUser = async (user: IUser) => {
-  const events: IEvent[] = await getEventsByUserId(user.userId)
-  return eventDecorator.decorateEvents(events, user)
+  return await getEventsByUserId(user.userId)
 }
 
 export const saveEvent = async (event: IEvent) => {
