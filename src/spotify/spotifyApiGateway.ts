@@ -10,6 +10,8 @@ import { removeCachedUser, updateUser } from '../user/userService'
 import IPlaylist from './IPlaylist'
 import ITrack from './ITrack'
 import { getCreds, saveCreds } from './spotifyCredsCache'
+import { getCachedTrack, cacheTrack } from './trackCache'
+import { isEmpty } from 'lodash'
 
 axios.defaults.headers.common.Authorization = `Basic ${Buffer.from(
   SPOTIFY_CLIENT_ID + ':' + SPOTIFY_CLIENT_SECRET
@@ -178,10 +180,25 @@ export const getUserTopTracks = async (user: IUser) => {
 
 export const getMultipleTracks = async (user: IUser, trackIds: string[]) => {
   const validUser: IUser = await checkToken(user)
-  const { body } = await getSpotifyApi(
-    validUser.spotifyAuth.accessToken
-  ).getTracks(trackIds)
-  return body.tracks.map(processTrack)
+  let tracks: ITrack[] = []
+  let cachedTracks: ITrack[] = []
+  let uncachedTrackIds: string[] = []
+
+  for (const trackId of trackIds) {
+    const track = await getCachedTrack(trackId)
+    if (track) {
+      cachedTracks.push(track)
+    } else {
+      uncachedTrackIds.push(trackId)
+    }
+  }
+  if (!isEmpty(uncachedTrackIds)) {
+    const { body } = await getSpotifyApi(
+      validUser.spotifyAuth.accessToken
+    ).getTracks(trackIds)
+    tracks = body.tracks.map(processTrack)
+  }
+  return [...tracks, ...cachedTracks]
 }
 
 export const getAudioFeaturesForTracks = async (
@@ -363,7 +380,7 @@ export const removeTrackFromPlaylist = async (
 }
 
 function processTrack(track: ITrack) {
-  return {
+  const processedTrack: ITrack = {
     id: track.id,
     album: { images: track.album.images },
     duration_ms: track.duration_ms,
@@ -374,4 +391,6 @@ function processTrack(track: ITrack) {
     uri: track.uri,
     artists: track.artists
   }
+  cacheTrack(processedTrack)
+  return processedTrack
 }
