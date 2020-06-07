@@ -197,6 +197,9 @@ export const getMultipleTracks = async (user: IUser, trackIds: string[]) => {
       validUser.spotifyAuth.accessToken
     ).getTracks(trackIds)
     tracks = body.tracks.map(processTrack)
+    tracks.forEach((track) => {
+      cacheTrack(track)
+    })
   }
   return [...tracks, ...cachedTracks]
 }
@@ -391,6 +394,5 @@ function processTrack(track: ITrack) {
     uri: track.uri,
     artists: track.artists
   }
-  cacheTrack(processedTrack)
   return processedTrack
 }
